@@ -7,6 +7,6 @@
 
 ## Running the Application
 
-```
-flask run
-```
+Install dependencies: `pip install -r requirements.txt`
+
+Run web app: `flask run`
