@@ -22,14 +22,14 @@ def home():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
-    if "is_login" in session and session['is_login']:
+    if "is_login" in session and session['is_login']:# remember user by session after first login
         return redirect(url_for('home'))
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.password == form.password.data:  
             flash('You have successfully logged in.', "success")
             session['is_login'] = True
-            session['username'] = user.username
+            session['username'] = user.username #username is unique
             print('good')
             return redirect(url_for('home'))
         else:
@@ -44,11 +44,11 @@ def register():
         if existing_user:
             flash(' choose another email.', 'danger')
             return redirect(url_for('register'))
-        new_user = User(
+        adduser = User(
             username=form.username.data,
             email=form.email.data,
             password=form.password.data)  
-        db.session.add(new_user)
+        db.session.add(adduser)
         db.session.commit()
         flash('successfully registered', 'success')
         return redirect(url_for('login'))
