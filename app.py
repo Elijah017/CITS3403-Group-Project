@@ -25,10 +25,10 @@ def login():
     if "is_login" in session and session['is_login']:# remember user by session after first login
         return redirect(url_for('home'))
     if request.method == 'POST' and form.validate():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()#use email to login
         if user and user.password == form.password.data:  
-            flash('You have successfully logged in.', "success")
-            session['is_login'] = True
+            flash('successfully logged in.', "success")
+            session['is_login'] = True #store a session after login firstly
             session['username'] = user.username #username is unique
             print('good')
             return redirect(url_for('home'))
@@ -38,11 +38,11 @@ def login():
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm(request.form)
+    form = RegisterForm(request.form) #The detail code from form.py 
     if request.method == 'POST' and form.validate():
         existing_user = User.query.filter_by(email=form.email.data).first()
-        if existing_user:
-            flash(' choose another email.', 'danger')
+        if existing_user: 
+            flash(' Email exist', 'danger')
             return redirect(url_for('register'))
         adduser = User(
             username=form.username.data,
