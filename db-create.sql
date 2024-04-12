@@ -7,23 +7,23 @@ CREATE TABLE Users(
     UserName TEXT NOT NULL,
     PWD TEXT NOT NULL,
     Email TEXT NOT NULL,
-    Active INT
+    Active INTEGER
 );
 
 CREATE TABLE Boards(
     ID TEXT PRIMARY KEY,
     BoardName TEXT NOT NULL,
-    Visibility INT,
+    Visibility INTEGER,
     SuperUser TEXT,
-    Active INT,
+    Active INTEGER,
     FOREIGN KEY(SuperUser) REFERENCES Users(ID)
 );
 
 CREATE TABLE Permissions(
     Board TEXT,
     User TEXT,
-    WriteAccess INT,
-    Active INT,
+    WriteAccess INTEGER,
+    Active INTEGER,
     FOREIGN KEY(Board) REFERENCES Boards(ID),
     FOREIGN KEY(User) REFERENCES Users(ID)
 )
