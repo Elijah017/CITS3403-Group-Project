@@ -1,7 +1,7 @@
 from flask import Flask, render_template, flash, redirect, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
@@ -74,9 +74,9 @@ def register():
 
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
+    form = BoardForm(request.form) 
 
-
-    return render_template('boardCreat.html')
+    return render_template('boardCreat.html', form=form)
 
 @app.route("/logout/")
 def logout():
