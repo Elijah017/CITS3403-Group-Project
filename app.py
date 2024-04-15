@@ -1,13 +1,16 @@
 from flask import Flask, render_template, flash, redirect, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from forms import LoginForm, RegisterForm
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance\\database.db'
+
 app.config['SECRET_KEY'] = '123456789'#Cross-Site Request Forgery
 
 
 db = SQLAlchemy(app)
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -25,12 +28,14 @@ def login():
     if "is_login" in session and session['is_login']:# remember user by session after first login
         return redirect(url_for('home'))
     if request.method == 'POST' and form.validate():
-        user = User.query.filter_by(email=form.email.data).first()#use email to login
-        if user and user.password == form.password.data:  
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        if user and Bcrypt.check_password_hash(user.password, password):  
             flash('successfully logged in.', "success")
             session['is_login'] = True #store a session after login firstly
             session['username'] = user.username #username is unique
-            print('good')
+            
             return redirect(url_for('home'))
         else:
             flash('Username or Password Incorrect', "danger")
@@ -40,19 +45,22 @@ def login():
 def register():
     form = RegisterForm(request.form) #The detail code from form.py 
     if request.method == 'POST' and form.validate():
-        existing_user = User.query.filter_by(email=form.email.data).first()
-        if existing_user: 
-            flash(' Email exist', 'danger')
+        username=form.username.data
+        email= form.email.data
+        password = Bcrypt.generate_password_hash(form.password.data).decode('utf-8')# it will encryption the code in database,  not neccesery 
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Email already exists. Please choose another one.', 'danger')
             return redirect(url_for('register'))
-        adduser = User(
-            username=form.username.data,
-            email=form.email.data,
-            password=form.password.data)  
-        db.session.add(adduser)
+        new_user = User(username=username, email=email, password=password)
+        db.session.add(new_user)
         db.session.commit()
-        flash('successfully registered', 'success')
+
+        flash('You have successfully registered!', 'success')
         return redirect(url_for('login'))
+
     return render_template('register.html', form=form)
+
 
 @app.route('/logout/')
 def logout():
