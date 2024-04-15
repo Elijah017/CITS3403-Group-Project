@@ -4,13 +4,13 @@ from forms import LoginForm, RegisterForm
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance\\database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 app.config['SECRET_KEY'] = '123456789'#Cross-Site Request Forgery
 
 
 db = SQLAlchemy(app)
-
+bcrypt = Bcrypt(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,7 +31,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
-        if user and Bcrypt.check_password_hash(user.password, password):  
+        if user and bcrypt.check_password_hash(user.password, password):  
             flash('successfully logged in.', "success")
             session['is_login'] = True #store a session after login firstly
             session['username'] = user.username #username is unique
@@ -47,7 +47,7 @@ def register():
     if request.method == 'POST' and form.validate():
         username=form.username.data
         email= form.email.data
-        password = Bcrypt.generate_password_hash(form.password.data).decode('utf-8')# it will encryption the code in database,  not neccesery 
+        password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')# it will encryption the code in database,  not neccesery 
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash('Email already exists. Please choose another one.', 'danger')
