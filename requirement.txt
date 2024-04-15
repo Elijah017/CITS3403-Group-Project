@@ -4,6 +4,6 @@ Flask-Login
 Flask-SQLAlchemy
 Flask-WTF
 SQLAlchemy
-Werkzeug
+flask-bcrypt
 WTForms
-Flask-WTF
+
