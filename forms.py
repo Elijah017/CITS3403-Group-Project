@@ -20,11 +20,15 @@ def checkPassword(form, field):
 #  we can change the form of password  at this place
 
 
+
+
+#   User login
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email(), Length(max=50)])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=6, max=256)])
 
 
+#   Registration 
 class RegisterForm(FlaskForm):
     username = StringField(
         "Username",
@@ -40,8 +44,14 @@ class RegisterForm(FlaskForm):
         render_kw={"placeholder": "Enter your password"},
     )
 
-    confirm = PasswordField(
-        "Confirm Password",
-        validators=[validators.DataRequired(message="Please fill this field")],
-        render_kw={"placeholder": "Confirm your password"},
-    )
+    confirm = PasswordField("Confirm Password", validators=[
+        validators.DataRequired(message="Please fill this field")
+    ], render_kw={"placeholder": "Confirm your password"})
+
+
+#   Board Creation
+class BoardForm(FlaskForm):
+    name = StringField('Board Name', validators=[validators.DataRequired(message="Board name required"), Length(min=1, max=50)], render_kw={"placeholder": "Enter board name"})#  Name of board
+    visibility = StringField('Visibility', validators=[validators.DataRequired(
+        message="Please enter public or private"), validators.EqualTo('public', 'private')], render_kw={"placeholder": "Enter public or private"})  #  Public or Private
+    submit = SubmitField('Create')
