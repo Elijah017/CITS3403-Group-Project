@@ -24,9 +24,9 @@ def checkPassword(form, field):
 
 #   User login
 class LoginForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email(), Length(max=50)])
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=6, max=256)])
-
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=50)], render_kw={"placeholder" : "Enter Email", "autofocus":True})
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=256)], render_kw={"placeholder" : "Enter Password"})
+    submit = SubmitField('Login')
 
 #   Registration 
 class RegisterForm(FlaskForm):
@@ -51,7 +51,7 @@ class RegisterForm(FlaskForm):
 
 #   Board Creation
 class BoardForm(FlaskForm):
-    name = StringField('Board Name', validators=[validators.DataRequired(message="Board name required"), Length(min=1, max=50)], render_kw={"placeholder": "Enter board name"})#  Name of board
+    name = StringField('Board Name', validators=[validators.DataRequired(message="Board name required"), Length(min=1, max=50)], render_kw={"placeholder": "Enter board name", "autofocus":True}) #  Name of board
     visibility = StringField('Visibility', validators=[validators.DataRequired(
         message="Please enter public or private"), validators.EqualTo('public', 'private')], render_kw={"placeholder": "Enter public or private"})  #  Public or Private
     submit = SubmitField('Create')
