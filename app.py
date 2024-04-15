@@ -69,7 +69,8 @@ def register():
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
 
-    return render_template('BoardCreat.html')
+
+    return render_template('boardCreat.html')
 
 @app.route('/logout/')
 def logout():
