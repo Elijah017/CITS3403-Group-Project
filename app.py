@@ -1,5 +1,6 @@
 from flask import Flask, render_template, flash, redirect, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from forms import LoginForm, RegisterForm
 from flask_bcrypt import Bcrypt
 
@@ -10,6 +11,7 @@ app.config['SECRET_KEY'] = '123456789'#Cross-Site Request Forgery
 
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
 class User(db.Model):

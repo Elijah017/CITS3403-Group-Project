@@ -7,3 +7,4 @@ SQLAlchemy
 flask-bcrypt
 WTForms
 email_validator
+Flask-Migrate
