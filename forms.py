@@ -4,7 +4,6 @@ from wtforms.validators import DataRequired, Email, Length
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=50)])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=256)])
-    submit = SubmitField('Login')
 
 class RegisterForm(FlaskForm):
     username = StringField("Username", validators=[validators.Length(min=3, max=25), validators.DataRequired(message="length should more than 3")], render_kw={"placeholder": "Enter your username"})

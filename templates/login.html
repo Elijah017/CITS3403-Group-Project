@@ -8,10 +8,10 @@
     <form method="post" class="bg-white shadow-sm centred login-form">
         {{ form.csrf_token }}
         <h1>Login</h1>
-        {% with messages = get_flashed_messages() %} 
+        {% with messages = get_flashed_messages(with_categories=true) %} 
             {% if messages %} 
-                {% for message in messages %}
-                    <div>{{ message }}</div>
+                {% for category, message in messages %}
+                    <p class="{{ category }}">{{ message }}</p>
                 {% endfor %}
             {% endif %} 
         {% endwith %}
@@ -20,5 +20,7 @@
         {{ form.password.label }}<br />
         {{ form.password }}<br />
         {{ form.submit }}
+        <input type="submit" value="Login" class="btn btn-primary">
+
     </form>
 {% endblock %}

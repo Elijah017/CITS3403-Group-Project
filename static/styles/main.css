@@ -24,3 +24,13 @@
 .login-form :not(label):not(:last-child) {
     margin-bottom: 1rem;
 }
+
+.login-form input:not([type="submit"]) {
+    border-radius: 0.25rem;
+    border: 1px solid black;
+    padding: 0.25rem;
+}
+
+p.danger {
+    color: crimson;
+}
