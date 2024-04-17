@@ -1,4 +1,4 @@
-body {
+body:has(.login-form) {
     background-image: linear-gradient(to top right, rgba(111,66,192,1), rgba(13,110,240,1));
     height: 100vh;
     width: 100vw;
