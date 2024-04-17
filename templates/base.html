@@ -10,27 +10,18 @@
     </head>
     <body>
         <header>
-            <nav class="navbar fixed-top bg-body-tertiary bg-white">
+            <nav class="navbar fixed-top bg-white shadow-sm">
                 <div class="container-fluid">
-                    <a class="navbar-brand">BanKan</a>
+                    <a class="navbar-brand" href="{{ url_for('home') }}">BanKan</a>
                     <div>
-                        <button class="btn btn-outline-primary">Login</button>
-                        <button class="btn btn-primary">Register</button>
+                        {% if session.is_login %}
+                            <a class="btn btn-outline-primary" href="{{ url_for('logout') }}">Logout</a>
+                        {% else %}
+                            <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
+                            <a class="btn btn-primary" href="{{ url_for('register') }}">Register</a>
+                        {% endif %}
                     </div>
                   </div>
-
-                <!-- <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Fixed top</a>
-                    <ul>
-                        <li><a href="{{ url_for('home') }}">Home</a></li>
-                        {% if session.is_login %}
-                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                        {% else %}
-                        <li><a href="{{ url_for('login') }}">Login</a></li>
-                        <li><a href="{{ url_for('register') }}">Register</a></li>
-                        {% endif %}
-                    </ul>
-                </div> -->
             </nav>
         </header>
         <h1>welcome</h1>
