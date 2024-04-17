@@ -1,27 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %} 
+
+{% block title %}
     <title>Login</title>
-</head>
-<body>
+{% endblock %} 
+
+{% block content %}
     <h1>Login</h1>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div>{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+    <div>{{ message }}</div>
+    {% endfor %} {% endif %} {% endwith %}
     <form method="post">
-        {{ form.csrf_token }}
-        {{ form.email.label }}<br>
-        {{ form.email }}<br>
-        {{ form.password.label }}<br>
-        {{ form.password }}<br>
+        {{ form.csrf_token }} {{ form.email.label }}<br />
+        {{ form.email }}<br />
+        {{ form.password.label }}<br />
+        {{ form.password }}<br />
         {{ form.submit }}
     </form>
-</body>
-</html>
-
+{% endblock %}
