@@ -1,5 +1,6 @@
 from flask import Flask, render_template, flash, redirect, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from forms import LoginForm, RegisterForm
 from flask_bcrypt import Bcrypt
 
@@ -10,10 +11,11 @@ app.config['SECRET_KEY'] = '123456789'#Cross-Site Request Forgery
 
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20), unique=True)
     email = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(200))  
@@ -48,16 +50,19 @@ def register():
         username=form.username.data
         email= form.email.data
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')# it will encryption the code in database,  not neccesery 
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
+        
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists. Please choose another one.', 'danger')
+            return redirect(url_for('register'))
+        elif User.query.filter_by(email=email).first():
             flash('Email already exists. Please choose another one.', 'danger')
             return redirect(url_for('register'))
-        new_user = User(username=username, email=email, password=password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        flash('You have successfully registered!', 'success')
-        return redirect(url_for('login'))
+        else:
+            new_user = User(username=username, email=email, password=password)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('You have successfully registered!', 'success')
+            return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
 

@@ -6,4 +6,5 @@ Flask-WTF
 SQLAlchemy
 flask-bcrypt
 WTForms
-
+email_validator
+Flask-Migrate
