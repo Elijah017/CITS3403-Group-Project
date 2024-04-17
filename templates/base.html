@@ -10,7 +10,7 @@
     </head>
     <body>
         <header>
-            <nav class="navbar fixed-top bg-white shadow-sm">
+            <nav class="navbar sticky-top bg-white shadow-sm">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="{{ url_for('home') }}">BanKan</a>
                     <div>
@@ -24,7 +24,6 @@
                   </div>
             </nav>
         </header>
-        <h1>welcome</h1>
         <main>{% block content %}{% endblock %}</main>
     </body>
 </html>
