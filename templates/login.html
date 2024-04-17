@@ -5,12 +5,16 @@
 {% endblock %} 
 
 {% block content %}
-    <h1>Login</h1>
-    {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
-    <div>{{ message }}</div>
-    {% endfor %} {% endif %} {% endwith %}
-    <form method="post">
-        {{ form.csrf_token }} {{ form.email.label }}<br />
+    <form method="post" class="bg-white shadow-sm centred login-form">
+        <h1>Login</h1>
+        {% with messages = get_flashed_messages() %} 
+            {% if messages %} 
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
+            {% endif %} 
+        {% endwith %}
+        {{ form.email.label }}<br />
         {{ form.email }}<br />
         {{ form.password.label }}<br />
         {{ form.password }}<br />

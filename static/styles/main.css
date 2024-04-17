@@ -1,0 +1,26 @@
+.centred {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.login-form {
+    width: 50%;
+    min-width: 250px;
+    max-width: 500px;
+    padding: 1rem;
+}
+
+.login-form h1 {
+    text-align: center;
+}
+
+.login-form * {
+    width: 100%;
+}
+
+.login-form :not(label):not(:last-child) {
+    margin-bottom: 1rem;
+}
