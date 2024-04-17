@@ -18,10 +18,19 @@
         {{ form.csrf_token }}
         {{ form.username.label }}<br>
         {{ form.username }}<br>
+        {% for error in form.username.errors %}
+        <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
         {{ form.email.label }}<br>
         {{ form.email }}<br>
+        {% for error in form.email.errors %}
+        <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
         {{ form.password.label }}<br>
         {{ form.password }}<br>
+        {% for error in form.password.errors %}
+        <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
         {{ form.confirm.label }}<br>
         {{ form.confirm }}<br>
         {{ form.submit }}
