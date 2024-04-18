@@ -32,8 +32,8 @@ class Board(db.Model):
 
 #   Permissions Table
 class Permission(db.Model):
-    board = db.Column(db.Integer(20), ForeignKey(Board.id))
-    user = db.Column(db.Integer(20), ForeignKey(User.id))
+    board = db.Column(db.Integer, ForeignKey(Board.id))
+    user = db.Column(db.Integer, ForeignKey(User.id))
     writeAccess = db.Column(db.Integer, nullable=False)
     active = db.Column(db.String(20), nullable=False)
     __table_args__ = (PrimaryKeyConstraint('board', 'user'),)
