@@ -1,0 +1,25 @@
+name: CI
+
+on: push
+
+jobs:
+    ci:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout this repository
+              uses: actions/checkout@v3
+
+            - name: Add Python to the pipeline
+              uses: actions/setup-python@v3
+              with:
+                  python-version: "3.12"
+                  cache: "pip" # caching pip dependencies
+
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+
+            - name: Check formatting
+              run: black --line-length 200 . --check
+
+            # - name: Run tests
+              # run: python3 -m unittest .

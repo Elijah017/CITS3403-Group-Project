@@ -8,3 +8,4 @@ flask-bcrypt
 WTForms
 email_validator
 Flask-Migrate
+black==24.4.0
