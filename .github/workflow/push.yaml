@@ -18,7 +18,7 @@ jobs:
             - name: Install dependencies
               run: pip install -r requirements.txt
 
-            - name: Check formatting
+            - name: Check Python formatting
               run: black --line-length 200 . --check
 
             # - name: Run tests
