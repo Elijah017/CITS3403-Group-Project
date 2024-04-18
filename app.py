@@ -25,6 +25,7 @@ class User(db.Model):
 #   Board Table
 class Board(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     boardname = db.Column(db.String(20), nullable=False)
     visibility = db.Column(db.String(20))
     superuser = db.Column(db.String(20), ForeignKey(User.id))
@@ -38,6 +39,7 @@ class Permission(db.Model):
     active = db.Column(db.String(20), nullable=False)
     __table_args__ = (PrimaryKeyConstraint('board', 'user'),)
 
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -48,7 +50,7 @@ def login():
     form = LoginForm(request.form)
     if "is_login" in session and session['is_login']:# remember user by session after first login
         return redirect(url_for('home'))
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST': # and form.validate():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
@@ -86,10 +88,12 @@ def register():
     return render_template('register.html', form=form)
 
 
+
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
     form = BoardForm(request.form)  #   Get the form
 
+    if request.method == 'POST': # and form.validate():
     if request.method == 'POST': # and form.validate():
         addboard = Board(
             boardname=form.boardname.data,
