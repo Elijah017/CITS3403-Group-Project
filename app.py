@@ -8,7 +8,7 @@ from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
-app.config['SECRET_KEY'] = '123456789'  # Cross-Site Request Forgery
+app.config['SECRET_KEY'] = '123456789'#Cross-Site Request Forgery
 
 
 db = SQLAlchemy(app)
@@ -22,12 +22,9 @@ bcrypt = Bcrypt(app)
 >>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(20))
+    username = db.Column(db.String(20), unique=True)
     email = db.Column(db.String(20), unique=True)
-    password = db.Column(db.String(200))
-    password = db.Column(db.String(200))
-
-<<<<<<< HEAD
+    password = db.Column(db.String(200))  
 
 @app.route("/")
 =======
@@ -57,38 +54,34 @@ def home():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
-    # remember user by session after first login
-    if "is_login" in session and session['is_login']:
+    if "is_login" in session and session['is_login']:# remember user by session after first login
         return redirect(url_for('home'))
     if request.method == 'POST' and form.validate():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
-        if user and bcrypt.check_password_hash(user.password, password):
+        if user and bcrypt.check_password_hash(user.password, password):  
             flash('successfully logged in.', "success")
             session['is_login'] = True #store a session after login firstly
-            # session['username'] = user.username #username is unique
-            session['UID'] = user.id 
-            print('good')
+            session['username'] = user.username #username is unique
+            session['UID'] = user.id
             return redirect(url_for('home'))
         else:
-            flash("Username or Password Incorrect", "danger")
-
-    return render_template("login.html", form=form)
-
-
+            flash('Username or Password Incorrect', "danger")
+    return render_template('login.html', form=form)
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm(request.form)  # The detail code from form.py
+    form = RegisterForm(request.form) #The detail code from form.py 
     if request.method == 'POST' and form.validate():
-        username = form.username.data
-        email = form.email.data
-        password = bcrypt.generate_password_hash(form.password.data).decode(
-            'utf-8')  # it will encryption the code in database,  not neccesery
-
-        # username doesn't need to be unique, however email does.
-        if User.query.filter_by(email=email).first():
+        username=form.username.data
+        email= form.email.data
+        password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')# it will encryption the code in database,  not neccesery 
+        
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists. Please choose another one.', 'danger')
+            return redirect(url_for('register'))
+        elif User.query.filter_by(email=email).first():
             flash('Email already exists. Please choose another one.', 'danger')
             return redirect(url_for('register'))
         else:
@@ -103,9 +96,9 @@ def register():
 
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
-    form = BoardForm(request.form)  #   Get the 
+    form = BoardForm(request.form)  #   Get the form
 
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST': #and form.validate()
         addboard = Board(
             boardname=form.boardname.data,
             visibiliy=form.visibility.data,
