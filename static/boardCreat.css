@@ -1,0 +1,35 @@
+hr{
+    border-top: 8px solid C0C0C0;
+    border-radius: 5px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#main{
+    background-color: FFFFFF;
+}
+
+#heading{
+    font-family:'Times New Roman', Times, serif;
+    padding:20px;
+    margin-bottom:10px;
+    background-color: rgb(255, 227, 188);
+    background-image: linear-gradient(to bottom, rgb(237, 214, 145), rgb(251, 221, 87))
+}
+
+#description{
+    font-family: 'Open Sans', sans-serif;
+    font-style: italic;
+}
+
+#create{
+    padding:15px;
+    margin:15px 10px 15px 10px;
+    background-color: C0C0C0;
+    border-left: 10px;
+    border-color: rgb(153, 244, 244);
+}
+
+.input{
+    margin: 20px;
+}

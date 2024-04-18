@@ -32,12 +32,11 @@ class Board(db.Model):
 
 #   Permissions Table
 class Permission(db.Model):
-    board = db.Column(db.String(20), ForeignKey(Board.id))
-    user = db.Column(db.String(20), ForeignKey(User.id))
+    board = db.Column(db.Integer(20), ForeignKey(Board.id))
+    user = db.Column(db.Integer(20), ForeignKey(User.id))
     writeAccess = db.Column(db.Integer, nullable=False)
     active = db.Column(db.String(20), nullable=False)
     __table_args__ = (PrimaryKeyConstraint('board', 'user'),)
-
 
 @app.route('/')
 def home():
@@ -56,9 +55,10 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
             flash('successfully logged in.', "success")
-            session['is_login'] = True  # store a session after login firstly
-            session['username'] = user.username  # username is unique
-
+            session['is_login'] = True #store a session after login firstly
+            # session['username'] = user.username #username is unique
+            session['UID'] = user.id 
+            print('good')
             return redirect(url_for('home'))
         else:
             flash('Username or Password Incorrect', "danger")
@@ -90,13 +90,19 @@ def register():
 
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
-    form = BoardForm(request.form)
+    form = BoardForm(request.form)  #   Get the 
+
     if request.method == 'POST' and form.validate():
-        newboard = newBoard(
-            boardname=form.name.data,
-            visibility=form.visibility.data
+        addboard = Board(
+            boardname=form.boardname.data,
+            visibiliy=form.visibility.data,
+            superuser=session['UID'],
+            active=True
         )
-        db.session.add(newboard)
+        db.session.add(addboard)
+        db.session.commit()
+        flash('Creation Succeeded', 'success')
+        #   need to return new page? 
     return render_template('boardCreat.html', form=form)
 
 

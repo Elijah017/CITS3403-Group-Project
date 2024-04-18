@@ -16,9 +16,6 @@ def checkPassword(form,field):
         #raise validators.ValidationError("Password can only contain alphanumeric characters and the following symbols: !@#$%^&*()-_=+{}[]|;:'\",.<>/?`~")
 #  we can change the form of password  at this place
 
-
-
-
 #   User login
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=50)], render_kw={"placeholder" : "Enter Email", "autofocus":True})
@@ -45,3 +42,5 @@ class BoardForm(FlaskForm):
     visibility = StringField('Visibility', validators=[validators.DataRequired(
         message="Please enter public or private"), validators.EqualTo('public', 'private')], render_kw={"placeholder": "Enter public or private"})  #  Public or Private
     submit = SubmitField('Create')
+
+#   Permissions 
