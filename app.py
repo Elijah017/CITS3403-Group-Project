@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from sqlalchemy import ForeignKey
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
 
@@ -14,11 +15,28 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
+#   User Table
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20), unique=True)
     email = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(200))  
+
+#   Board Table
+class Board(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    boardName = db.Column(db.String(20), nullable=False)
+    visibility = db.Column(db.String(20))
+    superuser = db.Column(db.String(20), ForeignKey(User.id))
+    active = db.Column(db.String(20), nullable=False)
+
+#   Permissions Table
+class Permission(db.Model):
+    board = db.Column(db.String(20), ForeignKey(Board.id))
+    user = db.Column(db.String(20), ForeignKey(User.id))
+    writeAccess = db.Column(db.Integer, nullable=False)
+    active = db.Column(db.String(20), nullable=False)
+
 
 @app.route('/')
 def home():
@@ -69,8 +87,12 @@ def register():
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
     form = BoardForm(request.form) 
-
+    if request.method == 'POST' and form.validate():
+        addboard = Board(
+            
+        )
     return render_template('boardCreat.html', form=form)
+
 
 @app.route('/logout/')
 def logout():
@@ -80,4 +102,3 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
