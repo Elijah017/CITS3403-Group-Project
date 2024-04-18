@@ -39,5 +39,5 @@ body:has(.login-form) {
 }
 
 p.danger {
-    color: crimson;
+    color: var(--bs-danger);
 }
