@@ -37,7 +37,7 @@ class RegisterForm(FlaskForm):
 
 #   Board Creation
 class BoardForm(FlaskForm):
-    name = StringField('Board Name', validators=[validators.DataRequired(message="Board name required"), Length(min=1, max=50)], render_kw={"placeholder": "Enter board name", "autofocus":True}) #  Name of board
+    boardname = StringField('Board Name', validators=[validators.DataRequired(message="Board name required"), Length(min=1, max=50)], render_kw={"placeholder": "Enter board name", "autofocus":True}) #  Name of board
     visibility = StringField('Visibility', validators=[validators.DataRequired(
         message="Please enter public or private"), validators.EqualTo('public', 'private')], render_kw={"placeholder": "Enter public or private"})  #  Public or Private
     submit = SubmitField('Create')
