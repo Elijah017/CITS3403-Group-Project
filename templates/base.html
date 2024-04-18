@@ -15,8 +15,8 @@
                     <a class="navbar-brand" href="{{ url_for('home') }}">BanKan</a>
                     <div>
                         {% if session.is_login %}
+                            <a class="btn btn-outline-primary" href="{{ url_for('newBoard')}}">New Kanban Board</a>
                             <a class="btn btn-outline-primary" href="{{ url_for('logout') }}">Logout</a>
-                            <li><a href="{{ url_for('newBoard')}}">New Kanban Board</a></li>
                         {% else %}
                             <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
                             <a class="btn btn-primary" href="{{ url_for('register') }}">Register</a>
