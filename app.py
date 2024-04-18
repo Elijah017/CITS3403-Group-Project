@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from sqlalchemy import ForeignKey
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
 
@@ -13,15 +14,39 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
+<<<<<<< HEAD
 
+=======
+#   User Table
+>>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20), unique=True)
     email = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(200))
 
+<<<<<<< HEAD
 
 @app.route("/")
+=======
+#   Board Table
+class Board(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    boardName = db.Column(db.String(20), nullable=False)
+    visibility = db.Column(db.String(20))
+    superuser = db.Column(db.String(20), ForeignKey(User.id))
+    active = db.Column(db.String(20), nullable=False)
+
+#   Permissions Table
+class Permission(db.Model):
+    board = db.Column(db.String(20), ForeignKey(Board.id))
+    user = db.Column(db.String(20), ForeignKey(User.id))
+    writeAccess = db.Column(db.Integer, nullable=False)
+    active = db.Column(db.String(20), nullable=False)
+
+
+@app.route('/')
+>>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 def home():
     return render_template("index.html")
 
@@ -75,10 +100,18 @@ def register():
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
     form = BoardForm(request.form) 
-
+    if request.method == 'POST' and form.validate():
+        addboard = Board(
+            
+        )
     return render_template('boardCreat.html', form=form)
 
+<<<<<<< HEAD
 @app.route("/logout/")
+=======
+
+@app.route('/logout/')
+>>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 def logout():
     session.clear()
     flash("logged out.", "info")
