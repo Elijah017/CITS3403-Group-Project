@@ -20,7 +20,6 @@ def checkPassword(form,field):
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=50)], render_kw={"placeholder" : "Enter Email", "autofocus":True})
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=256)], render_kw={"placeholder" : "Enter Password"})
-    submit = SubmitField('Login')
 
 #   Registration 
 class RegisterForm(FlaskForm):
