@@ -25,7 +25,7 @@ class User(db.Model):
 #   Board Table
 class Board(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    boardName = db.Column(db.String(20), nullable=False)
+    boardname = db.Column(db.String(20), nullable=False)
     visibility = db.Column(db.String(20))
     superuser = db.Column(db.String(20), ForeignKey(User.id))
     active = db.Column(db.String(20), nullable=False)
@@ -90,10 +90,10 @@ def register():
 def newBoard():
     form = BoardForm(request.form)  #   Get the form
 
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST': # and form.validate():
         addboard = Board(
             boardname=form.boardname.data,
-            visibiliy=form.visibility.data,
+            visibility=form.visibility.data,
             superuser=session['UID'],
             active=True
         )
