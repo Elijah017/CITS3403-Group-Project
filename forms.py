@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators, SubmitField
+from wtforms import StringField, PasswordField, validators, SubmitField, SelectField
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -48,8 +48,14 @@ class RegisterForm(FlaskForm):
 #   Board Creation
 class BoardForm(FlaskForm):
     boardname = StringField('Board Name', validators=[validators.DataRequired(message="Board name required"), Length(min=1, max=50)], render_kw={"placeholder": "Enter board name", "autofocus":True}) #  Name of board
-    visibility = StringField('Visibility', validators=[validators.DataRequired(
-        message="Please enter public or private"), validators.EqualTo('public', 'private')], render_kw={"placeholder": "Enter public or private"})  #  Public or Private
+    visibility = SelectField('Visibility', choices=[('public', 'Public'), ('private', 'Private')])
     submit = SubmitField('Create')
+    supervisor = StringField('Superuser')
+    active = SelectField('active')
 
 #   Permissions 
+class Permission(FlaskForm):
+    board = StringField()
+    user = StringField()
+    writeAccess = StringField('')
+
