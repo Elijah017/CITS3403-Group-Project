@@ -90,7 +90,7 @@ def register():
 def newBoard():
     form = BoardForm(request.form)  #   Get the form
 
-    if request.method == 'POST': #and form.validate()
+    if request.method == 'POST' and form.validate():
         addboard = Board(
             boardname=form.boardname.data,
             visibiliy=form.visibility.data,
@@ -99,8 +99,12 @@ def newBoard():
         )
         db.session.add(addboard)
         db.session.commit()
-        flash('Creation Succeeded', 'success')
+        if addboard.visibility is True:
+            flash('Public Board Created', 'success')
+        else:
+            flash('Private Board Created', 'success')
         #   need to return new page? 
+        return redirect(url_for('home'))
     return render_template('boardCreat.html', form=form)
 
 
