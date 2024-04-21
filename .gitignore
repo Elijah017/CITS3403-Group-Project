@@ -2,5 +2,3 @@
 *.pyc
 migrations
 instance
-config*
-*.db
