@@ -3,6 +3,13 @@ from wtforms import StringField, PasswordField, validators, SubmitField, SelectF
 from wtforms.validators import DataRequired, Email, Length
 
 def checkPassword(form,field):
+    """
+    Defines password validation parameters. These parameters are:
+        - length >= 10
+        - atleast 1 digit
+        - atleast 1 lowercase
+        - atleast 1 uppercase
+    """
     Password=field.data
     if len(Password)<10:
         raise validators.ValidationError("Password length should be more than 10 characters")
@@ -37,8 +44,20 @@ class RegisterForm(FlaskForm):
 
 #   Board Creation
 class BoardForm(FlaskForm):
-    boardname = StringField('Board Name', validators=[validators.DataRequired(message="Board name required"), Length(min=1, max=50)], render_kw={"placeholder": "Enter board name", "autofocus":True}) #  Name of board
-    visibility = SelectField('Visibility', choices=[('public', 'Public'), ('private', 'Private')])
+    boardname = StringField('Board Name',
+        validators=[validators.DataRequired(message="Board name required"),
+        Length(min=1, max=50)],
+        render_kw={
+            "placeholder": "Enter board name",
+            "autofocus":True
+        }
+    ) #  Name of board
+    visibility = SelectField('Visibility',
+        choices=[
+            ('public', 'Public'),
+            ('private', 'Private')
+        ]
+    )
     submit = SubmitField('Create')
     supervisor = StringField('Superuser')
     active = SelectField('active')

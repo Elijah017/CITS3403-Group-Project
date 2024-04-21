@@ -4,11 +4,10 @@ from flask_migrate import Migrate
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
+import json
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-
-app.config['SECRET_KEY'] = '123456789'#Cross-Site Request Forgery
+app.config.from_file('config.json', load=json.load)
 
 
 db = SQLAlchemy(app)
@@ -93,8 +92,7 @@ def register():
 def newBoard():
     form = BoardForm(request.form)  #   Get the form
 
-    if request.method == 'POST': # and form.validate():
-    if request.method == 'POST': # and form.validate():
+    if request.method == 'POST':
         addboard = Board(
             boardname=form.boardname.data,
             visibility=form.visibility.data,

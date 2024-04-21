@@ -3,6 +3,10 @@
 {% block title %}
     <title>Register</title>
 {% endblock %} 
+{% block head %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='scripts/register.js')}}"></script>
+{% endblock %}
 
 {% block content %}
     <form method="post" class="bg-white shadow-sm centred login-form">
@@ -30,8 +34,18 @@
         {% for error in form.password.errors %}
             <p class="danger">{{ error }}</p>
         {% endfor %}
+        <div id="passwordHelper" class="formHelpers">
+          <p id="passwordLength" class="text-danger">minimum 10 characters</p>
+          <p id="passwordSpecial" class="text-danger">at least 1 special character</p>
+          <p id="passwordUpper" class="text-danger">at least 1 uppercase character</p>
+          <p id="passwordLower" class="text-danger">at least 1 lowercase letter</p>
+          <p id="passwordNumber" class="text-danger">at least 1 number</p>
+        </div>
         {{ form.confirm.label }}<br>
         {{ form.confirm }}<br>
+        <div id="confirmHelper" class="formHelpers">
+          <p id="confirmMatch" class="text-danger">passwords must match</p>
+        </div>
         {{ form.submit }}
         <input type="submit" value="Register" class="btn btn-primary">
     </form>
