@@ -30,16 +30,45 @@ class LoginForm(FlaskForm):
 
 #   Registration 
 class RegisterForm(FlaskForm):
-    username = StringField("Username", validators=[validators.Length(min=3, max=25), validators.DataRequired(message="length should more than 3")], render_kw={"placeholder": "Enter your username"})
-    email = StringField("Email", validators=[validators.Email(message="Invalid email address")], render_kw={"placeholder": "Enter your email"})
-    password = PasswordField("Password", validators=[
-        validators.DataRequired(message="Password length should be more than 10"),
-        checkPassword
-    ], render_kw={"placeholder": "Enter your password"})
+    username = StringField(
+        "Username",
+        validators=[validators.Length(min=3, max=25),
+        validators.DataRequired(message="length should more than 3")],
+        render_kw={
+            "class": "lowered",
+            "placeholder": "Enter your username"
+        }
+    )
+    email = StringField(
+        "Email",
+        validators=[validators.Email(message="Invalid email address")],
+        render_kw={
+            "class": "form-control",
+            "placeholder": "Enter your email"
+            }
+        )
+    password = PasswordField(
+        "Password",
+        validators=[
+            validators.DataRequired(message="Password length should be more than 10"),
+            checkPassword
+        ],
+        render_kw={
+            "class": "form-control",
+            "placeholder": "Enter your password"
+            }
+        )
 
-    confirm = PasswordField("Confirm Password", validators=[
-        validators.DataRequired(message="Please fill this field")
-    ], render_kw={"placeholder": "Confirm your password"})
+    confirm = PasswordField(
+        "Confirm Password",
+        validators=[
+            validators.DataRequired(message="Please fill this field")
+        ],
+        render_kw={
+            "class": "form-control",
+            "placeholder": "Confirm your password"
+            }
+        )
 
 
 #   Board Creation

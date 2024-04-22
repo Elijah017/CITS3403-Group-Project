@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Home</title>
+{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='scripts/boards.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <ul class="list-group board-display" id="boards-list">
+        <li class="list-group-item"><h2>Available Boards</h2></li>
+            {% if not boards %}
+                <li class="list-group-item">No Boards To Display</li>
+            {% else %}
+                {% for board in boards %}
+                    <a id="{{ board['id'] }}" class="list-group-item list-group-item-action" href="boards/{{ board['id'] }}">{{ board['boardname'] }}</a>
+                {% endfor %}
+            {% endif %}
+    </ul>
+{% endblock %}

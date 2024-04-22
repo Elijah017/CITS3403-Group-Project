@@ -9,40 +9,33 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" class="bg-white shadow-sm centred login-form">
+    <form method="post" class="bg-white shadow-sm centred login-form needs-validation" novalidate>
         {{ form.csrf_token }}
         <h1>Register</h1>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <p class="{{ category }}">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {{ form.username.label }}<br>
-        {{ form.username }}<br>
+        <label for="username" class="raised">Username</label>
+        {{ form.username }}
         {% for error in form.username.errors %}
             <p class="danger">{{ error }}</p>
         {% endfor %}
-        {{ form.email.label }}<br>
-        {{ form.email }}<br>
+        <label for='email' class="raised">Email</label>
+        {{ form.email }}
         {% for error in form.email.errors %}
             <p class="danger">{{ error }}</p>
         {% endfor %}
-        {{ form.password.label }}<br>
-        {{ form.password }}<br>
+        <label for="password" class="raised">Password</label>
+        {{ form.password }}
         {% for error in form.password.errors %}
             <p class="danger">{{ error }}</p>
         {% endfor %}
-        <div id="passwordHelper" class="formHelpers">
+        <div id="passwordHelper" class="formHelpers invalid-feedback">
           <p id="passwordLength" class="text-danger">minimum 10 characters</p>
           <p id="passwordSpecial" class="text-danger">at least 1 special character</p>
           <p id="passwordUpper" class="text-danger">at least 1 uppercase character</p>
           <p id="passwordLower" class="text-danger">at least 1 lowercase letter</p>
           <p id="passwordNumber" class="text-danger">at least 1 number</p>
         </div>
-        {{ form.confirm.label }}<br>
-        {{ form.confirm }}<br>
+        <label for="confirm" class="raised">Confirm Password</label>
+        {{ form.confirm }}
         <div id="confirmHelper" class="formHelpers">
           <p id="confirmMatch" class="text-danger">passwords must match</p>
         </div>
