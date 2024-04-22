@@ -5,6 +5,12 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Welcome to our website!</h2>
-    <p>This is the homepage of our Flask Auth App.</p>
+    {% if not session['is_login'] %}
+        <h2>Welcome to our website!</h2>
+        <p>This is the homepage of our Flask Auth App.</p>
+    {% else %}
+        <ul class="list-group">
+            <li class="list-group-item">Available Boards</li>
+        </ul>
+    {% endif %}
 {% endblock %}
