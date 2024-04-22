@@ -48,8 +48,19 @@ class Permission(db.Model):
 @app.route('/')
 >>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 def home():
-    return render_template("index.html")
+    if (not session['is_login']):
+        return render_template('index.html', boards=[])
+    
+    return render_template(
+        'index.html',
+        boards=Board.query.filter_by(superuser=session['UID'], active=1)
+    )
 
+
+@app.route('/board/<int:id>', methods=['GET', 'POST'])
+def board(id):
+    board = Board.query.filter_by(id=id).first()
+    return render_template('board.html', title=board.boardname)
 
 
 @app.route('/login/', methods=['GET', 'POST'])

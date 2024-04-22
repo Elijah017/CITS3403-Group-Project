@@ -57,7 +57,7 @@ class BoardForm(FlaskForm):
         validators=[validators.DataRequired(message="Board name required"),
         Length(min=1, max=50)],
         render_kw={
-            "class": "form-control bg-light",
+            "class": "form-control",
             "placeholder": "Board Name",
             "autofocus":True
         }
