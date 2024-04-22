@@ -48,19 +48,21 @@ class Permission(db.Model):
 @app.route('/')
 >>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 def home():
-    if (not session['is_login']):
-        return render_template('index.html', boards=[])
+    return render_template('index.html')
     
+
+
+@app.route('/boards/')
+def boards():
     return render_template(
-        'index.html',
+        'boards/boards.html',
         boards=Board.query.filter_by(superuser=session['UID'], active=1)
     )
 
-
-@app.route('/board/<int:id>', methods=['GET', 'POST'])
+@app.route('/boards/<int:id>', methods=['GET', 'POST'])
 def board(id):
     board = Board.query.filter_by(id=id).first()
-    return render_template('board.html', title=board.boardname)
+    return render_template('boards/board.html', title=board.boardname)
 
 
 @app.route('/login/', methods=['GET', 'POST'])
@@ -77,7 +79,7 @@ def login():
             session['is_login'] = True #store a session after login firstly
             session['username'] = user.username #username is unique
             session['UID'] = user.id
-            return redirect(url_for('home'))
+            return redirect(url_for('boards'))
         else:
             flash('Username or Password Incorrect', "danger")
     return render_template('login.html', form=form)
@@ -125,7 +127,7 @@ def newBoard():
         else:
             flash('Private Board Created', 'success')
         #   need to return new page? 
-        return redirect(url_for('home'))
+        return redirect(url_for('boards'))
     return render_template('boardCreat.html', form=form)
 
 <<<<<<< HEAD

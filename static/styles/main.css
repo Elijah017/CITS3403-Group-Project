@@ -22,6 +22,7 @@ body:has(.login-form), body:has(.board-display) {
   max-width: 500px;
   padding: 1rem;
   border-radius: 0.5rem;
+  text-align: center;
 }
 
 .login-form h1 {
@@ -37,9 +38,29 @@ body:has(.login-form), body:has(.board-display) {
 }
 
 .login-form input:not([type="submit"]) {
-  border-radius: 0.25rem;
-  border: 1px solid black;
-  padding: 0.25rem;
+  margin-top: 0px;
+  padding: 0.8rem;
+  text-align: center;
+  border: 1px solid;
+  color: var(--bs-body-color);
+  border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
+  border-color: var(--bs-border-color);
+}
+
+.login-form input::placeholder {
+  text-align: center;
+}
+
+.login-form label {
+  margin-bottom: 0px;
+  padding: 0.375rem 0.75rem;
+  /* max-width: fit-content; */
+  width: 100%;
+  background-color: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+  border: 1px solid;
+  border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+  border-color: var(--bs-border-color);
 }
 
 p.danger {
@@ -52,8 +73,8 @@ div.formHelpers {
   opacity: 0.75;
 }
 
-#create .form-control {
-  border-color: #D3D3D3;
+.form-control {
+  border: var(--bs-border-width) solid var(--bs-border-color);
 }
 
 #create .form-select {
