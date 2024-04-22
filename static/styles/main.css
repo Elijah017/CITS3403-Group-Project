@@ -1,7 +1,11 @@
-body:has(.login-form) {
-  background-image: linear-gradient(to top right, rgba(111, 66, 192, 1), rgba(13, 110, 240, 1));
+body {
+  margin: 0;
   height: 100vh;
   width: 100vw;
+}
+
+body:has(.login-form), body:has(.board-display) {
+  background-image: linear-gradient(to top right, rgba(111, 66, 192, 1), rgba(13, 110, 240, 1));
 }
 
 .centred {
@@ -49,10 +53,24 @@ div.formHelpers {
 }
 
 #create .form-control {
-  border-color: gray;
+  border-color: #D3D3D3;
 }
 
 #create .form-select {
   max-width: max-content;
   margin: 0px;
+}
+
+.board-display {
+  position: absolute;
+  background-color: white;
+  left: 10%;
+  margin: 2rem 0;
+  width: 80%;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+.board-display {
+  text-align: center;
 }
