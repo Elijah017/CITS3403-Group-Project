@@ -48,6 +48,11 @@ div.formHelpers {
   opacity: 0.75;
 }
 
-input, select {
-  text-align: center;
+#create .form-control {
+  border-color: gray;
+}
+
+#create .form-select {
+  max-width: max-content;
+  margin: 0px;
 }

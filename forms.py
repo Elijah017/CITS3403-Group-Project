@@ -48,7 +48,8 @@ class BoardForm(FlaskForm):
         validators=[validators.DataRequired(message="Board name required"),
         Length(min=1, max=50)],
         render_kw={
-            "placeholder": "Enter board name",
+            "class": "form-control bg-light",
+            "placeholder": "Board Name",
             "autofocus":True
         }
     ) #  Name of board
@@ -56,9 +57,16 @@ class BoardForm(FlaskForm):
         choices=[
             ('public', 'Public'),
             ('private', 'Private')
-        ]
+        ],
+        render_kw={
+            "class": "form-select"
+        }
     )
-    submit = SubmitField('Create')
+    submit = SubmitField('Create',
+        render_kw={
+            "class": "btn btn-primary"
+        }
+    )
     supervisor = StringField('Superuser')
     active = SelectField('active')
 

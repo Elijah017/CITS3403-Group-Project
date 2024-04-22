@@ -4,24 +4,18 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" class="bg-white shadow-sm centred login-form">
+    <form method="post" class="bg-white shadow-sm centred login-form board-create-form">
         {{ form.csrf_token }}
         <h1>Board Creation</h1>
         <p class="text-center" id="description">Let's Start Creating Your New KanBan Board!</p>
         <div id="create">
             <form method="post">
                 {{ form.csrf_token }}
-                <div class="input text-center">
-                    {{ form.boardname.label }}
+                <div class="input-group mb-3">
+                    {{ form.visibility }}
                     {{ form.boardname }}
                 </div>
-                <div class="input text-center">
-                    {{ form.visibility.label }}
-                    {{ form.visibility }}
-                </div>
-                <div class="text-center">
-                    {{ form.submit }}
-                </div>
+                {{ form.submit }}
             </form>
         </div>
 {% endblock %}
