@@ -37,30 +37,48 @@ body:has(.login-form), body:has(.board-display) {
   margin-bottom: 1rem;
 }
 
-.login-form input:not([type="submit"]) {
-  margin-top: 0px;
-  padding: 0.8rem;
-  text-align: center;
+.form-container {
   border: 1px solid;
   color: var(--bs-body-color);
-  border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
+  border-radius: var(--bs-border-radius);
   border-color: var(--bs-border-color);
+  margin: 0px;
+  padding: 0px;
 }
 
-.login-form input::placeholder {
+.form-container input:not([type="submit"]) {
+  margin: 0px;
+  padding: 0.8rem;
+  text-align: center;
+  border: 0px var(--bs-border-color);
+}
+
+.form-container input::placeholder {
   text-align: center;
 }
 
-.login-form label {
+.form-container input:focus {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid;
+  border-radius: 0px;
+  border-color: black;
+}
+
+.form-container label {
   margin-bottom: 0px;
   padding: 0.375rem 0.75rem;
-  /* max-width: fit-content; */
   width: 100%;
   background-color: var(--bs-tertiary-bg);
   color: var(--bs-body-color);
-  border: 1px solid;
-  border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
   border-color: var(--bs-border-color);
+  /* border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0; */
+}
+
+.form-container label:is(:first-child) {
+  border-top: none;
 }
 
 p.danger {
@@ -68,6 +86,7 @@ p.danger {
 }
 
 div.formHelpers {
+  margin-top: 5px;
   padding-top: 5px;
   line-height: 0;
   opacity: 0.75;
@@ -75,6 +94,12 @@ div.formHelpers {
 
 .form-control {
   border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.input-group input:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: black;
 }
 
 #create .form-select {

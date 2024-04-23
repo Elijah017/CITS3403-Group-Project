@@ -12,34 +12,36 @@
     <form method="post" class="bg-white shadow-sm centred login-form needs-validation" novalidate>
         {{ form.csrf_token }}
         <h1>Register</h1>
-        <label for="username" class="raised">Username</label>
-        {{ form.username }}
-        {% for error in form.username.errors %}
-            <p class="danger">{{ error }}</p>
-        {% endfor %}
-        <label for='email' class="raised">Email</label>
-        {{ form.email }}
-        {% for error in form.email.errors %}
-            <p class="danger">{{ error }}</p>
-        {% endfor %}
-        <label for="password" class="raised">Password</label>
-        {{ form.password }}
-        {% for error in form.password.errors %}
-            <p class="danger">{{ error }}</p>
-        {% endfor %}
-        <div id="passwordHelper" class="formHelpers invalid-feedback">
-          <p id="passwordLength" class="text-danger">minimum 10 characters</p>
-          <p id="passwordSpecial" class="text-danger">at least 1 special character</p>
-          <p id="passwordUpper" class="text-danger">at least 1 uppercase character</p>
-          <p id="passwordLower" class="text-danger">at least 1 lowercase letter</p>
-          <p id="passwordNumber" class="text-danger">at least 1 number</p>
+        <div class="form-container">
+          <label for="username" class="raised">Username</label>
+          {{ form.username }}
+          {% for error in form.username.errors %}
+              <p class="danger">{{ error }}</p>
+          {% endfor %}
+          <label for='email' class="raised">Email</label>
+          {{ form.email }}
+          {% for error in form.email.errors %}
+              <p class="danger">{{ error }}</p>
+          {% endfor %}
+          <label for="password" class="raised">Password</label>
+          {{ form.password }}
+          {% for error in form.password.errors %}
+              <p class="danger">{{ error }}</p>
+          {% endfor %}
+          <div id="passwordHelper" class="formHelpers invalid-feedback">
+            <p id="passwordLength" class="text-danger">minimum 10 characters</p>
+            <p id="passwordSpecial" class="text-danger">at least 1 special character</p>
+            <p id="passwordUpper" class="text-danger">at least 1 uppercase character</p>
+            <p id="passwordLower" class="text-danger">at least 1 lowercase letter</p>
+            <p id="passwordNumber" class="text-danger">at least 1 number</p>
+          </div>
+          <label for="confirm" class="raised">Confirm Password</label>
+          {{ form.confirm }}
+          <div id="confirmHelper" class="formHelpers">
+            <p id="confirmMatch" class="text-danger">passwords must match</p>
+          </div>
+          {{ form.submit }}
         </div>
-        <label for="confirm" class="raised">Confirm Password</label>
-        {{ form.confirm }}
-        <div id="confirmHelper" class="formHelpers">
-          <p id="confirmMatch" class="text-danger">passwords must match</p>
-        </div>
-        {{ form.submit }}
         <input type="submit" value="Register" class="btn btn-primary">
     </form>
 {% endblock %}
