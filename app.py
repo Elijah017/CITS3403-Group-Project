@@ -143,8 +143,13 @@ def register():
 
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
-    form = BoardForm(request.form)  # Get the form
-
+    form = BoardForm(request.form) 
+    #   Check whether boardname already exists for superuser
+    exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session['UID']).first()
+    if exist:
+        flash('Board with this name already exists', 'error')
+        return render_template('boardCreat.html', form=form)
+    #   Posting to db
     if request.method == 'POST':
         addboard = Board(
             boardname=form.boardname.data,
@@ -158,13 +163,9 @@ def newBoard():
             flash('Public Board Created', 'success')
         else:
             flash('Private Board Created', 'success')
-        #   need to return new page?
+        #   need to return new page? 
         return redirect(url_for('boards'))
     return render_template('boardCreat.html', form=form)
-
-<<<<<<< HEAD
-@app.route("/logout/")
-=======
 
 @app.route('/logout/')
 >>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
