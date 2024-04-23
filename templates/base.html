@@ -22,7 +22,7 @@
                     {% if session.is_login %}
                       <a class="navbar-brand" href="{{ url_for('boards') }}">BanKan</a>
                       <div>
-                          <a class="btn btn-outline-primary" href="{{ url_for('newBoard')}}">New Kanban Board</a>
+                          <a class="btn btn-outline-primary" href="{{ url_for('newBoard')}}">New Board</a>
                           <a class="btn btn-outline-primary" href="{{ url_for('logout') }}">Logout</a>
                       </div>
                     {% else %}

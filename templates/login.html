@@ -5,6 +5,12 @@
 {% endblock %} 
 
 {% block content %}
+    {%  for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissble fade show" role="alert" >
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
     <form method="post" class="bg-white shadow-sm centred login-form">
         {{ form.csrf_token }}
         <h1>Login</h1>
