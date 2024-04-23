@@ -14,8 +14,8 @@
             {% if not boards %}
                 <li class="list-group-item">No Boards To Display</li>
             {% else %}
-                {% for board in boards %}
-                    <a id="{{ board['id'] }}" class="list-group-item list-group-item-action" href="boards/{{ board['id'] }}">{{ board['boardname'] }}</a>
+                {% for board in boards.keys() %}
+                    <a id="{{ board }}" class="list-group-item list-group-item-action board-btn" href="/boards/{{ board }}">{{ boards[board]['boardname'] }} Owner : {{ boards[board]['owner'] }}</a>
                 {% endfor %}
             {% endif %}
     </ul>

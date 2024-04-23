@@ -14,29 +14,23 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
-<<<<<<< HEAD
 
-=======
-#   User Table
->>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(20), unique=True)
+    username = db.Column(db.String(20))
     email = db.Column(db.String(20), unique=True)
-    password = db.Column(db.String(200))  
+    password = db.Column(db.String(200))
 
-@app.route("/")
-=======
-#   Board Table
+
 class Board(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     boardname = db.Column(db.String(20), nullable=False)
     visibility = db.Column(db.String(20))
     superuser = db.Column(db.String(20), ForeignKey(User.id))
     active = db.Column(db.String(20), nullable=False)
 
-#   Permissions Table
+
 class Permission(db.Model):
     board = db.Column(db.Integer, ForeignKey(Board.id))
     user = db.Column(db.Integer, ForeignKey(User.id))
@@ -49,15 +43,54 @@ class Permission(db.Model):
 >>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 def home():
     return render_template('index.html')
-    
+
+
+def get_owner(id, user):
+    if id == user:
+        return "Mine"
+    else:
+        username = User.query.filter_by(id=id).first()
+        if username == None:
+            return None
+        return username.username
 
 
 @app.route('/boards/')
 def boards():
-    return render_template(
-        'boards/boards.html',
-        boards=Board.query.filter_by(superuser=session['UID'], active=1)
-    )
+    render = {}
+    user = session['UID']
+
+    for board in Board.query.filter(
+        ((Board.superuser == user) | (Board.visibility == "public"))
+        & (Board.active == 1)
+    ):
+        owner = get_owner(board.superuser, user)
+        if owner == None:
+            continue
+
+        render[board.id] = {
+            "boardname": board.boardname,
+            "owner": owner,
+            "active": 1,
+            "visibility": board.visibility
+        }
+
+    for perm in Permission.query.filter_by(board=user, active=1):
+        if perm.board in render:
+            continue
+        board = Board.query.filter_by(id=perm.board)
+        owner = get_owner(board.superuser, user)
+        if owner == None:
+            continue
+        render[board.id] = {
+            "boardname": board.boardname,
+            "owner": owner,
+            "active": 1,
+            "visibility": board.visibility
+        }
+
+    return render_template('boards/boards.html', boards=render)
+
 
 @app.route('/boards/<int:id>', methods=['GET', 'POST'])
 def board(id):
@@ -68,34 +101,34 @@ def board(id):
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
-    if "is_login" in session and session['is_login']:# remember user by session after first login
+    # remember user by session after first login
+    if "is_login" in session and session['is_login']:
         return redirect(url_for('home'))
-    if request.method == 'POST': # and form.validate():
+    if request.method == 'POST':  # and form.validate():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
-        if user and bcrypt.check_password_hash(user.password, password):  
+        if user and bcrypt.check_password_hash(user.password, password):
             flash('successfully logged in.', "success")
-            session['is_login'] = True #store a session after login firstly
-            session['username'] = user.username #username is unique
+            session['is_login'] = True  # store a session after login firstly
+            session['username'] = user.username  # username is unique
             session['UID'] = user.id
             return redirect(url_for('boards'))
         else:
             flash('Username or Password Incorrect', "danger")
     return render_template('login.html', form=form)
 
+
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm(request.form) #The detail code from form.py 
+    form = RegisterForm(request.form)  # The detail code from form.py
     if request.method == 'POST' and form.validate():
-        username=form.username.data
-        email= form.email.data
-        password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')# it will encryption the code in database,  not neccesery 
-        
-        if User.query.filter_by(username=username).first():
-            flash('Username already exists. Please choose another one.', 'danger')
-            return redirect(url_for('register'))
-        elif User.query.filter_by(email=email).first():
+        username = form.username.data
+        email = form.email.data
+        password = bcrypt.generate_password_hash(form.password.data).decode(
+            'utf-8')  # it will encryption the code in database,  not neccesery
+
+        if User.query.filter_by(email=email).first():
             flash('Email already exists. Please choose another one.', 'danger')
             return redirect(url_for('register'))
         else:
@@ -108,10 +141,9 @@ def register():
     return render_template('register.html', form=form)
 
 
-
 @app.route('/newBoard/', methods=['GET', 'POST'])
 def newBoard():
-    form = BoardForm(request.form)  #   Get the form
+    form = BoardForm(request.form)  # Get the form
 
     if request.method == 'POST':
         addboard = Board(
@@ -126,7 +158,7 @@ def newBoard():
             flash('Public Board Created', 'success')
         else:
             flash('Private Board Created', 'success')
-        #   need to return new page? 
+        #   need to return new page?
         return redirect(url_for('boards'))
     return render_template('boardCreat.html', form=form)
 

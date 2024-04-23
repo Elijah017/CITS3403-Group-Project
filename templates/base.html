@@ -19,16 +19,19 @@
         <header>
             <nav class="navbar sticky-top bg-white shadow-sm">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="{{ url_for('home') }}">BanKan</a>
-                    <div>
-                        {% if session.is_login %}
-                            <a class="btn btn-outline-primary" href="{{ url_for('newBoard')}}">New Kanban Board</a>
-                            <a class="btn btn-outline-primary" href="{{ url_for('logout') }}">Logout</a>
-                        {% else %}
-                            <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
-                            <a class="btn btn-primary" href="{{ url_for('register') }}">Register</a>
-                        {% endif %}
-                    </div>
+                    {% if session.is_login %}
+                      <a class="navbar-brand" href="{{ url_for('boards') }}">BanKan</a>
+                      <div>
+                          <a class="btn btn-outline-primary" href="{{ url_for('newBoard')}}">New Kanban Board</a>
+                          <a class="btn btn-outline-primary" href="{{ url_for('logout') }}">Logout</a>
+                      </div>
+                    {% else %}
+                      <a class="navbar-brand" href="{{ url_for('home') }}">BanKan</a>
+                      <div>
+                          <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
+                          <a class="btn btn-primary" href="{{ url_for('register') }}">Register</a>
+                      </div>
+                    {% endif %}
                   </div>
             </nav>
         </header>

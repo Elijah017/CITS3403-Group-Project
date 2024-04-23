@@ -25,12 +25,25 @@ def checkPassword(form,field):
 
 #  we can change the form of password  at this place
 
-#   User login
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=50)], render_kw={"placeholder" : "Enter Email", "autofocus":True})
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=256)], render_kw={"placeholder" : "Enter Password"})
+    email = StringField(
+        'Email', 
+        validators=[DataRequired(), Email(), Length(max=50)],
+        render_kw={
+            "class": "lowered",
+            "placeholder" : "Enter Email", 
+            "autofocus":True
+        }
+    )
+    password = PasswordField(
+        'Password',
+        validators=[DataRequired(), Length(min=6, max=256)],
+        render_kw={
+            "class": "lowered",
+            "placeholder" : "Enter Password"
+        }
+    )
 
-#   Registration 
 class RegisterForm(FlaskForm):
     username = StringField(
         "Username",
@@ -38,7 +51,8 @@ class RegisterForm(FlaskForm):
         validators.DataRequired(message="length should more than 3")],
         render_kw={
             "class": "lowered",
-            "placeholder": "Enter your username"
+            "placeholder": "Enter your username",
+            "autofocus": True
         }
     )
     email = StringField(
@@ -73,7 +87,6 @@ class RegisterForm(FlaskForm):
         )
 
 
-#   Board Creation
 class BoardForm(FlaskForm):
     boardname = StringField('Board Name',
         validators=[validators.DataRequired(message="Board name required"),
@@ -83,7 +96,7 @@ class BoardForm(FlaskForm):
             "placeholder": "Board Name",
             "autofocus":True
         }
-    ) #  Name of board
+    )
     visibility = SelectField('Visibility',
         choices=[
             ('public', 'Public'),
@@ -101,7 +114,6 @@ class BoardForm(FlaskForm):
     supervisor = StringField('Superuser')
     active = SelectField('active')
 
-#   Permissions 
 class Permission(FlaskForm):
     board = StringField()
     user = StringField()
