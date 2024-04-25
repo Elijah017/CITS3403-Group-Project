@@ -44,6 +44,8 @@ class Permission(db.Model):
 @app.route('/')
 >>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 def home():
+    if 'is_login' in session:
+        return redirect(url_for('boards'))
     return render_template('index.html')
 
 
