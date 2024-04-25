@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <title>Home</title>
+    <title>KanBan</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/icon.png') }}">
 {% endblock %}
 
 {% block content %}
-    <h2>Welcome to our website!</h2>
-    <p>This is the homepage of our Flask Auth App.</p>
+    <br>
+    <h2 id="welcome">Welcome to our website!</h2>
+    <div class="description alert alert-warning alert-dismissble fade show">
+        <h3>What is KanBan?</h3>
+        <p>KanBan board is a website tool designed to help teams visually imagine 
+            the progress of projects</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 {% endblock %}
