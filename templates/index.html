@@ -7,11 +7,38 @@
 
 {% block content %}
     <br>
-    <h2 id="welcome">Welcome to our website!</h2>
+    <h2 class="empha text-center">Welcome to our website!</h2>
     <div class="description alert alert-warning alert-dismissble fade show">
         <h3>What is KanBan?</h3>
         <p>KanBan board is a website tool designed to help teams visually imagine 
             the progress of projects</p>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="container-fluid">
+        <h2 class="empha text-center">KanBan Plans for You</h2>
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="{{ url_for('static', filename='images/workflow.png') }}" alt="workflow" class="image">
+                <br>
+                <h5 class="text-center">Visualise Workflow</h5>
+                <hr>
+                <p class="description text-center">KanBan is a great way to visualise the workflow</p>    
+            </div>
+            <div class="col-sm-4">
+                <img src="{{ url_for('static', filename='images/divide_work.png') }}" alt="Task Separation" class="image">
+                <br>
+                <h5 class="text-center">Task Separation</h5>
+                <hr>
+                <p class="description text-center">KanBan provides great insight into the 
+                    requirements of tasks</p>
+            </div>
+            <div class="col-sm-4">
+                <img src="{{ url_for('static', filename='images/improvement.png') }}" alt="Imrpovement" class="image">
+                <br>
+                <h5 class="text-center">Continous Improvement</h5>
+                <hr>
+                <p class="description text-center">KanBan promotes peer review and collaboration</p>
+            </div>
+        </div>
     </div>
 {% endblock %}

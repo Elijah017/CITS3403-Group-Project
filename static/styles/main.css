@@ -120,3 +120,27 @@ div.formHelpers {
 .board-display {
   text-align: center;
 }
+
+.empha{
+    margin:2% 2%;
+    font-size: 30;
+    font-weight: bolder;
+}
+  
+.description{
+    font-style: italic;
+    font-size: x-large;
+    display: flex;
+    align-items: center;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin: 5%, 4%;
+}
+
+.image{
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
