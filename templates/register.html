@@ -1,9 +1,6 @@
 {% extends "base.html" %} 
 
-{% block title %}
-    <title>Register</title>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/icon.png') }}">
-{% endblock %} 
+{% block title %}Register{% endblock %} 
 {% block head %}
   {{ super() }}
   <script src="{{ url_for('static', filename='scripts/register.js')}}"></script>

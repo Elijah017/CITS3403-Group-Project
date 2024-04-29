@@ -2,6 +2,12 @@ $(function() {
     mod_board_height()
 
     $(window).change(mod_board_height)
+
+    $("tbody tr").each(function() {
+        $(this).click(function() {
+            window.location.href = $(this).attr('href');
+        })
+    })
 });
 
 function mod_board_height() {

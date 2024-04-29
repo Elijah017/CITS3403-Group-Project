@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}
-    <title>Home</title>
-{% endblock %}
+{% block title %}Boards{% endblock %}
 {% block head %}
     {{ super() }}
     <script src="{{ url_for('static', filename='scripts/boards.js') }}"></script>
@@ -10,13 +8,34 @@
 
 {% block content %}
     <ul class="list-group board-display" id="boards-list">
-        <li class="list-group-item"><h2>Available Boards</h2></li>
-            {% if not boards %}
-                <li class="list-group-item">No Boards To Display</li>
-            {% else %}
-                {% for board in boards.keys() %}
-                    <a id="{{ board }}" class="list-group-item list-group-item-action board-btn" href="/boards/{{ board }}">{{ boards[board]['boardname'] }} Owner : {{ boards[board]['owner'] }}</a>
-                {% endfor %}
-            {% endif %}
+        <li class="list-group-item" id="boards-header"><h2>Available Boards</h2></li>
+        <div class="boards-container">
+            <table class="table table-hover table-borderless align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th class="name-col" scope="col">Board Name</th>
+                        <th class="name-col" scope="col">Owner</th>
+                        <th class="desc-col" scope="col">Description</th>
+                        <th class="name-col" scope="col">Status</th>
+                        <th class="name-col" scope="col">Visibility</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if boards %}
+                        {% for board in boards.keys() %}
+                            <tr href="{{ url_for('boards') }}{{ board }}">
+                                <td>{{ boards[board]["boardname"] }}</td>
+                                <td>{{ boards[board]["owner"] }}</td>
+                                <td class="desc-row">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in tincidunt tellus. Cras sit amet diam ante. Cras ornare volutpat vestibulum. Donec ut tortor aliquet, pulvinar diam et, efficitur metus. Phasellus mollis ipsum risus, vitae pulvinar elit auctor quis. Pellentesque eu dui lacus. Aenean bibendum turpis fringilla, venenatis orci in, ultricies lorem. Praesent congue nisi id purus posuere, ac posuere neque lobortis. Praesent nec pellentesque urna. Nulla eleifend erat ac dui vulputate malesuada. Pellentesque auctor condimentum leo eget feugiat. Nulla efficitur feugiat eros sit amet congue. Morbi ultricies in arcu quis pulvinar. Nulla tristique facilisis eros, at bibendum erat molestie semper. Morbi hendrerit erat egestas ligula hendrerit elementum.</td>
+                                <td>{% if boards[board]["active"] %}Active{% else %}Inactive{% endif %}</td>
+                                <td>{{ boards[board]["visibility"] }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="5">No Boards</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
     </ul>
 {% endblock %}
