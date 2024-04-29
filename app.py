@@ -98,14 +98,6 @@ def adduser_by_superuser(BID,Uid,Write_Access):#this method is to add user by su
     AddUser(Uid,BID,Write_Access,active="active")
     return redirect(url_for('boards'))
 
-def Request_to_add_user(BId):
-    return None
-
-
-def superuser_represent_request():
-    return None
-
-
 
 
 @app.route('/boards/')
