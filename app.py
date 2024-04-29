@@ -39,6 +39,8 @@ class Permission(db.Model):
     __table_args__ = (PrimaryKeyConstraint('board', 'user'),)
 
 
+
+
 @app.route('/')
 >>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 def home():
@@ -53,6 +55,51 @@ def get_owner(id, user):
         if username == None:
             return None
         return username.username
+
+
+
+def AddUser(Uid,Bid,WA,active="active"):#the mathod to add a user to permission, WA is writeAccess
+    board = Board.query.get(Bid)
+    if not board:#check whether the board is exist
+
+        return {"status": "error", "message": "Board not found"}
+    user = User.query.get(Uid)
+    if not user:#check whether the user is exist
+        return {"status": "error", "message": "User not found"}
+    existing_permission = Permission.query.filter_by(board=Bid, user=Uid).first()
+    if existing_permission:#check whether the permission is exist
+        return {"status": "error", "message": "Permission already exists"}
+    NewPermission=Permission(
+        board=Bid,
+        user=Uid,
+        writeAccess=WA,
+        active=active
+        )
+    db.session.add(NewPermission)
+    db.session.commit()
+
+    return {"status": "success", "message": "Permission added successfully"}
+  
+@app.route('/boards/adduser',methods=['GET', 'POST'])
+def adduser_by_superuser(BID,Uid,Write_Access):#this method is to add user by superuser
+    Superuser = session['UID']
+    board_id=BID
+    add_user_id=Uid
+    superuser=Board.query.filter_by(id=BID, superuser=session['UID']).first()
+    if not superuser:
+        flash('You are not superuser', 'error')
+        
+    AddUser(Uid,BID,Write_Access,active="active")
+    return redirect(url_for('boards'))
+
+def Request_to_add_user(BId):
+    return None
+
+
+def superuser_represent_request():
+    return None
+
+
 
 
 @app.route('/boards/')
