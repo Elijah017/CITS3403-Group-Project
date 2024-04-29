@@ -121,6 +121,10 @@ div.formHelpers {
   text-align: center;
 }
 
+#boards-header {
+  border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+}
+
 .empha{
     margin:2% 2%;
     font-size: 30;
@@ -143,4 +147,20 @@ div.formHelpers {
     margin-left: auto;
     margin-right: auto;
     width: 50%;
+}
+
+thead {
+    border-bottom: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+}
+
+tr .name-col {
+  width: 15%;
+}
+
+tr .desc-col {
+  width: 40%;
+}
+
+tr .desc-row {
+  font-size: small;
 }

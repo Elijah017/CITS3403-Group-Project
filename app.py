@@ -41,8 +41,6 @@ class Permission(db.Model):
 
 @app.route('/')
 def home():
-    if 'is_login' in session:
-        return redirect(url_for('boards'))
     return render_template('index.html')
 
 

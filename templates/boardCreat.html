@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}
-    <title>Board Creation</title>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/icon.png') }}">
-{% endblock %}
+{% block title %}Board Creation{% endblock %}
 
 {% block content %}
     {%  for message in get_flashed_messages() %}
