@@ -18,21 +18,56 @@
                         <th class="desc-col" scope="col">Description</th>
                         <th class="name-col" scope="col">Status</th>
                         <th class="name-col" scope="col">Visibility</th>
+                        <th class="mod" scope="col"><img src="{{ url_for('static', filename='images/menu.png') }}" width="20" height="20"></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if boards %}
                         {% for board in boards.keys() %}
-                            <tr href="{{ url_for('boards') }}{{ board }}">
-                                <td>{{ boards[board]["boardname"] }}</td>
+                            <tr {% if boards[board]["active"] != '1' %} style="display:none;" {% endif %} href="{{ url_for('boards') }}{{ board }}">
+                                <td id="board{{ board }}name">{{ boards[board]["boardname"] }}</td>
                                 <td>{{ boards[board]["owner"] }}</td>
                                 <td class="desc-row">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in tincidunt tellus. Cras sit amet diam ante. Cras ornare volutpat vestibulum. Donec ut tortor aliquet, pulvinar diam et, efficitur metus. Phasellus mollis ipsum risus, vitae pulvinar elit auctor quis. Pellentesque eu dui lacus. Aenean bibendum turpis fringilla, venenatis orci in, ultricies lorem. Praesent congue nisi id purus posuere, ac posuere neque lobortis. Praesent nec pellentesque urna. Nulla eleifend erat ac dui vulputate malesuada. Pellentesque auctor condimentum leo eget feugiat. Nulla efficitur feugiat eros sit amet congue. Morbi ultricies in arcu quis pulvinar. Nulla tristique facilisis eros, at bibendum erat molestie semper. Morbi hendrerit erat egestas ligula hendrerit elementum.</td>
-                                <td>{% if boards[board]["active"] %}Active{% else %}Inactive{% endif %}</td>
+                                <td>{% if boards[board]["active"] == '1' %}Active{% else %}Inactive{% endif %}</td>
                                 <td>{{ boards[board]["visibility"] }}</td>
+                                <td>
+                                    {% if boards[board]["active"] == '1' %}
+                                        <img
+                                            class="board-mod-btn"
+                                            id="board-mod-btn"
+                                            src="{{ url_for('static', filename='images/delete.png') }}"
+                                            width="30"
+                                            height="30"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#board{{ board }}"
+                                        />
+                                        <div class="modal fade" id="board{{ board }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content bg-dark text-light">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to <b>delete</b> "{{ boards[board]["boardname"] }}"?</h1>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <button id="modal-btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button
+                                                            id="modal-btn"
+                                                            type="button"
+                                                            class="btn btn-danger"
+                                                            data-bs-dismiss="modal"
+                                                            onclick="delete_board('{{ url_for('delete_board', id=board)}}')"
+                                                        >Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <img id="board-mod-btn" class="board-mod-btn" onclick="restore_board(event, {{ board }})" src="{{ url_for('static', filename='images/restore.png') }}" width="30" height="30">
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     {% else %}
-                        <tr><td colspan="5">No Boards</td></tr>
+                        <tr><td  style="box-shadow: none;" colspan="6">No Boards</td></tr>
                     {% endif %}
                 </tbody>
             </table>
