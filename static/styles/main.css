@@ -108,17 +108,14 @@ div.formHelpers {
 }
 
 .board-display {
+  text-align: center;
   position: absolute;
   background-color: white;
-  left: 10%;
+  left: 5%;
   margin: 2rem 0;
-  width: 80%;
+  width: 90%;
   min-width: 200px;
   min-height: 200px;
-}
-
-.board-display {
-  text-align: center;
 }
 
 #boards-header {
@@ -154,7 +151,7 @@ thead {
 }
 
 tr .name-col {
-  width: 15%;
+  width: 12.5%;
 }
 
 tr .desc-col {
@@ -163,4 +160,27 @@ tr .desc-col {
 
 tr .desc-row {
   font-size: small;
+  max-height: 10px;
+}
+
+tr .mod {
+  width: 5%;
+  cursor: pointer;
+}
+
+.board-action {
+  background-color: none;
+  border: none;
+}
+
+.modal-content {
+  text-align: center;
+}
+
+.modal-content b {
+  color: red;
+}
+
+.board-mod-btn {
+  cursor: pointer;
 }

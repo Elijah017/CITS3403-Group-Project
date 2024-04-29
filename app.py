@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, request, session, url_for
+from flask import Flask, render_template, flash, redirect, request, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
@@ -13,7 +13,6 @@ app.config.from_file('config.json', load=json.load)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
-
 
 
 class User(db.Model):
@@ -44,9 +43,17 @@ def home():
     return render_template('index.html')
 
 
+@app.route('/boards/delete/<int:id>', methods=['DELETE'])
+def delete_board(id):
+    board = Board.query.filter_by(id=id).first()
+    setattr(board, 'active', int(False))
+    db.session.commit()
+    return jsonify(success=True)
+
+
 def get_owner(id, user):
-    if id == user:
-        return "Mine"
+    if int(id) == user:
+        return "Me"
     else:
         username = User.query.filter_by(id=id).first()
         if username == None:
@@ -60,8 +67,7 @@ def boards():
     user = session['UID']
 
     for board in Board.query.filter(
-        ((Board.superuser == user) | (Board.visibility == "public"))
-        & (Board.active == 1)
+        (Board.superuser == user) | (Board.visibility == "public")
     ):
         owner = get_owner(board.superuser, user)
         if owner == None:
@@ -70,11 +76,11 @@ def boards():
         render[board.id] = {
             "boardname": board.boardname,
             "owner": owner,
-            "active": 1,
+            "active": board.active,
             "visibility": board.visibility
         }
 
-    for perm in Permission.query.filter_by(board=user, active=1):
+    for perm in Permission.query.filter_by(board=user):
         if perm.board in render:
             continue
         board = Board.query.filter_by(id=perm.board)
@@ -84,7 +90,7 @@ def boards():
         render[board.id] = {
             "boardname": board.boardname,
             "owner": owner,
-            "active": 1,
+            "active": board.active,
             "visibility": board.visibility
         }
 
