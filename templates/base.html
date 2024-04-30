@@ -20,16 +20,23 @@
     <header>
         <nav class="navbar sticky-top bg-white shadow-sm">
             <div class="container-fluid">
-                <img src="{{ url_for('static', filename='images/icon.png') }}" width="30" height="24">
-                <a class="navbar-brand" href="{{ url_for('home') }}">KanBan</a>
-                <ul class="navbar-nav me-auto">
-                    {% if session.is_login %}
-                        <a class="nav-item nav-link" href="{{ url_for('boards') }}">Boards</a>
-                    {% endif %}
-                </ul>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Menu
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% if session.is_login %}
+                            <li><a class="dropdown-item" href="{{ url_for('boards') }}">Boards</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('newBoard') }}">New Kanban Board</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <a class="navbar-brand" href="{{ url_for('home') }}">
+                    <img src="{{ url_for('static', filename='images/icon.png') }}" href="{{ url_for('home') }}" width="30" height="24">
+                </a>
                 <div>
                     {% if session.is_login %}
-                        <a class="btn btn-outline-primary" href="{{ url_for('newBoard')}}">New Kanban Board</a>
                         <a class="btn btn-danger" href="{{ url_for('logout') }}">Logout</a>
                     {% else %}
                         <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
