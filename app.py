@@ -212,6 +212,10 @@ def newBoard():
         return redirect(url_for('boards'))
     return render_template('boardCreat.html', form=form)
 
+@app.route('/about/')
+def about():
+    return render_template('about.html')
+
 @app.route('/logout/')
 >>>>>>> bb2e3f4 (Added board and permission tables classes and started constructing database links)
 def logout():
