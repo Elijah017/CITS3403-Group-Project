@@ -6,7 +6,7 @@
     {%  for message in get_flashed_messages() %}
     <div class="alert alert-warning alert-dismissble fade show" role="alert" >
         {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-right" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
     <form method="post" class="bg-white shadow-sm centred login-form">
@@ -18,8 +18,10 @@
             <label for="password" class="raised">Password</label>
             {{ form.password }}<br />
         </div>
+        <div>
+            <a href="{{ url_for('register')}} ">No account? Register here</a>
+        </div>
         {{ form.submit }}
         <input type="submit" value="Login" class="btn btn-primary">
-
     </form>
 {% endblock %}

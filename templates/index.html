@@ -3,13 +3,24 @@
 {% block title %}KanBan{% endblock %}
 
 {% block content %}
+    {%  for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissble" role="alert" >
+        {{ message }}
+        <button type="button" class="btn-close btn-right" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
     <br>
     <h2 class="empha text-center">Welcome to our website!</h2>
-    <div class="description alert alert-warning alert-dismissble fade show">
-        <h3>What is KanBan?</h3>
-        <p>KanBan board is a website tool designed to help teams visually imagine 
-            the progress of projects</p>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8"></div>
+                <h3>What is KanBan?</h3>
+                <p class="description">KanBan board is a website tool designed to help teams visualise the progress of projects</p>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
     </div>
     <div class="container-fluid">
         <h2 class="empha text-center">KanBan Plans for You</h2>
