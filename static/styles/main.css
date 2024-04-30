@@ -92,11 +92,11 @@ div.formHelpers {
   opacity: 0.75;
 }
 
-.form-control {
+.login-form .form-control {
   border: var(--bs-border-width) solid var(--bs-border-color);
 }
 
-.input-group input:focus {
+.login-form .input-group input:focus {
   outline: none;
   box-shadow: none;
   border-color: black;
@@ -120,6 +120,41 @@ div.formHelpers {
 
 #boards-header {
   border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.boards-heading {
+  justify-self: center;
+}
+
+.boards-mod-menu {
+  display: flex;
+  width: 25%;
+  position: absolute;
+  right: 0.375rem;
+}
+
+.search-options {
+  width: 100%;
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+}
+
+.search-icon {
+  margin-right: 0.25rem;
+  opacity: 0.75;
+}
+
+.search-bar {
+  width: 88%;
+  margin-top: 0.375rem;
+  border: none;
+}
+
+.search-bar:focus {
+  outline: none;
 }
 
 .empha{
