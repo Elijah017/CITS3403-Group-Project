@@ -18,7 +18,30 @@
                         <th class="desc-col" scope="col">Description</th>
                         <th class="name-col" scope="col">Status</th>
                         <th class="name-col" scope="col">Visibility</th>
-                        <th class="mod" scope="col"><img src="{{ url_for('static', filename='images/menu.png') }}" width="20" height="20"></th>
+                        <th class="mod dropdown" scope="col">
+                            <img
+                                class="dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                src="{{ url_for('static', filename='images/filter.png') }}"
+                                width="25"
+                                height="27">
+                            <form class="dropdown-menu">
+                                <div class="dropdown-item">
+                                    <input class="form-check-input" type="checkbox" id="disp-inact">
+                                    <label class="form-check-label" for="disp-inact">Show Inactive Boards</label>
+                                </div>
+                                <div class="dropdown-item">
+                                    <input class="form-check-input" type="checkbox" id="disp-mine" checked>
+                                    <label class="form-check-label" for="disp-mine">Show My Boards</label>
+                                </div>
+                                <div class="dropdown-item">
+                                    <input class="form-check-input" type="checkbox" id="disp-others" checked>
+                                    <label class="form-check-label" for="disp-others">Show Other Boards</label>
+                                </div>
+                            </form>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,7 +50,7 @@
                             <tr {% if boards[board]["active"] != '1' %} style="display:none;" {% endif %} href="{{ url_for('boards') }}{{ board }}">
                                 <td id="board{{ board }}name">{{ boards[board]["boardname"] }}</td>
                                 <td>{{ boards[board]["owner"] }}</td>
-                                <td class="desc-row">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in tincidunt tellus. Cras sit amet diam ante. Cras ornare volutpat vestibulum. Donec ut tortor aliquet, pulvinar diam et, efficitur metus. Phasellus mollis ipsum risus, vitae pulvinar elit auctor quis. Pellentesque eu dui lacus. Aenean bibendum turpis fringilla, venenatis orci in, ultricies lorem. Praesent congue nisi id purus posuere, ac posuere neque lobortis. Praesent nec pellentesque urna. Nulla eleifend erat ac dui vulputate malesuada. Pellentesque auctor condimentum leo eget feugiat. Nulla efficitur feugiat eros sit amet congue. Morbi ultricies in arcu quis pulvinar. Nulla tristique facilisis eros, at bibendum erat molestie semper. Morbi hendrerit erat egestas ligula hendrerit elementum.</td>
+                                <td style="-webkit-line-clap: 4;" class="desc-row">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in tincidunt tellus. Cras sit amet diam ante. Cras ornare volutpat vestibulum. Donec ut tortor aliquet, pulvinar diam et, efficitur metus. Phasellus mollis ipsum risus, vitae pulvinar elit auctor quis. Pellentesque eu dui lacus. Aenean bibendum turpis fringilla, venenatis orci in, ultricies lorem. Praesent congue nisi id purus posuere, ac posuere neque lobortis. Praesent nec pellentesque urna. Nulla eleifend erat ac dui vulputate malesuada. Pellentesque auctor condimentum leo eget feugiat. Nulla efficitur feugiat eros sit amet congue. Morbi ultricies in arcu quis pulvinar. Nulla tristique facilisis eros, at bibendum erat molestie semper. Morbi hendrerit erat egestas ligula hendrerit elementum.</td>
                                 <td>{% if boards[board]["active"] == '1' %}Active{% else %}Inactive{% endif %}</td>
                                 <td>{{ boards[board]["visibility"] }}</td>
                                 <td>
@@ -45,7 +68,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content bg-dark text-light">
                                                     <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to <b>delete</b> "{{ boards[board]["boardname"] }}"?</h1>
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to <b>deactivate</b> "{{ boards[board]["boardname"] }}"</h1>
                                                     </div>
                                                     <div class="modal-body">
                                                         <button id="modal-btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

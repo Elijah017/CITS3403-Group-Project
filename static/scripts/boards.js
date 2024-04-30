@@ -10,6 +10,10 @@ $(function() {
             }
         })
     })
+
+    $(".dropdown-item").each(function() {
+        $(this).change(function(e) { console.log($(this)); $(this).stopImmediatePropagation(); });
+    })
 });
 
 function mod_board_height() {
@@ -17,7 +21,7 @@ function mod_board_height() {
     $('#boards-list').css('height', `calc(100% - ${offset}px - 2rem)`);
 }
 
-function restore_board(event, id) {
+function restore_board(id) {
     console.log(id);
 }
 
