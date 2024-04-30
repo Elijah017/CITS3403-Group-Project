@@ -211,6 +211,10 @@ def newBoard():
         return redirect(url_for('boards'))
     return render_template('boardCreat.html', form=form)
 
+@app.route('/about/')
+def about():
+    return render_template('about.html')
+
 @app.route('/logout/')
 def logout():
     session.clear()

@@ -29,7 +29,9 @@
                             <li><a class="dropdown-item" href="{{ url_for('boards') }}">Boards</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('newBoard') }}">New Kanban Board</a></li>
+                            <li><hr class="dropdown-divider"></li>
                         {% endif %}
+                        <li><a class="dropdown-item" href="{{ url_for('about') }}">About Us</a></li>
                     </ul>
                 </div>
                 <a class="navbar-brand" href="{{ url_for('home') }}">
