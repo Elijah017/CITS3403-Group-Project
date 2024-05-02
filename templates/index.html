@@ -9,43 +9,55 @@
         <button type="button" class="btn-close btn-right" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
-
-    <br>
-    <h2 class="empha text-center">Welcome to our website!</h2>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-8"></div>
-                <h3>What are DevBoards?</h3>
-                <p class="description">DevBoards is a website tool designed to help teams visualise the progress of projects</p>
-            </div>
-            <div class="col-sm-4">
+    <div class="info">
+        <h2 class="empha text-center">Welcome to our website!</h2>
+        <br>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 class="text-center">What is DevBoard?</h3>
+                    <br>
+                    <p class="description">DevBoard is a website tool designed to help teams 
+                        visualise the progress of projects. Users can create project planners called boards 
+                        and the owner of a DevBoard can add other users to it as helpers. Helpers are able to 
+                        comment and assist in the progress of the project. Tasks can be split into 
+                        different categories. For example categories can be: to do, started, under test, 
+                        completed. In general, DevBoards is a great way to get some ideas 
+                        if you are having trouble getting started.
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/backimage.png')}}" id="mainimg" class="img-fluid float-end img-thumbnail">
+                </div>
             </div>
         </div>
     </div>
+    <hr>
+    </div>
     <div class="container-fluid">
-        <h2 class="empha text-center">DevBoards Plans for You</h2>
+        <h2 class="empha text-center">DevBoard Plans for You</h2>
         <div class="row">
-            <div class="col-sm-4">
-                <img src="{{ url_for('static', filename='images/workflow.png') }}" alt="workflow" class="image">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='images/workflow.png') }}" alt="Workflow" class="image img-thumbnail">
                 <br>
                 <h5 class="text-center">Visualise Workflow</h5>
                 <hr>
-                <p class="description text-center">DevBoards is a great way to visualise the workflow</p>    
+                <p class="description text-center">DevBoard is a great way to visualise the workflow</p>    
             </div>
-            <div class="col-sm-4">
-                <img src="{{ url_for('static', filename='images/divide_work.png') }}" alt="Task Separation" class="image">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='images/divide_work.png') }}" alt="Task Separation" class="image img-thumbnail">
                 <br>
                 <h5 class="text-center">Task Separation</h5>
                 <hr>
-                <p class="description text-center">DevBoards provides great insight into the 
+                <p class="description text-center">DevBoard provides great insight into the 
                     requirements of tasks</p>
             </div>
-            <div class="col-sm-4">
-                <img src="{{ url_for('static', filename='images/improvement.png') }}" alt="Improvement" class="image">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='images/improvement.png') }}" alt="Improvement" class="image img-thumbnail">
                 <br>
                 <h5 class="text-center">Continous Improvement</h5>
                 <hr>
-                <p class="description text-center">DevBoards promotes peer review and collaboration</p>
+                <p class="description text-center">DevBoard promotes peer review and collaboration</p>
             </div>
         </div>
     </div>
