@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Board Creation{% endblock %}
+
+{% block content %}
+    {%  for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissble fade show" role="alert" >
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    <form method="post" class="bg-white shadow-sm centred login-form board-create-form">
+        {{ form.csrf_token }}
+        <h1>Board Creation</h1>
+        <p class="text-center" id="description">Let's Start Creating Your New DevBoards Board!</p>
+        <div id="create">
+            <form method="post">
+                {{ form.csrf_token }}
+                <div class="input-group mb-3">
+                    {{ form.visibility }}
+                    {{ form.boardname }}
+                </div>
+                {{ form.submit }}
+            </form>
+        </div>
+{% endblock %}
+</html>
