@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}KanBan{% endblock %}
+{% block title %}DevBoards{% endblock %}
 
 {% block content %}
     {%  for message in get_flashed_messages() %}
@@ -15,29 +15,29 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-8"></div>
-                <h3>What is KanBan?</h3>
-                <p class="description">KanBan board is a website tool designed to help teams visualise the progress of projects</p>
+                <h3>What are DevBoards?</h3>
+                <p class="description">DevBoards is a website tool designed to help teams visualise the progress of projects</p>
             </div>
             <div class="col-sm-4">
             </div>
         </div>
     </div>
     <div class="container-fluid">
-        <h2 class="empha text-center">KanBan Plans for You</h2>
+        <h2 class="empha text-center">DevBoards Plans for You</h2>
         <div class="row">
             <div class="col-sm-4">
                 <img src="{{ url_for('static', filename='images/workflow.png') }}" alt="workflow" class="image">
                 <br>
                 <h5 class="text-center">Visualise Workflow</h5>
                 <hr>
-                <p class="description text-center">KanBan is a great way to visualise the workflow</p>    
+                <p class="description text-center">DevBoards is a great way to visualise the workflow</p>    
             </div>
             <div class="col-sm-4">
                 <img src="{{ url_for('static', filename='images/divide_work.png') }}" alt="Task Separation" class="image">
                 <br>
                 <h5 class="text-center">Task Separation</h5>
                 <hr>
-                <p class="description text-center">KanBan provides great insight into the 
+                <p class="description text-center">DevBoards provides great insight into the 
                     requirements of tasks</p>
             </div>
             <div class="col-sm-4">
@@ -45,7 +45,7 @@
                 <br>
                 <h5 class="text-center">Continous Improvement</h5>
                 <hr>
-                <p class="description text-center">KanBan promotes peer review and collaboration</p>
+                <p class="description text-center">DevBoards promotes peer review and collaboration</p>
             </div>
         </div>
     </div>

@@ -147,6 +147,10 @@ div.formHelpers {
   opacity: 0.75;
 }
 
+.filter-btn {
+  opacity: 0.75;
+}
+
 .search-bar {
   width: 88%;
   margin-top: 0.375rem;

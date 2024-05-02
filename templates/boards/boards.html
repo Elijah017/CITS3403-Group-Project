@@ -2,104 +2,110 @@
 
 {% block title %}Boards{% endblock %}
 {% block head %}
-    {{ super() }}
-    <script src="{{ url_for('static', filename='scripts/boards.js') }}"></script>
+{{ super() }}
+<script src="{{ url_for('static', filename='scripts/boards.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-    <ul class="list-group board-display" id="boards-list">
-        <li class="list-group-item" id="boards-header">
-            <h2 style="">Available Boards</h2>
-            <div class="boards-mod-menu">
-                <div class="search-options">
-                    <img type="button" class="search-icon"
-                        src="{{ url_for('static', filename='images/search.png') }}" width="21" height="24">
-                    <input  class="search-bar" type="text" placeholder="Search">
-                </div>
-                <div style="padding:0.375rem;">
-                    <div class="dropdown">
-                        <img class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                            src="{{ url_for('static', filename='images/filter.png') }}" width="25" height="27">
-                        <form class="dropdown-menu">
-                            <div class="dropdown-item">
-                                <input class="form-check-input" type="checkbox" id="disp-inact">
-                                <label class="form-check-label" for="disp-inact">Show Inactive Boards</label>
-                            </div>
-                            <div class="dropdown-item">
-                                <input class="form-check-input" type="checkbox" id="disp-mine" checked>
-                                <label class="form-check-label" for="disp-mine">Show My Boards</label>
-                            </div>
-                            <div class="dropdown-item">
-                                <input class="form-check-input" type="checkbox" id="disp-others" checked>
-                                <label class="form-check-label" for="disp-others">Show Other Boards</label>
-                            </div>
-                        </form>
-                    </div>
+<ul class="list-group board-display" id="boards-list">
+    <li class="list-group-item" id="boards-header">
+        <h2>Your Boards</h2>
+        <div class="boards-mod-menu">
+            <div class="search-options">
+                <img type="button" class="search-icon" src="{{ url_for('static', filename='images/search.png') }}"
+                    width="21" height="24">
+                <input class="search-bar" type="text" placeholder="Search" size="25">
+            </div>
+            <div style="padding:0.375rem;">
+                <div class="dropdown">
+                    <img class="dropdown-toggle filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                        src="{{ url_for('static', filename='images/filter.png') }}" width="25" height="27">
+                    <form class="dropdown-menu">
+                        <div class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" id="disp-inact">
+                            <label class="form-check-label" for="disp-inact">Show Inactive Boards</label>
+                        </div>
+                        <div class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" id="disp-mine" checked>
+                            <label class="form-check-label" for="disp-mine">Show My Boards</label>
+                        </div>
+                        <div class="dropdown-item">
+                            <input class="form-check-input" type="checkbox" id="disp-others" checked>
+                            <label class="form-check-label" for="disp-others">Show Other Boards</label>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </li>
-        <div class="boards-container">
-            <table class="table table-hover table-borderless align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th class="name-col" scope="col">Board Name</th>
-                        <th class="name-col" scope="col">Owner</th>
-                        <th class="desc-col" scope="col">Description</th>
-                        <th class="name-col" scope="col">Status</th>
-                        <th class="name-col" scope="col">Visibility</th>
-                        <th class="mod" scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if boards %}
-                        {% for board in boards.keys() %}
-                            <tr {% if boards[board]["active"] != '1' %} style="display:none;max-height:10px;" {% endif %} href="{{ url_for('boards') }}{{ board }}">
-                                <td id="board{{ board }}name">{{ boards[board]["boardname"] }}</td>
-                                <td>{{ boards[board]["owner"] }}</td>
-                                <td style="-webkit-line-clap: 4;" class="desc-row">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in tincidunt tellus. Cras sit amet diam ante. Cras ornare volutpat vestibulum. Donec ut tortor aliquet, pulvinar diam et, efficitur metus. Phasellus mollis ipsum risus, vitae pulvinar elit auctor quis. Pellentesque eu dui lacus. Aenean bibendum turpis fringilla, venenatis orci in, ultricies lorem. Praesent congue nisi id purus posuere, ac posuere neque lobortis. Praesent nec pellentesque urna. Nulla eleifend erat ac dui vulputate malesuada. Pellentesque auctor condimentum leo eget feugiat. Nulla efficitur feugiat eros sit amet congue. Morbi ultricies in arcu quis pulvinar. Nulla tristique facilisis eros, at bibendum erat molestie semper. Morbi hendrerit erat egestas ligula hendrerit elementum.</td>
-                                <td>{% if boards[board]["active"] == '1' %}Active{% else %}Inactive{% endif %}</td>
-                                <td>{{ boards[board]["visibility"] }}</td>
-                                <td>
-                                    {% if boards[board]["active"] == '1' %}
-                                        <img
-                                            class="board-mod-btn"
-                                            id="board-mod-btn"
-                                            src="{{ url_for('static', filename='images/delete.png') }}"
-                                            width="30"
-                                            height="30"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#board{{ board }}"
-                                        />
-                                        <div class="modal fade" id="board{{ board }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to <b>deactivate</b> "{{ boards[board]["boardname"] }}"</h1>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <button id="modal-btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                        <button
-                                                            id="modal-btn"
-                                                            type="button"
-                                                            class="btn btn-danger"
-                                                            data-bs-dismiss="modal"
-                                                            onclick="delete_board('{{ url_for('delete_board', id=board)}}')"
-                                                        >Delete</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <img id="board-mod-btn" class="board-mod-btn" onclick="restore_board(event, {{ board }})" src="{{ url_for('static', filename='images/restore.png') }}" width="30" height="30">
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr><td  style="box-shadow: none;" colspan="6">No Boards</td></tr>
-                    {% endif %}
-                </tbody>
-            </table>
         </div>
-    </ul>
+    </li>
+    <div class="boards-container">
+        <table class="table table-hover table-borderless align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th class="name-col" scope="col">Board Name</th>
+                    <th class="name-col" scope="col">Owner</th>
+                    <th class="desc-col" scope="col">Description</th>
+                    <th class="name-col" scope="col">Status</th>
+                    <th class="name-col" scope="col">Visibility</th>
+                    <th class="mod" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if boards %}
+                {% for board in boards.keys() %}
+                <tr {% if boards[board]["active"] !='1' %} style="display:none;max-height:10px;" {% endif %}
+                    href="{{ url_for('boards') }}{{ board }}">
+                    <td id="board{{ board }}name">{{ boards[board]["boardname"] }}</td>
+                    <td>{{ boards[board]["owner"] }}</td>
+                    <td style="-webkit-line-clap: 4;" class="desc-row">Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Pellentesque in tincidunt tellus. Cras sit amet diam ante. Cras ornare volutpat
+                        vestibulum. Donec ut tortor aliquet, pulvinar diam et, efficitur metus. Phasellus mollis ipsum
+                        risus, vitae pulvinar elit auctor quis. Pellentesque eu dui lacus. Aenean bibendum turpis
+                        fringilla, venenatis orci in, ultricies lorem. Praesent congue nisi id purus posuere, ac posuere
+                        neque lobortis. Praesent nec pellentesque urna. Nulla eleifend erat ac dui vulputate malesuada.
+                        Pellentesque auctor condimentum leo eget feugiat. Nulla efficitur feugiat eros sit amet congue.
+                        Morbi ultricies in arcu quis pulvinar. Nulla tristique facilisis eros, at bibendum erat molestie
+                        semper. Morbi hendrerit erat egestas ligula hendrerit elementum.</td>
+                    <td>{% if boards[board]["active"] == '1' %}Active{% else %}Inactive{% endif %}</td>
+                    <td>{{ boards[board]["visibility"] }}</td>
+                    <td>
+                        {% if boards[board]["active"] == '1' %}
+                        <img class="board-mod-btn" id="board-mod-btn"
+                            src="{{ url_for('static', filename='images/delete.png') }}" width="30" height="30"
+                            data-bs-toggle="modal" data-bs-target="#board{{ board }}" alt="Delete" />
+                        <div class="modal fade" id="board{{ board }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to
+                                            <b>deactivate</b> "{{ boards[board]["boardname"] }}"</h1>
+                                    </div>
+                                    <div class="modal-body">
+                                        <button id="modal-btn" type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <button id="modal-btn" type="button" class="btn btn-danger"
+                                            data-bs-dismiss="modal"
+                                            onclick="delete_board('{{ url_for('delete_board', id=board)}}')">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <img id="board-mod-btn" class="board-mod-btn" onclick="restore_board(event, {{ board }})"
+                            src="{{ url_for('static', filename='images/restore.png') }}" width="30" height="30"
+                            alt="Restore">
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td style="box-shadow: none;" colspan="6">No Boards</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</ul>
 {% endblock %}
