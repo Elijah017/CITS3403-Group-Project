@@ -201,11 +201,6 @@ tr .desc-col {
   width: 40%;
 }
 
-tr .desc-row {
-  font-size: small;
-  max-height: 10px;
-}
-
 tr .mod {
   width: 5%;
   cursor: pointer;
@@ -226,4 +221,9 @@ tr .mod {
 
 .board-mod-btn {
   cursor: pointer;
+}
+
+.board-desc {
+  font-size: small;
+  max-height: 5rem;
 }
