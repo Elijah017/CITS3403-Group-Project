@@ -13,19 +13,13 @@ def checkPassword(form, field):
     """
     Password = field.data
     if len(Password) < 10:
-        raise validators.ValidationError(
-            "Password length should be more than 10 characters"
-        )
+        raise validators.ValidationError("Password length should be more than 10 characters")
     if not any(char.isdigit() for char in Password):
         raise validators.ValidationError("Password must contain at least one digit")
     if not any(char.islower() for char in Password):
-        raise validators.ValidationError(
-            "Password must contain at least one lowercase letter"
-        )
+        raise validators.ValidationError("Password must contain at least one lowercase letter")
     if not any(char.isupper() for char in Password):
-        raise validators.ValidationError(
-            "Password must contain at least one uppercase letter"
-        )
+        raise validators.ValidationError("Password must contain at least one uppercase letter")
 
 
 #  we can change the form of password  at this place

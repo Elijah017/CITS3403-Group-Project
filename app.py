@@ -70,9 +70,7 @@ def get_owner(id, user):
         return username.username
 
 
-def AddUser(
-    Uid, Bid, WA, active="active"
-):  # the mathod to add a user to permission, WA is writeAccess
+def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
     board = Board.query.get(Bid)
     if not board:  # check whether the board is exist
 
@@ -91,9 +89,7 @@ def AddUser(
 
 
 @app.route("/boards/adduser", methods=["GET", "POST"])
-def adduser_by_superuser(
-    BID, Uid, Write_Access
-):  # this method is to add user by superuser
+def adduser_by_superuser(BID, Uid, Write_Access):  # this method is to add user by superuser
     Superuser = session["UID"]
     board_id = BID
     add_user_id = Uid
@@ -110,9 +106,7 @@ def boards():
     render = {}
     user = session["UID"]
 
-    for board in Board.query.filter(
-        (Board.superuser == user) | (Board.visibility == "public")
-    ):
+    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "public")):
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
@@ -195,9 +189,7 @@ def register():
 def newBoard():
     form = BoardForm(request.form)
     #   Check whether boardname already exists for superuser
-    exist = Board.query.filter_by(
-        boardname=form.boardname.data, superuser=session["UID"]
-    ).first()
+    exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
     if exist:
         flash("Board with this name already exists", "error")
         return render_template("boardCreat.html", form=form)
