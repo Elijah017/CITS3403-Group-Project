@@ -16,6 +16,10 @@ body:has(.login-form), body:has(.board-display) {
   transform: translate(-50%, -50%);
 }
 
+body{
+    overflow-x: hidden
+}
+
 .login-form {
   width: 50%;
   min-width: 250px;
@@ -186,8 +190,13 @@ div.formHelpers {
     margin-bottom: 10px
 }
 
-.btn-right{
-    float: right;
+#arrow{
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
 }
 
 .nav-link{
@@ -200,6 +209,7 @@ div.formHelpers {
 .info{
     background-color: beige;
     padding: 2%;
+    margin:auto;
 }
 
 thead {
