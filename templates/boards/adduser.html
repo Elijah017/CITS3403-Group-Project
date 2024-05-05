@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+    <div class="alert alert-{{ category }}" role="alert">
+        {{ message }}
+    </div>
+{% endif %}
+{% endwith %}
+
+<!-- Form to add user to a board -->
+<form method="post" action="{{ url_for('adduser_by_superuser') }}">
+<div class="form-group">
+    <label for="Bid">Board ID:</label>
+    <input type="text" class="form-control" name="Bid" id="board_id" required>
+</div>
+
+<div class="form-group">
+    <label for="Uid">User ID:</label>
+    <input type="text" class="form-control" name="Uid" id="user_id" required>
+</div>
+
+<div class="form-group">
+    <label for="write_access">Write Access:</label>
+    <select class="form-control" name="Write_Access" id="write_access" required>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+    </select>
+</div>
+
+<button type="submit" class="btn btn-primary">Add User</button>
+</form>

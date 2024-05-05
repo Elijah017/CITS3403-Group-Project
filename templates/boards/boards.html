@@ -10,6 +10,9 @@
 <ul class="list-group board-display" id="boards-list">
     <li class="list-group-item" id="boards-header">
         <h2>Your Boards</h2>
+        <a href="{{ url_for('adduser') }}">Go to Add User Page</a>
+
+
         <div class="boards-mod-menu">
             <div class="search-options">
                 <img type="button" class="search-icon" src="{{ url_for('static', filename='images/search.png') }}"
