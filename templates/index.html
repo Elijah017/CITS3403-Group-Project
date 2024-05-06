@@ -9,35 +9,19 @@
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
-    <div class="info">
-        <h2 class="empha text-center">Welcome to our website!</h2>
-        <br>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-8">
-                    <h3 class="text-center">What is DevBoard?</h3>
-                    <br>
-                    <p class="description">DevBoard is a website tool designed to help teams 
-                        visualise the progress of projects. Users can create project planners called boards 
-                        and the owner of a DevBoard can add other users to it as helpers. Helpers are able to 
-                        comment and assist in the progress of the project. Tasks can be split into 
-                        different categories. For example categories can be: to do, started, under test, 
-                        completed. In general, DevBoards is a great way to get some ideas 
-                        if you are having trouble getting started.
-                    </p>
-                </div>
-                <div class="col-md-4">
-                    <img src="{{ url_for('static', filename='images/backimage.png')}}" id="mainimg" class="img-fluid float-end img-thumbnail">
-                </div>
+    <div class="back">
+        <div class="centred">
+            <h2 id="logo">DevBoard</h2>
+            <p id="slogan">Where Ideas Meet Action</p>
+            <div class="text-center">
+                <i id="arrow"></i>
             </div>
         </div>
-        <div class="text-center">
-            <i id="arrow"></i>
-        </div>
     </div>
-    <div class="bg-dark">
+
+    <div class="backhis">
         <div class="text-center empha">
-            <h2 class="text-white">DevBoard History</h2>
+            <p class="exp">Developing Devboard Was An Arduous Journey That Required Continous Effort</p>
         </div>
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -48,31 +32,31 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="{{ url_for('static', filename='images/board.png') }}" class="d-block w-100" alt="stage-1">
+                    <img src="{{ url_for('static', filename='images/conception.jpg') }}" class="d-block w-100" alt="stage-1">
                     <div class="carousel-caption d-none img-fluid d-md-block">
-                        <h3>Conception</h3>
-                        <h5>A Wooden Board Is The Start</h5>
+                        <h3 class="text-dark">Conception</h3>
+                        <h5 class="text-dark">Birth Of An Idea</h5>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="{{ url_for('static', filename='images/physicalBoard.png') }}" class="d-block w-100" alt="stage-2">
+                    <img src="{{ url_for('static', filename='images/development.jpg') }}" class="d-block w-100" alt="stage-2">
                     <div class="carousel-caption d-none img-fluid d-md-block">
-                        <h3>Development</h3>
-                        <h5>Notes Are Gradually Added</h5>
+                        <h3 class="text-dark">Development</h3>
+                        <h5 class="text-dark">Brainstorming Possibilities</h5>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="{{ url_for('static', filename='images/digitalBoard.png') }}" class="d-block w-100" alt="stage-3">
+                    <img src="{{ url_for('static', filename='images/cooperation.jpg') }}" class="d-block w-100" alt="stage-3">
                     <div class="carousel-caption d-none img-fluid d-md-block">
-                        <h3>Polymorphism</h3>
-                        <h5>Medium Switch To Digital</h5>
+                        <h3 class="text-dark">Cooperation</h3>
+                        <h5 class="text-dark">Others Offering Assistance</h5>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="{{ url_for('static', filename='images/board.png') }}" class="d-block w-100" alt="stage-3">
+                    <img src="{{ url_for('static', filename='images/completion.png') }}" class="d-block w-100" alt="stage-3">
                     <div class="carousel-caption d-none img-fluid d-md-block">
-                        <h3>Completion</h3>
-                        <h5>DevBoard Is Created</h5>
+                        <h3 class="text-dark">Completion</h3>
+                        <h5 class="text-dark">DevBoard Is Created</h5>
                     </div>
                 </div>
             </div>
@@ -88,29 +72,60 @@
     </div>
 
     <div class="container-fluid">
-        <h2 class="empha text-center">DevBoard Plans for You</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <img src="{{ url_for('static', filename='images/workflow.png') }}" alt="Workflow" class="image img-thumbnail">
-                <br>
-                <h5 class="text-center">Visualise Workflow</h5>
-                <hr>
-                <p class="description text-center">DevBoard is a great way to visualise the workflow</p>    
+        <div class="backhis">
+            <h2 class="empha text-center">DevBoard Plans for You</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/workflow.png') }}" alt="Workflow" class="image img-thumbnail">
+                    <br>
+                    <h5 class="text-center">Visualise Workflow</h5>
+                    <hr>
+                    <p class="description text-center">DevBoard is a great way to visualise the workflow</p>    
+                </div>
+                <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/divide_work.png') }}" alt="Task Separation" class="image img-thumbnail">
+                    <br>
+                    <h5 class="text-center text-black">Task Separation</h5>
+                    <hr>
+                    <p class="description text-center">DevBoard provides great insight into the 
+                        requirements of tasks</p>
+                </div>
+                <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/improvement.png') }}" alt="Improvement" class="image img-thumbnail">
+                    <br>
+                    <h5 class="text-center">Continous Improvement</h5>
+                    <hr>
+                    <p class="description text-center">DevBoard promotes peer review and collaboration</p>
+                </div>
             </div>
-            <div class="col-md-4">
-                <img src="{{ url_for('static', filename='images/divide_work.png') }}" alt="Task Separation" class="image img-thumbnail">
-                <br>
-                <h5 class="text-center">Task Separation</h5>
-                <hr>
-                <p class="description text-center">DevBoard provides great insight into the 
-                    requirements of tasks</p>
+        </div>
+    </div>
+    <br>
+    <div class="back">
+        <div class="info">
+            <h2 class="empha text-center">Welcome to our website!</h2>
+            <br>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="text-center">What is DevBoard?</h3>
+                        <br>
+                        <p class="description">DevBoard is a website tool designed to help teams 
+                            visualise the progress of projects. Users can create project planners called boards 
+                            and the owner of a DevBoard can add other users to it as helpers. Helpers are able to 
+                            comment and assist in the progress of the project. Tasks can be split into 
+                            different categories. For example categories can be: to do, started, under test, 
+                            completed. In general, DevBoards is a great way to get some ideas 
+                            if you are having trouble getting started.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="{{ url_for('static', filename='images/backimage.png')}}" id="mainimg" class="img-fluid float-end img-thumbnail">
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <img src="{{ url_for('static', filename='images/improvement.png') }}" alt="Improvement" class="image img-thumbnail">
-                <br>
-                <h5 class="text-center">Continous Improvement</h5>
-                <hr>
-                <p class="description text-center">DevBoard promotes peer review and collaboration</p>
+            <div class="text-center">
+                <i id="arrow"></i>
             </div>
         </div>
     </div>

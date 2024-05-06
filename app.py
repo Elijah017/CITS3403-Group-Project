@@ -64,18 +64,19 @@ def get_owner(id, user):
 def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
     board = Board.query.get(Bid)
     if not board:  # check whether the board is exist
-        return {"status": "error", "message": "Board not found"}
+        return {"status": "error", "message": "Board Not Found"}
     user = User.query.get(Uid)
     if not user:  # check whether the user is exist
-        return {"status": "error", "message": "User not found"}
+        return {"status": "error", "message": "User Not Found"}
     existing_permission = Permission.query.filter_by(board=Bid, user=Uid).first()
     if existing_permission:  # check whether the permission is exist
-        return {"status": "error", "message": "Permission already exists"}
+        return {"status": "error", "message": "Permission Already Exists"}
     NewPermission = Permission(board=Bid, user=Uid, writeAccess=WA, active=active)
     db.session.add(NewPermission)
     db.session.commit()
 
-    return {"status": "success", "message": "Permission added successfully"}
+    return {"status": "success", "message": "Permission Added Successfully"}
+
 
 
 @app.route("/adduser", methods=["POST"])
@@ -138,7 +139,7 @@ def login():
         password = request.form["password"]
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
-            flash("successfully logged in.", "success")
+            flash("Successfully Logged In", "success")
             session["is_login"] = True  # store a session after login firstly
             session["username"] = user.username  # username is unique
             session["UID"] = user.id
@@ -159,13 +160,13 @@ def register():
         )  # it will encryption the code in database,  not neccesery
 
         if User.query.filter_by(email=email).first():
-            flash("Email already exists. Please choose another one.", "danger")
+            flash("Email Already Exists. Please Choose Another One", "danger")
             return redirect(url_for("register"))
         else:
             new_user = User(username=username, email=email, password=password)
             db.session.add(new_user)
             db.session.commit()
-            flash("You have successfully registered!", "success")
+            flash("You Have Successfully Registered!", "success")
             return redirect(url_for("login"))
 
     return render_template("register.html", form=form)
@@ -177,7 +178,7 @@ def newBoard():
     #   Check whether boardname already exists for superuser
     exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
     if exist:
-        flash("Board with this name already exists", "error")
+        flash("Board With This Name Already Exists.", "error")
         return render_template("boardCreat.html", form=form)
     #   Posting to db
     if request.method == "POST":
@@ -188,7 +189,7 @@ def newBoard():
             flash("Public Board Created", "success")
         else:
             flash("Private Board Created", "success")
-        #   need to return new page?
+
         return redirect(url_for("boards"))
     return render_template("boardCreat.html", form=form)
 

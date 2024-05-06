@@ -166,11 +166,17 @@ div.formHelpers {
 }
 
 .empha{
+    opacity: 1;
     margin:2% 2%;
     font-size: 30;
     font-weight: bolder;
 }
-  
+
+.exp{
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
 .description{
     font-style: italic;
     font-size: x-large;
@@ -206,10 +212,40 @@ div.formHelpers {
     padding-right:1%;
 }
 
-.info{
-    background-color: beige;
+.back{
+    background: url("/static/images/background.jpg");
+    background-size: 100%;
+    background-position: center;
     padding: 2%;
-    margin:auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: cover;
+    height: 500px;
+}
+
+.info{
+    opacity: 1;
+    color:white
+}
+
+.backhis{
+    padding-left: 10%;
+    padding-right: 10%;
+    border-radius:15px;
+}
+
+#logo{
+    color: rgba(255, 255, 255, 0.978);
+    font-size: 30px;
+}
+
+#slogan{
+    color:rgba(255, 255, 255, 0.978);
+    font-size: 50px;
+    font-weight: bold;
 }
 
 thead {
