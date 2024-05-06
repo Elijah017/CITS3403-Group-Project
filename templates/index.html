@@ -9,7 +9,7 @@
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
-    <div class="back">
+    <div id="backimg">
         <div class="centred">
             <h2 id="logo">DevBoard</h2>
             <p id="slogan">Where Ideas Meet Action</p>
@@ -100,32 +100,27 @@
             </div>
         </div>
     </div>
+
+    <hr>
+    
     <br>
-    <div class="back">
-        <div class="info">
-            <h2 class="empha text-center">Welcome to our website!</h2>
-            <br>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-8">
-                        <h3 class="text-center">What is DevBoard?</h3>
-                        <br>
-                        <p class="description">DevBoard is a website tool designed to help teams 
-                            visualise the progress of projects. Users can create project planners called boards 
-                            and the owner of a DevBoard can add other users to it as helpers. Helpers are able to 
-                            comment and assist in the progress of the project. Tasks can be split into 
-                            different categories. For example categories can be: to do, started, under test, 
-                            completed. In general, DevBoards is a great way to get some ideas 
-                            if you are having trouble getting started.
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <img src="{{ url_for('static', filename='images/backimage.png')}}" id="mainimg" class="img-fluid float-end img-thumbnail">
-                    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <h3 class="text-center">What is DevBoard?</h3>
+                <br>
+                <p class="description">DevBoard is a website tool designed to help teams 
+                                visualise the progress of projects. Users can create project planners called boards 
+                                and the owner of a DevBoard can add other users to it as helpers. Helpers are able to 
+                                comment and assist in the progress of the project. Tasks can be split into 
+                                different categories. For example categories can be: to do, started, under test, 
+                                completed. In general, DevBoards is a great way to get some ideas 
+                                if you are having trouble getting started.
+                </p>
                 </div>
-            </div>
-            <div class="text-center">
-                <i id="arrow"></i>
+                <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/backimage.png')}}" id="mainimg" class="img-fluid float-end img-thumbnail">
+                </div>
             </div>
         </div>
     </div>
