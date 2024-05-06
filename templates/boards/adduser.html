@@ -1,5 +1,7 @@
-{% extends "base.html" %}
+<html>
+    <head></head>
 
+<Body>
 {% with messages = get_flashed_messages(with_categories=True) %}
 {% if messages %}
     <div class="alert alert-{{ category }}" role="alert">
@@ -9,7 +11,7 @@
 {% endwith %}
 
 <!-- Form to add user to a board -->
-<form method="post" action="{{ url_for('adduser_by_superuser') }}">
+<form method="POST" action="{{ url_for('adduser') }}">
 <div class="form-group">
     <label for="Bid">Board ID:</label>
     <input type="text" class="form-control" name="Bid" id="board_id" required>
@@ -30,3 +32,5 @@
 
 <button type="submit" class="btn btn-primary">Add User</button>
 </form>
+</Body>
+</html>

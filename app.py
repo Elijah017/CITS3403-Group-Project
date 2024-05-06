@@ -78,24 +78,20 @@ def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permi
     return {"status": "success", "message": "Permission added successfully"}
 
 
-@app.route("/adduser", methods=["POST"])
+@app.route("/boards/adduser/", methods=["GET", "POST"])
 def adduser():
-    board_id = request.form.get("board_id")
-    user_id = request.form.get("user_id")
-    write_access = request.form.get("write_access")
+    if request.method=="POST":
+        board_id = request.form.get("board_id")
+        user_id = request.form.get("user_id")
+        write_access = request.form.get("write_access")
+        result = AddUser(user_id, board_id, write_access)
+        if result["status"] == "error":
+            flash(result["message"], "error")
+        else:
+            flash(result["message"], "success")
+            return redirect(url_for("boards"))
 
-    if not board_id or not user_id or write_access not in ["0", "1"]:
-        flash("Invalid data provided", "error")
-        return redirect(url_for("adduser"))
-
-    result = AddUser(user_id, board_id, write_access)
-    if result["status"] == "error":
-        flash(result["message"], "error")
-    else:
-        flash(result["message"], "success")
-
-    return redirect(url_for("boards"))
-
+    return render_template("boards/adduser.html")
 
 @app.route("/boards/")
 def boards():
