@@ -82,9 +82,10 @@ def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permi
 @app.route("/boards/adduser/", methods=["GET", "POST"])
 def adduser():
     if request.method=="POST":
-        board_id = request.form.get("board_id")
-        user_id = request.form.get("user_id")
-        write_access = request.form.get("write_access")
+        board_id = request.form.get("Bid")
+        user_id = request.form.get("Uid")
+        write_access = request.form.get("Write_Access")
+        print(board_id,user_id )
         result = AddUser(user_id, board_id, write_access)
         if result["status"] == "error":
             flash(result["message"], "error")
