@@ -3,8 +3,64 @@
 {% block title %}{{ title }}{% endblock %}
 {% block head %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='scripts/board.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-    <h1 class="centred">Placeholder for Board '{{ title }}'</h1>
+    <div class="task-view container">
+        <div class="row">
+            <div class="col">
+                <div class="task-col">
+                    <div class="col-title">
+                        ON HOLD
+                    </div>
+                    <hr/>
+                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)">
+                        <div class="task" draggable="true" ondragstart="dragTask(event)" id="drag1">sdfjdhs</div>
+                        <div class="task" draggable="true" ondragstart="dragTask(event)" id="drag2">hjkyujuytjyt</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="task-col" ondrop="dropTask(event)" ondragover="dragOver(event)">
+                    <div class="col-title">
+                        TO DO
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="task-col" ondrop="dropTask(event)" ondragover="dragOver(event)">
+                    <div class="col-title">
+                        IN PROGRESS
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="task-col" ondrop="dropTask(event)" ondragover="dragOver(event)">
+                    <div class="col-title">
+                        TESTING
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="task-col" ondrop="dropTask(event)" ondragover="dragOver(event)">
+                    <div class="col-title">
+                        READY FOR QA
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="task-col" ondrop="dropTask(event)" ondragover="dragOver(event)">
+                    <div class="col-title">
+                        DONE
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
