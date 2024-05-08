@@ -9,7 +9,7 @@ function dragOver(e) {
   function dropTask(e) {
     e.preventDefault();
     var data = e.dataTransfer.getData("text");
-    e.target.appendChild(document.getElementById(data));
+    e.target.closest(".col-body").appendChild(document.getElementById(data));
   }
 
 $(function() {

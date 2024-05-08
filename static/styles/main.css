@@ -223,3 +223,7 @@ tr .mod {
 .task-view hr {
   margin: 0.5rem 0;
 }
+
+.col-body {
+  min-height: 1rem;
+}
