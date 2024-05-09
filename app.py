@@ -1,13 +1,4 @@
-from flask import (
-    Flask,
-    render_template,
-    flash,
-    redirect,
-    request,
-    session,
-    url_for,
-    jsonify,
-)
+from flask import Flask, render_template, flash, redirect, request, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
@@ -73,33 +64,36 @@ def get_owner(id, user):
 def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
     board = Board.query.get(Bid)
     if not board:  # check whether the board is exist
-
-        return {"status": "error", "message": "Board not found"}
+        return {"status": "error", "message": "Board Not Found"}
     user = User.query.get(Uid)
     if not user:  # check whether the user is exist
-        return {"status": "error", "message": "User not found"}
+        return {"status": "error", "message": "User Not Found"}
     existing_permission = Permission.query.filter_by(board=Bid, user=Uid).first()
     if existing_permission:  # check whether the permission is exist
-        return {"status": "error", "message": "Permission already exists"}
+        return {"status": "error", "message": "Permission Already Exists"}
     NewPermission = Permission(board=Bid, user=Uid, writeAccess=WA, active=active)
     db.session.add(NewPermission)
     db.session.commit()
 
-    return {"status": "success", "message": "Permission added successfully"}
+    return {"status": "success", "message": "Permission Added Successfully"}
 
 
-@app.route("/boards/adduser", methods=["GET", "POST"])
-def adduser_by_superuser(BID, Uid, Write_Access):  # this method is to add user by superuser
-    Superuser = session["UID"]
-    board_id = BID
-    add_user_id = Uid
-    superuser = Board.query.filter_by(id=BID, superuser=session["UID"]).first()
-    if not superuser:
-        flash("You are not superuser", "error")
 
-    AddUser(Uid, BID, Write_Access, active="active")
-    return redirect(url_for("boards"))
+@app.route("/boards/adduser/", methods=["GET", "POST"])
+def adduser():
+    if request.method=="POST":
+        board_id = request.form.get("Bid")
+        user_id = request.form.get("Uid")
+        write_access = request.form.get("Write_Access")
+        print(board_id,user_id )
+        result = AddUser(user_id, board_id, write_access)
+        if result["status"] == "error":
+            flash(result["message"], "error")
+        else:
+            flash(result["message"], "success")
+            return redirect(url_for("boards"))
 
+    return render_template("boards/adduser.html")
 
 @app.route("/boards/")
 def boards():
@@ -111,12 +105,7 @@ def boards():
         if owner == None:
             continue
 
-        render[board.id] = {
-            "boardname": board.boardname,
-            "owner": owner,
-            "active": bool(board.active),
-            "visibility": board.visibility,
-        }
+        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility}
 
     for perm in Permission.query.filter_by(board=user):
         if perm.board in render:
@@ -125,12 +114,7 @@ def boards():
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
-        render[board.id] = {
-            "boardname": board.boardname,
-            "owner": owner,
-            "active": bool(board.active),
-            "visibility": board.visibility,
-        }
+        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility}
 
     return render_template("boards/boards.html", boards=render)
 
@@ -152,7 +136,7 @@ def login():
         password = request.form["password"]
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
-            flash("successfully logged in.", "success")
+            flash("Successfully Logged In", "success")
             session["is_login"] = True  # store a session after login firstly
             session["username"] = user.username  # username is unique
             session["UID"] = user.id
@@ -173,13 +157,13 @@ def register():
         )  # it will encryption the code in database,  not neccesery
 
         if User.query.filter_by(email=email).first():
-            flash("Email already exists. Please choose another one.", "danger")
+            flash("Email Already Exists. Please Choose Another One", "danger")
             return redirect(url_for("register"))
         else:
             new_user = User(username=username, email=email, password=password)
             db.session.add(new_user)
             db.session.commit()
-            flash("You have successfully registered!", "success")
+            flash("You Have Successfully Registered!", "success")
             return redirect(url_for("login"))
 
     return render_template("register.html", form=form)
@@ -191,23 +175,18 @@ def newBoard():
     #   Check whether boardname already exists for superuser
     exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
     if exist:
-        flash("Board with this name already exists", "error")
+        flash("Board With This Name Already Exists.", "error")
         return render_template("boardCreat.html", form=form)
     #   Posting to db
     if request.method == "POST":
-        addboard = Board(
-            boardname=form.boardname.data,
-            visibility=form.visibility.data,
-            superuser=session["UID"],
-            active=True,
-        )
+        addboard = Board(boardname=form.boardname.data, visibility=form.visibility.data, superuser=session["UID"], active=True)
         db.session.add(addboard)
         db.session.commit()
         if addboard.visibility is True:
             flash("Public Board Created", "success")
         else:
             flash("Private Board Created", "success")
-        #   need to return new page?
+
         return redirect(url_for("boards"))
     return render_template("boardCreat.html", form=form)
 

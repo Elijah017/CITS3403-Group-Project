@@ -16,6 +16,10 @@ body:has(.login-form), body:has(.board-display) {
   transform: translate(-50%, -50%);
 }
 
+body{
+    overflow-x: hidden
+}
+
 .login-form {
   width: 50%;
   min-width: 250px;
@@ -159,47 +163,6 @@ div.formHelpers {
 
 .search-bar:focus {
   outline: none;
-}
-
-.empha{
-    margin:2% 2%;
-    font-size: 30;
-    font-weight: bolder;
-}
-  
-.description{
-    font-style: italic;
-    font-size: x-large;
-    display: flex;
-    align-items: center;
-    padding-left: 5%;
-    padding-right: 5%;
-    margin: 5%, 4%;
-}
-
-.image{
-    width: 50%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    margin-bottom: 10px
-}
-
-.btn-right{
-    float: right;
-}
-
-.nav-link{
-    margin-left: 2%;
-    margin-right: 2%;
-    padding-left: 1%;
-    padding-right:1%;
-}
-
-.info{
-    background-color: beige;
-    padding: 2%;
 }
 
 thead {
