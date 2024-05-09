@@ -1,4 +1,6 @@
-from flask import Flask, render_template, flash, redirect, request, session, url_for, jsonify
+from flask import (
+    Flask, render_template, flash, redirect, request, session, url_for, jsonify
+    )
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
@@ -60,8 +62,8 @@ def get_owner(id, user):
             return None
         return username.username
 
-
-def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
+# the mathod to add a user to permission, WA is writeAccess
+def AddUser(Uid, Bid, WA, active="active"):  
     board = Board.query.get(Bid)
     if not board:  # check whether the board is exist
         return {"status": "error", "message": "Board Not Found"}
@@ -100,7 +102,8 @@ def boards():
     render = {}
     user = session["UID"]
 
-    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "public")):
+    for board in Board.query.filter((Board.superuser == user) | 
+                                    (Board.visibility == "public")):
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
@@ -177,7 +180,8 @@ def register():
 def newBoard():
     form = BoardForm(request.form)
     #   Check whether boardname already exists for superuser
-    exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
+    exist = Board.query.filter_by(boardname=form.boardname.data, 
+                                  superuser=session["UID"]).first()
     if exist:
         flash("Board With This Name Already Exists.", "error")
         return render_template("boardCreat.html", form=form)
