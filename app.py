@@ -1,6 +1,4 @@
-from flask import (
-    Flask, render_template, flash, redirect, request, session, url_for, jsonify
-    )
+from flask import Flask, render_template, flash, redirect, request, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
@@ -62,8 +60,9 @@ def get_owner(id, user):
             return None
         return username.username
 
+
 # the mathod to add a user to permission, WA is writeAccess
-def AddUser(Uid, Bid, WA, active="active"):  
+def AddUser(Uid, Bid, WA, active="active"):
     board = Board.query.get(Bid)
     if not board:  # check whether the board is exist
         return {"status": "error", "message": "Board Not Found"}
@@ -80,14 +79,13 @@ def AddUser(Uid, Bid, WA, active="active"):
     return {"status": "success", "message": "Permission Added Successfully"}
 
 
-
 @app.route("/boards/adduser/", methods=["GET", "POST"])
 def adduser():
-    if request.method=="POST":
+    if request.method == "POST":
         board_id = request.form.get("Bid")
         user_id = request.form.get("Uid")
         write_access = request.form.get("Write_Access")
-        print(board_id,user_id )
+        print(board_id, user_id)
         result = AddUser(user_id, board_id, write_access)
         if result["status"] == "error":
             flash(result["message"], "error")
@@ -97,20 +95,18 @@ def adduser():
 
     return render_template("boards/adduser.html")
 
+
 @app.route("/boards/")
 def boards():
     render = {}
     user = session["UID"]
 
-    for board in Board.query.filter((Board.superuser == user) | 
-                                    (Board.visibility == "public")):
+    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "public")):
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
 
-        render[board.id] = {"boardname": board.boardname, 
-                            "owner": owner, "active": board.active, 
-                            "visibility": board.visibility}
+        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility}
 
     for perm in Permission.query.filter_by(board=user):
         if perm.board in render:
@@ -119,9 +115,7 @@ def boards():
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
-        render[board.id] = {"boardname": board.boardname, 
-                            "owner": owner, "active": board.active, 
-                            "visibility": board.visibility}
+        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility}
 
     return render_template("boards/boards.html", boards=render)
 
@@ -180,16 +174,13 @@ def register():
 def newBoard():
     form = BoardForm(request.form)
     #   Check whether boardname already exists for superuser
-    exist = Board.query.filter_by(boardname=form.boardname.data, 
-                                  superuser=session["UID"]).first()
+    exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
     if exist:
         flash("Board With This Name Already Exists.", "error")
         return render_template("boardCreat.html", form=form)
     #   Posting to db
     if request.method == "POST":
-        addboard = Board(boardname=form.boardname.data, 
-                         visibility=form.visibility.data, 
-                         superuser=session["UID"], active=True)
+        addboard = Board(boardname=form.boardname.data, visibility=form.visibility.data, superuser=session["UID"], active=True)
         db.session.add(addboard)
         db.session.commit()
         if addboard.visibility is True:
