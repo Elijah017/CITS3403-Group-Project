@@ -105,7 +105,12 @@ def boards():
         if owner == None:
             continue
 
-        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility}
+        render[board.id] = {
+            "boardname": board.boardname,
+            "owner": owner,
+            "active": board.active,
+            "visibility": board.visibility,
+        }
 
     for perm in Permission.query.filter_by(board=user):
         if perm.board in render:
@@ -114,7 +119,12 @@ def boards():
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
-        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility}
+        render[board.id] = {
+            "boardname": board.boardname,
+            "owner": owner,
+            "active": board.active,
+            "visibility": board.visibility,
+        }
 
     return render_template("boards/boards.html", boards=render)
 
@@ -179,7 +189,12 @@ def newBoard():
         return render_template("boardCreat.html", form=form)
     #   Posting to db
     if request.method == "POST":
-        addboard = Board(boardname=form.boardname.data, visibility=form.visibility.data, superuser=session["UID"], active=True)
+        addboard = Board(
+            boardname=form.boardname.data,
+            visibility=form.visibility.data,
+            superuser=session["UID"],
+            active=int(True),
+        )
         db.session.add(addboard)
         db.session.commit()
         if addboard.visibility is True:

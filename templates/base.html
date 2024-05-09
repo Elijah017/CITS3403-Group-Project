@@ -23,19 +23,19 @@
             <div class="container-fluid">
                 <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                     <ul class="navbar-nav me-auto">
+                        <li>
+                            <a class="navbar-brand bg-white nav-link" href="{{ url_for('home') }}">                                    
+                                Home
+                            </a>
+                        </li>
                         {% if session.is_login %}
+                        <div class="vr"></div>
                         <li>
                             <a class="navbar-brand bg-white nav-link" href="{{ url_for('boards') }}">                                    
                                 Boards
                             </a>
                         </li>
                         <div class="vr"></div>
-                        <li>
-                            <a class="navbar-brand bg-white nav-link"  href="{{ url_for('newBoard') }}">
-                                New Board
-                            </a>
-                        </li>
-                        <div class="vr"></div>    
                         {% endif %}
                         <li>
                             <a class="navbar-brand btn-white nav-link" href="{{ url_for('about') }}">
@@ -47,14 +47,20 @@
                 </div>
                 <div class="mx-auto order-0">
                     <a class="navbar-brand" href="{{ url_for('home') }}">
-                        <img src="{{ url_for('static', filename='images/icon.png') }}" href="{{ url_for('home') }}" width="30" height="24">
+                        <img src="{{ url_for('static', filename='images/icon.png') }}" href="{{ url_for('home') }}" width="50" height="40">
                     </a>
                 </div>
                 <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                     <ul class="navbar-nav ms-auto">
                         <li>
                             {% if session.is_login %}
-                                <a class="btn btn-danger" href="{{ url_for('logout') }}">Logout</a>
+                                <li>
+                                    <a class="btn btn-outline-primary" style="margin-right: 0.5rem;"  href="{{ url_for('newBoard') }}">
+                                        New Board
+                                    </a>
+                                </li>
+                                <div class="vr"></div>    
+                                <a class="btn btn-danger" style="margin-left: 0.5rem;" href="{{ url_for('logout') }}">Logout</a>
                             {% else %}
                                 <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Login</a>
                             {% endif %}

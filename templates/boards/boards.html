@@ -56,7 +56,7 @@
             <tbody>
                 {% if boards %}
                 {% for board in boards.keys() %}
-                <tr {% if not boards[board]["active"] %} style="display:none;" {% endif %}
+                <tr id="board{{ board }}-row" {% if not boards[board]["active"] == '1' %} style="display:none;" {% endif %}
                     href="{{ url_for('boards') }}{{ board }}">
                     <td id="board{{ board }}name">{{ boards[board]["boardname"] }}</td>
                     <td>{{ boards[board]["owner"] }}</td>
@@ -73,14 +73,14 @@
                             semper. Morbi hendrerit erat egestas ligula hendrerit elementum.
                         </div>
                     </td>
-                    <td>{% if boards[board]["active"] %}Active{% else %}Inactive{% endif %}</td>
+                    <td class="board-state-col">{% if boards[board]["active"] == '1' %}Active{% else %}Inactive{% endif %}</td>
                     <td>{{ boards[board]["visibility"] }}</td>
                     <td>
-                        {% if boards[board]["active"] %}
+                        {% if boards[board]["active"] == '1' %}
                         <img class="board-mod-btn" id="board-mod-btn"
                             src="{{ url_for('static', filename='images/delete.png') }}" width="30" height="30"
-                            data-bs-toggle="modal" data-bs-target="#board{{ board }}" alt="Delete" />
-                        <div class="modal fade" id="board{{ board }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            data-bs-toggle="modal" data-bs-target="#board{{ board }}-modal" alt="Delete" />
+                        <div class="modal fade" id="board{{ board }}-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -93,7 +93,7 @@
                                             data-bs-dismiss="modal">Cancel</button>
                                         <button id="modal-btn" type="button" class="btn btn-danger"
                                             data-bs-dismiss="modal"
-                                            onclick="delete_board('{{ url_for('delete_board', id=board)}}')">Delete</button>
+                                            onclick="delete_board('{{ url_for('delete_board', id=board)}}', {{ board }})">Delete</button>
                                     </div>
                                 </div>
                             </div>

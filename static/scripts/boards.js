@@ -1,19 +1,19 @@
 $(function() {
-    mod_board_height()
+    mod_board_height();
 
-    $(window).change(mod_board_height)
+    $(window).change(mod_board_height);
 
     $("tbody tr").each(function() {
         $(this).click(function(event) {
             if (event.target.id === "") {
                 window.location.href = $(this).attr('href');
             }
-        })
-    })
+        });
+    });
 
     $(".dropdown-item").each(function() {
         $(this).change(function(e) { console.log($(this)); $(this).stopImmediatePropagation(); });
-    })
+    });
 });
 
 function mod_board_height() {
@@ -25,9 +25,24 @@ function restore_board(id) {
     console.log(id);
 }
 
-function delete_board(uri) {
-    $.ajax({
-        url: `${uri}`,
-        method: 'DELETE',
-    })
+function delete_board(uri, id) {
+    row = `#board${id}-row`;
+    if ($(row + " .board-state-col").innerHtml === "Active") {
+        $.ajax({
+            url: `${uri}`,
+            method: 'DELETE',
+            statuscode: {
+                204: $(row).hide(),
+            },
+            error: console.log("DELETE error")
+        });
+    } else {
+        $.ajax({
+            url: `${uri}`,
+            method: 'PATCH',
+            statuscode: {
+                201: $(row).show(),
+            }
+        });
+    }
 }

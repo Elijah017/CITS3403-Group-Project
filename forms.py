@@ -81,6 +81,7 @@ class BoardForm(FlaskForm):
         ],
         render_kw={
             "class": "form-control",
+            "autocomplete": "off",
             "placeholder": "Board Name",
             "autofocus": True,
         },
