@@ -21,28 +21,29 @@ function mod_board_height() {
     $('#boards-list').css('height', `calc(100% - ${offset}px - 2rem)`);
 }
 
-function restore_board(id) {
-    console.log(id);
-}
-
-function delete_board(uri, id) {
+function change_board_state(uri, id) {
     row = `#board${id}-row`;
-    if ($(row + " .board-state-col").innerHtml === "Active") {
+    col = $(`${row} .board-state-col`).text()
+    if ( col === "Active") {
         $.ajax({
             url: `${uri}`,
-            method: 'DELETE',
-            statuscode: {
-                204: $(row).hide(),
-            },
-            error: console.log("DELETE error")
+            method: 'PATCH',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                delete: true
+            }),
         });
     } else {
         $.ajax({
             url: `${uri}`,
             method: 'PATCH',
-            statuscode: {
-                201: $(row).show(),
-            }
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                delete: false
+            }),
         });
     }
+    location.reload();
 }

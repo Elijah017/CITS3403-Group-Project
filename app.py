@@ -43,10 +43,15 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/boards/delete/<int:id>", methods=["DELETE"])
-def delete_board(id):
+@app.route("/boards/change_board_state/<int:id>", methods=["PATCH"])
+def change_board_state(id):
     board = Board.query.filter_by(id=id).first()
-    setattr(board, "active", int(False))
+
+    change_state = request.json['delete']
+    if change_state:
+        setattr(board, "active", int(False))
+    else:
+        setattr(board, 'active', int(True))
     db.session.commit()
     return jsonify(success=True)
 
