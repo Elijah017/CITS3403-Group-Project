@@ -246,6 +246,10 @@ tr .mod {
   width: calc(100vw - 2rem);
 }
 
+.row {
+  width: inherit;
+}
+
 .task-col {
   background-color: var(--bs-gray-200);
   border: 1px solid var(--bs-gray-400);
@@ -264,4 +268,18 @@ tr .mod {
 
 .col-body {
   min-height: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task {
+  background-color: var(--bs-gray-100);
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 0.5rem;
+}
+
+.task-id {
+  color: var(--bs-gray-600);
 }
