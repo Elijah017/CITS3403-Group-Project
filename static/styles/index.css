@@ -1,13 +1,13 @@
 .empha{
     opacity: 1;
     margin:2% 2%;
-    font-size: 30;
+    font-size: 30px;
     font-weight: bolder;
 }
 
 .exp{
-    margin-top: 5%;
-    margin-bottom: 5%;
+    font-weight: bolder;
+    margin: 5% 2%;
 }
 
 .description{
@@ -17,7 +17,7 @@
     align-items: center;
     padding-left: 5%;
     padding-right: 5%;
-    margin: 5%, 4%;
+    margin: 5% 4%;
 }
 
 .image{
@@ -35,7 +35,6 @@
     display: inline-block;
     padding: 3px;
     transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
 }
 
 .nav-link{
