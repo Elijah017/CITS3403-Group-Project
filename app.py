@@ -24,7 +24,7 @@ class User(db.Model):
 
 class Board(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    boardname = db.Column(db.String(20), nullable=False)
+    boardname = db.Column(db.String(20), nullable=False,unique=True)
     visibility = db.Column(db.String(20))
     superuser = db.Column(db.String(20), ForeignKey(User.id))
     active = db.Column(db.String(20), nullable=False)
@@ -190,6 +190,22 @@ def newBoard():
         return redirect(url_for("boards"))
     return render_template("boardCreat.html", form=form)
 
+@app.route("/Boards/delectboard/", methods=["GET", "POST"])
+def delete_board():
+    if request.method=="Delect":
+        board_id = request.form.get("Bid")
+        Uid=session('UID')
+        board = Board.query.filter_by(id=board_id).first()
+        if board.superuser==Uid:
+            session.pop(board)
+        else:
+            flash("You are not superuser.", "error")
+
+    return render_template("boards/delectboard.html")
+
+def search_board(board_name):
+    board=Board.query.filter_by(boardnamed=board_name).first()
+    return board.id
 
 @app.route("/about/")
 def about():
