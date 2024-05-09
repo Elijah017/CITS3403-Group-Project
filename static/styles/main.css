@@ -4,7 +4,7 @@ body {
   width: 100vw;
 }
 
-body:has(.login-form), body:has(.board-display) {
+body:has(.login-form), body:has(.board-display), body:has(.task-view) {
   background-image: linear-gradient(to top right, rgba(111, 66, 192, 1), rgba(13, 110, 240, 1));
 }
 
@@ -246,7 +246,7 @@ tr .mod {
   width: calc(100vw - 2rem);
 }
 
-.row {
+.task-view .row {
   width: inherit;
 }
 

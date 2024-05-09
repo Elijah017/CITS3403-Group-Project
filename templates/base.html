@@ -22,7 +22,13 @@
             <div class="container-fluid">
                 <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                     <ul class="navbar-nav me-auto">
+                        <li>
+                            <a class="navbar-brand btn-white nav-link" href="{{ url_for('about') }}">
+                                About Us
+                            </a>                    
+                        </li>   
                         {% if session.is_login %}
+                        <div class="vr"></div>
                         <li>
                             <a class="navbar-brand bg-white nav-link" href="{{ url_for('boards') }}">                                    
                                 Boards
@@ -36,12 +42,7 @@
                         </li>
                         <div class="vr"></div>    
                         {% endif %}
-                        <li>
-                            <a class="navbar-brand btn-white nav-link" href="{{ url_for('about') }}">
-                                About Us
-                            </a>                    
-                        </li>    
-
+                        {% block navbarOptions %}{% endblock %}
                     </ul>
                 </div>
                 <div class="mx-auto order-0">
