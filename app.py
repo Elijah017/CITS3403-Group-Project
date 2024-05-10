@@ -1,14 +1,24 @@
-from flask import Flask, render_template, flash, redirect, request, session, url_for, jsonify
+from flask import (
+    Flask, 
+    render_template, 
+    flash, redirect, 
+    request, 
+    session, 
+    url_for, jsonify
+    )
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
-import json
+from config import DeploymentConfig, TestConfig
 
 app = Flask(__name__)
-app.config.from_file("config.json", load=json.load)
-
+#Storage of data in memory for testing
+if app.config['TESTING']:
+    app.config.from_object(TestConfig)
+else:
+    app.config.from_object(DeploymentConfig)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -161,7 +171,9 @@ def register():
             flash("Email Already Exists. Please Choose Another One", "danger")
             return redirect(url_for("register"))
         else:
-            new_user = User(username=username, email=email, password=password)
+            new_user = User(username=username, 
+                            email=email, 
+                            password=password)
             db.session.add(new_user)
             db.session.commit()
             flash("You Have Successfully Registered!", "success")
