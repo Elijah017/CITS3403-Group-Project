@@ -190,22 +190,28 @@ def newBoard():
         return redirect(url_for("boards"))
     return render_template("boardCreat.html", form=form)
 
-@app.route("/Boards/delectboard/", methods=["GET", "POST"])
-def delete_board():
-    if request.method=="Delect":
-        board_id = request.form.get("Bid")
-        Uid=session('UID')
-        board = Board.query.filter_by(id=board_id).first()
-        if board.superuser==Uid:
-            session.pop(board)
-        else:
-            flash("You are not superuser.", "error")
 
-    return render_template("boards/delectboard.html")
 
 def search_board(board_name):
-    board=Board.query.filter_by(boardnamed=board_name).first()
-    return board.id
+    board = Board.query.filter_by(boardname=board_name).first()
+    return board.id if board else None
+
+
+@app.route("/boards/search", methods=["GET", "POST"])
+def search():
+    if request.method == "POST":
+        search_query = request.form.get("search_query")
+       
+        board_id = search_board(search_query)
+        if board_id:
+            
+            return redirect(url_for("board", id=board_id))
+        else:
+            flash("Board not found", "error")
+            return redirect(url_for("boards"))
+    return render_template("boards/search.html")
+
+
 
 @app.route("/about/")
 def about():
