@@ -1,12 +1,19 @@
-<html>
+{% extends "base.html" %}
 
-
-
-<Body>
-    <form action="/boards/search", method="POST">\
+{% block content %}
+<div id="1">
+    <form action="/boards/search", method="POST">
         <label for="Board_name">Board name</label>
         <input type="text" name="search_query">
-        <button type="submit"></button>
+        <button type="submit">search</button>
     </form>
-</Body>
-</html>
+</div>
+    <Style>
+        #1{display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; }
+            
+
+    </Style>
+    {% endblock %}
