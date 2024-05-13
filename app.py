@@ -1,25 +1,34 @@
-from flask import Flask, render_template, flash, redirect, request, session, url_for, jsonify
+from flask import (
+    Flask, 
+    render_template, 
+    flash, redirect, 
+    request, 
+    session, 
+    url_for, jsonify
+    )
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_bcrypt import Bcrypt
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
 from forms import LoginForm, RegisterForm, BoardForm
+from flask_bcrypt import Bcrypt
 from config import DeploymentConfig, TestConfig
 
-app = Flask(__name__)
+db = SQLAlchemy()
 
-# Storage of data in memory for testing
-if app.config["TESTING"]:
-    app.config.from_object(TestConfig)
-else:
-    app.config.from_object(DeploymentConfig)
+#Refactor app creation function
+def create_app(config):
+    flaskApp = Flask(__name__)
+    flaskApp.config.from_object(config)
 
-db = SQLAlchemy(app)
+    db.init_app(flaskApp)
+
+    return flaskApp
+
+app = create_app(DeploymentConfig)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
 
-# Class corresponding to database tables
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20))
@@ -43,7 +52,6 @@ class Permission(db.Model):
     __table_args__ = (PrimaryKeyConstraint("board", "user"),)
 
 
-# Routes and functions
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -107,7 +115,7 @@ def boards():
     render = {}
     user = session["UID"]
 
-    for board in Board.query.filter((Board.superuser == user), (Board.visibility == "public"), (Board.active == True)):
+    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "public")):
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
@@ -167,7 +175,9 @@ def register():
             flash("Email Already Exists. Please Choose Another One", "danger")
             return redirect(url_for("register"))
         else:
-            new_user = User(username=username, email=email, password=password)
+            new_user = User(username=username, 
+                            email=email, 
+                            password=password)
             db.session.add(new_user)
             db.session.commit()
             flash("You Have Successfully Registered!", "success")
@@ -193,6 +203,7 @@ def newBoard():
             flash("Public Board Created", "success")
         else:
             flash("Private Board Created", "success")
+
         return redirect(url_for("boards"))
     return render_template("boardCreat.html", form=form)
 
