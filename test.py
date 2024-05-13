@@ -1,6 +1,6 @@
 import unittest
 from forms import checkPassword
-from app import create_app, db, User
+from app import create_app, db, User, get_owner
 from config import TestConfig
 from wtforms import validators
 
@@ -55,8 +55,12 @@ class BasicTests(unittest.TestCase):
         with self.assertRaises(validators.ValidationError) as context:
             checkPassword(p4)
         self.assertEqual(context.exception.args[0], "Password must contain at least one uppercase letter")
-        
 
+    def test_get_owner(self):
+        self.assertEqual(get_owner("1", 1), "Me")
+        self.assertEqual(get_owner("1", 2), "Bus")        
+        self.assertEqual(get_owner("4", 2), "Truck")   
+        self.assertEqual(get_owner("3", 4), "Cab")
 
 if __name__ == "__main__":
     unittest.main()
