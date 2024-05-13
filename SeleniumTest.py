@@ -1,8 +1,7 @@
-import unittest
+import unittest, threading
 from selenium import webdriver
 from app import create_app, delete_board, db, User, Board
 from config import TestConfig
-from wtforms import validators
 
 localHost = "http://localhost:5000/"
 
@@ -19,6 +18,7 @@ class SeleniumTests(unittest.TestCase):
         self.driver.get(localHost)
 
         self.server_thread = multiprocessing.Process(target=self.testApp.run)
+        self.server.thread.daemon = True
         self.server_thread.start()
         user = User(username="Bus", 
                         email="123456@i.com", 

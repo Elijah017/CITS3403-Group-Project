@@ -1,6 +1,6 @@
 import unittest
 from forms import checkPassword
-from app import create_app, db, User, get_owner
+from app import create_app, get_owner, delete_board, db, User, Board
 from config import TestConfig
 from wtforms import validators
 
@@ -27,10 +27,15 @@ class BasicTests(unittest.TestCase):
         user4 = User(username="Truck", 
                         email="11edffsd@a.com", 
                         password="asfaf143256")
+        board = Board(boardname="Project",
+                       visibility="public", 
+                       superuser=1, 
+                       active=True)
         db.session.add(user1)
         db.session.add(user2)
         db.session.add(user3)
         db.session.add(user4)
+        db.session.add(board)
         db.session.commit()
 
     def tearDown(self):
@@ -61,6 +66,13 @@ class BasicTests(unittest.TestCase):
         self.assertEqual(get_owner("1", 2), "Bus")        
         self.assertEqual(get_owner("4", 2), "Truck")   
         self.assertEqual(get_owner("3", 4), "Cab")
+
+    def test_delete_board(self):
+        #Active stored as '1' and non-ative stored as '0'
+        board = Board.query.filter_by(boardname="Project").first()
+        self.assertEqual(board.active, '1')
+        delete_board(board.id)
+        self.assertEqual(board.active, '0')
 
 if __name__ == "__main__":
     unittest.main()
