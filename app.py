@@ -1,11 +1,4 @@
-from flask import (
-    Flask, 
-    render_template, 
-    flash, redirect, 
-    request, 
-    session, 
-    url_for, jsonify
-    )
+from flask import Flask, render_template, flash, redirect, request, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
@@ -15,7 +8,8 @@ from config import DeploymentConfig, TestConfig
 
 db = SQLAlchemy()
 
-#Refactor app creation function
+
+# Refactor app creation function
 def create_app(config):
     flaskApp = Flask(__name__)
     flaskApp.config.from_object(config)
@@ -23,6 +17,7 @@ def create_app(config):
     db.init_app(flaskApp)
 
     return flaskApp
+
 
 app = create_app(DeploymentConfig)
 migrate = Migrate(app, db)
@@ -175,9 +170,7 @@ def register():
             flash("Email Already Exists. Please Choose Another One", "danger")
             return redirect(url_for("register"))
         else:
-            new_user = User(username=username, 
-                            email=email, 
-                            password=password)
+            new_user = User(username=username, email=email, password=password)
             db.session.add(new_user)
             db.session.commit()
             flash("You Have Successfully Registered!", "success")
