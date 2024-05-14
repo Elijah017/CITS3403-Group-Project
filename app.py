@@ -52,11 +52,11 @@ class Ticket(db.Model):
     boardId = db.Column(db.Integer, ForeignKey(Board.id))
     creatorId = db.Column(db.Integer, ForeignKey(User.id))
     id = db.Column(db.Integer, nullable=False, default=1)
-    type = db.Column(db.Integer, nullable=False, default=0) # 0: Task, 1: Bug, 2: Story
+    type = db.Column(db.Integer, nullable=False, default=0)  # 0: Task, 1: Bug, 2: Story
     title = db.Column(db.String, nullable=False, default="New Ticket")
-    priority = db.Column(db.Integer, nullable=False, default=1) # 0: Low, 1: Medium, 2: High
-    status = db.Column(db.Integer, nullable=False, default=1) # 0: On Hold, 1: To Do, 2: In Progress, 3: Testing, 4: Ready for QA, 5: Done
-    description = db.Column(db.String, nullable=False, default="") 
+    priority = db.Column(db.Integer, nullable=False, default=1)  # 0: Low, 1: Medium, 2: High
+    status = db.Column(db.Integer, nullable=False, default=1)  # 0: On Hold, 1: To Do, 2: In Progress, 3: Testing, 4: Ready for QA, 5: Done
+    description = db.Column(db.String, nullable=False, default="")
     __table_args__ = (PrimaryKeyConstraint("boardId", "creatorId", "id"),)
     board = db.relationship(Board, back_populates="tickets")
 
@@ -155,6 +155,7 @@ def board(id):
         board = Board.query.filter_by(id=id).first()
         return render_template("boards/board.html", title=board.boardname)
 
+
 @app.route("/boards/<int:id>/tickets", methods=["GET", "POST"])
 def tickets(id):
     if request.method == "GET":
@@ -172,7 +173,7 @@ def tickets(id):
                 title=data["title"],
                 priority=data["priority"],
                 status=data["status"],
-                description=data["description"]
+                description=data["description"],
             )
             db.session.add(newTicket)
             db.session.commit()
