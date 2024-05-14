@@ -241,6 +241,15 @@ tr .mod {
   max-height: 5rem;
 }
 
+body:has(.task-view) {
+  overflow: hidden;
+}
+
+main:has(.task-view) {
+  height: calc(100% - 2rem);
+  overflow-y: auto;
+}
+
 .task-view {
   margin: 1rem;
   width: calc(100vw - 2rem);
@@ -255,6 +264,7 @@ tr .mod {
   border: 1px solid var(--bs-gray-400);
   border-radius: 0.5rem;
   padding: 0.5rem;
+  max-height: max-content;
 }
 
 .col-title {
