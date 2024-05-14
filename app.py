@@ -156,7 +156,7 @@ def board(id):
         return render_template("boards/board.html", title=board.boardname)
 
 
-@app.route("/boards/<int:id>/tickets", methods=["GET", "POST"])
+@app.route("/boards/<int:id>/tickets", methods=["GET", "POST", "PATCH"])
 def tickets(id):
     if request.method == "GET":
         tickets = [{"ticketId": ticket.id, "title": ticket.title, "status": ticket.status} for ticket in Ticket.query.filter_by(boardId=id)]
@@ -180,7 +180,15 @@ def tickets(id):
             return {"ticketId": ticketId}, 201
         except Exception as e:
             return {"StatusCode": 400}, 400
-
+    elif request.method == "PATCH":
+        data = json.loads(request.data)
+        try:
+            Ticket.query.filter_by(boardId=id, id=data["ticketId"]).update({Ticket.status: data["status"]})
+            db.session.commit()
+            return {"StatusCode": 202}, 202
+        except Exception as e:
+            print(e)
+            return {"StatusCode": 400}, 400
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():

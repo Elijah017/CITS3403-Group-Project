@@ -8,8 +8,19 @@ function dragTask(e) {
 
 function dropTask(e) {
   e.preventDefault();
-  var data = e.dataTransfer.getData("text");
-  e.target.closest(".col-body").appendChild(document.getElementById(data));
+  let ticketId = e.dataTransfer.getData("text");
+  let colBody = e.target.closest(".col-body");
+  let newStatus = Array.prototype.indexOf.call(colBody.closest(".row").children, colBody.closest(".col"));
+
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = (e) => {
+    if (e.target.readyState == 4 && e.target.status == 202) {
+      colBody.appendChild(document.getElementById(ticketId));
+    }
+  }
+  xhttp.open("PATCH", document.URL + "/tickets", true);
+  xhttp.setRequestHeader("Content-Type", "application/json");
+  xhttp.send(JSON.stringify({ticketId: ticketId, status: newStatus}));  
 }
 
 function addTicket(ticketId, title, status) {
@@ -34,7 +45,6 @@ $( document ).ready(() => {
     }
   }
   xhttp.open("GET", document.URL + "/tickets", true);
-  xhttp.setRequestHeader("Content-Type", "application/json");
   xhttp.send();
 
   $("#newTicketModal").on("submit", (e) => {
