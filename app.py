@@ -149,11 +149,17 @@ def boards():
     return render_template("boards/boards.html", boards=render)
 
 
-@app.route("/boards/<int:id>", methods=["GET", "POST"])
+@app.route("/boards/<int:id>", methods=["GET"])
 def board(id):
     if request.method == "GET":
         board = Board.query.filter_by(id=id).first()
         return render_template("boards/board.html", title=board.boardname)
+
+@app.route("/boards/<int:id>/tickets", methods=["GET", "POST"])
+def tickets(id):
+    if request.method == "GET":
+        tickets = [{"ticketId": ticket.id, "title": ticket.title, "status": ticket.status} for ticket in Ticket.query.filter_by(boardId=id)]
+        return tickets, 200
     elif request.method == "POST":
         data = json.loads(request.data)
         ticketId = Ticket.query.filter_by(boardId=int(id), creatorId=int(session["UID"])).count() + 1
