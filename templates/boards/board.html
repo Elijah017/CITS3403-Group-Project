@@ -100,7 +100,7 @@
                 <form id="newTicketForm" class="container">
                     <div class="row">
                         <label for="ticketType">Ticket type</label>
-                        <select id="ticketType" class="form-select">
+                        <select name="ticketType" id="ticketType" class="form-select">
                             <option value="0" selected>Task</option>
                             <option value="1">Bug</option>
                             <option value="2">Story</option>
@@ -108,12 +108,12 @@
                     </div><br>
                     <div class="row">
                         <label for="ticketTitle">Title</label>
-                        <input type="text" class="form-control" id="ticketTitle" required>
+                        <input name="ticketTitle" type="text" class="form-control" id="ticketTitle" required>
                     </div><br>
                     <div class="row">
                         <div class="col">
                             <label for="ticketPriority">Priority</label>
-                            <select id="ticketPriority" class="form-select">
+                            <select name="ticketPriority" id="ticketPriority" class="form-select">
                                 <option value="0">Low</option>
                                 <option value="1" selected>Medium</option>
                                 <option value="2">High</option>
@@ -121,7 +121,7 @@
                         </div><br>
                         <div class="col">
                             <label for="ticketStatus">Status</label>
-                            <select id="ticketPriority" class="form-select">
+                            <select name="ticketStatus" id="ticketStatus" class="form-select">
                                 <option value="0">ON HOLD</option>
                                 <option value="1" selected>TO DO</option>
                                 <option value="2">IN PROGRESS</option>
@@ -133,14 +133,14 @@
                     </div><br>
                     <div class="row">
                         <label for="ticketDescription">Description</label>
-                        <textarea id="ticketDescription" class="form-control" required></textarea>
+                        <textarea name="ticketDescription" id="ticketDescription" class="form-control" required></textarea>
                     </div><br>
                     <div class="row">
                         <div class="col">
                             <button type="button" class="btn btn-secondary" style="width: 100%;" data-bs-dismiss="modal" onclick="document.getElementById('newTicketForm').reset()">Close</button>
                         </div>
                         <div class="col">
-                            <button type="submit" class="btn btn-primary" style="width: 100%;" >Create</button>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Create</button>
                         </div>
                     </div>
                 </form>
