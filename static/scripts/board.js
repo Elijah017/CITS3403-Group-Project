@@ -27,7 +27,20 @@ $( document ).ready(() => {
     e.target.reset();
 
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", document.URL, false);
+    xhttp.onreadystatechange = (e) => {
+      if (e.target.readyState == 4 && e.target.status == 201) {
+        ticketId = JSON.parse(e.target.responseText).ticketId;
+        let newTicketElement = document.createElement("div");
+        newTicketElement.id = ticketId;
+        newTicketElement.classList.add("task");
+        newTicketElement.setAttribute("draggable", true);
+        newTicketElement.setAttribute("ondragstart", "dragTask(event)");
+        newTicketElement.setAttribute("draggable", true);
+        newTicketElement.innerHTML = `<span class="task-id">#${ticketId}</span><br>${data.title}`
+        $(".task-col .col-body")[data.status].appendChild(newTicketElement);
+      }
+    }
+    xhttp.open("POST", document.URL, true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(JSON.stringify(data));
   })

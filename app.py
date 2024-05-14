@@ -157,7 +157,6 @@ def board(id):
     elif request.method == "POST":
         data = json.loads(request.data)
         ticketId = Ticket.query.filter_by(boardId=int(id), creatorId=int(session["UID"])).count() + 1
-
         try:
             newTicket = Ticket(
                 boardId=int(id),
@@ -171,9 +170,8 @@ def board(id):
             )
             db.session.add(newTicket)
             db.session.commit()
-            return {"StatusCode": 201}, 201
+            return {"ticketId": ticketId}, 201
         except Exception as e:
-            print(e)
             return {"StatusCode": 400}, 400
 
 
