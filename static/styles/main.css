@@ -4,7 +4,7 @@ body {
   width: 100vw;
 }
 
-body:has(.login-form), body:has(.board-display) {
+body:has(.login-form), body:has(.board-display), body:has(.task-view) {
   background-image: linear-gradient(to top right, rgba(111, 66, 192, 1), rgba(13, 110, 240, 1));
 }
 
@@ -165,6 +165,47 @@ div.formHelpers {
   outline: none;
 }
 
+.empha{
+    margin:2% 2%;
+    font-size: 30;
+    font-weight: bolder;
+}
+  
+.description{
+    font-style: italic;
+    font-size: x-large;
+    display: flex;
+    align-items: center;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin: 5%, 4%;
+}
+
+.image{
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    margin-bottom: 10px
+}
+
+.btn-right{
+    float: right;
+}
+
+.nav-link{
+    margin-left: 2%;
+    margin-right: 2%;
+    padding-left: 1%;
+    padding-right:1%;
+}
+
+.info{
+    background-color: beige;
+    padding: 2%;
+}
+
 thead {
     border-bottom: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
 }
@@ -204,9 +245,22 @@ tr .mod {
   max-height: 5rem;
 }
 
+body:has(.task-view) {
+  overflow: hidden;
+}
+
+main:has(.task-view) {
+  height: calc(100% - 2rem);
+  overflow-y: auto;
+}
+
 .task-view {
   margin: 1rem;
   width: calc(100vw - 2rem);
+}
+
+.task-view .row {
+  width: inherit;
 }
 
 .task-col {
@@ -214,6 +268,7 @@ tr .mod {
   border: 1px solid var(--bs-gray-400);
   border-radius: 0.5rem;
   padding: 0.5rem;
+  max-height: max-content;
 }
 
 .col-title {
@@ -227,9 +282,18 @@ tr .mod {
 
 .col-body {
   min-height: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-#modal-btn {
-  margin-left: 2%;
-  margin-right: 2%;
+.task {
+  background-color: var(--bs-gray-100);
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 0.5rem;
+}
+
+.task-id {
+  color: var(--bs-gray-600);
 }

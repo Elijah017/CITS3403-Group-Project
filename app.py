@@ -28,6 +28,7 @@ class Board(db.Model):
     visibility = db.Column(db.String(20))
     superuser = db.Column(db.String(20), ForeignKey(User.id))
     active = db.Column(db.String(20), nullable=False)
+    tickets = db.relationship("Ticket", back_populates="board")
 
 
 class Permission(db.Model):
@@ -36,6 +37,19 @@ class Permission(db.Model):
     writeAccess = db.Column(db.Integer, nullable=False)
     active = db.Column(db.String(20), nullable=False)
     __table_args__ = (PrimaryKeyConstraint("board", "user"),)
+
+
+class Ticket(db.Model):
+    boardId = db.Column(db.Integer, ForeignKey(Board.id))
+    creatorId = db.Column(db.Integer, ForeignKey(User.id))
+    id = db.Column(db.Integer, nullable=False, default=1)
+    type = db.Column(db.Integer, nullable=False, default=0)  # 0: Task, 1: Bug, 2: Story
+    title = db.Column(db.String, nullable=False, default="New Ticket")
+    priority = db.Column(db.Integer, nullable=False, default=1)  # 0: Low, 1: Medium, 2: High
+    status = db.Column(db.Integer, nullable=False, default=1)  # 0: On Hold, 1: To Do, 2: In Progress, 3: Testing, 4: Ready for QA, 5: Done
+    description = db.Column(db.String, nullable=False, default="")
+    __table_args__ = (PrimaryKeyConstraint("boardId", "creatorId", "id"),)
+    board = db.relationship(Board, back_populates="tickets")
 
 
 @app.route("/")
@@ -134,11 +148,46 @@ def boards():
     return render_template("boards/boards.html", boards=render)
 
 
-@app.route("/boards/<int:id>", methods=["GET", "POST"])
+@app.route("/boards/<int:id>", methods=["GET"])
 def board(id):
-    board = Board.query.filter_by(id=id).first()
-    return render_template("boards/board.html", title=board.boardname)
+    if request.method == "GET":
+        board = Board.query.filter_by(id=id).first()
+        return render_template("boards/board.html", title=board.boardname)
 
+
+@app.route("/boards/<int:id>/tickets", methods=["GET", "POST", "PATCH"])
+def tickets(id):
+    if request.method == "GET":
+        tickets = [{"ticketId": ticket.id, "title": ticket.title, "status": ticket.status} for ticket in Ticket.query.filter_by(boardId=id)]
+        return tickets, 200
+    elif request.method == "POST":
+        data = json.loads(request.data)
+        ticketId = Ticket.query.filter_by(boardId=int(id), creatorId=int(session["UID"])).count() + 1
+        try:
+            newTicket = Ticket(
+                boardId=int(id),
+                creatorId=int(session["UID"]),
+                id=ticketId,
+                type=data["type"],
+                title=data["title"],
+                priority=data["priority"],
+                status=data["status"],
+                description=data["description"],
+            )
+            db.session.add(newTicket)
+            db.session.commit()
+            return {"ticketId": ticketId}, 201
+        except Exception as e:
+            return {"StatusCode": 400}, 400
+    elif request.method == "PATCH":
+        data = json.loads(request.data)
+        try:
+            Ticket.query.filter_by(boardId=id, id=data["ticketId"]).update({Ticket.status: data["status"]})
+            db.session.commit()
+            return {"StatusCode": 202}, 202
+        except Exception as e:
+            print(e)
+            return {"StatusCode": 400}, 400
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():

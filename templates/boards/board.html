@@ -6,8 +6,16 @@
     <script src="{{ url_for('static', filename='scripts/board.js') }}"></script>
 {% endblock %}
 
+{% block navbarOptions %}
+    <li style="margin-left: 0.5rem">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTicketModal">
+            New Ticket
+        </button>
+    </li>
+{% endblock %}
+
 {% block content %}
-    <div class="task-view container">
+    <div class="task-view">
         <div class="row">
             <div class="col">
                 <div class="task-col">
@@ -15,10 +23,16 @@
                         ON HOLD
                     </div>
                     <hr/>
-                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)">
-                        <div class="task" draggable="true" ondragstart="dragTask(event)" id="drag1">sdfjdhs</div>
-                        <div class="task" draggable="true" ondragstart="dragTask(event)" id="drag2">hjkyujuytjyt</div>
+                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="task-col">
+                    <div class="col-title">
+                        TO DO
                     </div>
+                    <hr/>
+                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)"></div>
                 </div>
             </div>
             <div class="col">
@@ -27,37 +41,97 @@
                         IN PROGRESS
                     </div>
                     <hr/>
-                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)">
-                    </div>
+                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)"></div>
                 </div>
-            </div><div class="col">
+            </div>
+            <div class="col">
                 <div class="task-col">
                     <div class="col-title">
                         TESTING
                     </div>
                     <hr/>
-                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)">
-                    </div>
+                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)"></div>
                 </div>
-            </div><div class="col">
+            </div>
+            <div class="col">
                 <div class="task-col">
                     <div class="col-title">
                         READY FOR QA
                     </div>
                     <hr/>
-                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)">
-                    </div>
+                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)"></div>
                 </div>
-            </div><div class="col">
+            </div>
+            <div class="col">
                 <div class="task-col">
                     <div class="col-title">
                         DONE
                     </div>
                     <hr/>
-                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)">
-                    </div>
+                    <div class="col-body" ondrop="dropTask(event)" ondragover="dragOver(event)"></div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Basic skeleton of the modal was taken from https://getbootstrap.com/docs/5.3/components/modal/#vertically-centered -->
+    <div class="modal fade" id="newTicketModal" tabindex="-1" aria-labelledby="newTicketModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newTicketModalLabel">New Ticket</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newTicketForm" class="container">
+                    <div class="row">
+                        <label for="ticketType">Ticket type</label>
+                        <select name="ticketType" id="ticketType" class="form-select">
+                            <option value="0" selected>Task</option>
+                            <option value="1">Bug</option>
+                            <option value="2">Story</option>
+                        </select>
+                    </div><br>
+                    <div class="row">
+                        <label for="ticketTitle">Title</label>
+                        <input name="ticketTitle" type="text" class="form-control" id="ticketTitle" required>
+                    </div><br>
+                    <div class="row">
+                        <div class="col">
+                            <label for="ticketPriority">Priority</label>
+                            <select name="ticketPriority" id="ticketPriority" class="form-select">
+                                <option value="0">Low</option>
+                                <option value="1" selected>Medium</option>
+                                <option value="2">High</option>
+                            </select>
+                        </div><br>
+                        <div class="col">
+                            <label for="ticketStatus">Status</label>
+                            <select name="ticketStatus" id="ticketStatus" class="form-select">
+                                <option value="0">ON HOLD</option>
+                                <option value="1" selected>TO DO</option>
+                                <option value="2">IN PROGRESS</option>
+                                <option value="3">TESTING</option>
+                                <option value="4">READY FOR QA</option>
+                                <option value="5">DONE</option>
+                            </select>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <label for="ticketDescription">Description</label>
+                        <textarea name="ticketDescription" id="ticketDescription" class="form-control" required></textarea>
+                    </div><br>
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-secondary" style="width: 100%;" data-bs-dismiss="modal" onclick="document.getElementById('newTicketForm').reset()">Close</button>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Create</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         </div>
     </div>
 {% endblock %}
