@@ -12,7 +12,10 @@ $(function() {
     });
 
     $(".dropdown-item").each(function() {
-        $(this).change(function(e) { console.log($(this)); $(this).stopImmediatePropagation(); });
+        if ($(this).has("#disp-inact").length === 1) {
+            t = $(this)
+            $(this).click(handle_inactive_filter);
+        }
     });
 });
 
@@ -23,27 +26,23 @@ function mod_board_height() {
 
 function change_board_state(uri, id) {
     row = `#board${id}-row`;
-    col = $(`${row} .board-state-col`).text()
-    if ( col === "Active") {
-        $.ajax({
-            url: `${uri}`,
-            method: 'PATCH',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
-                delete: true
-            }),
-        });
-    } else {
-        $.ajax({
-            url: `${uri}`,
-            method: 'PATCH',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
-                delete: false
-            }),
-        });
-    }
-    location.reload();
+    $.ajax({
+        url: `${uri}`,
+        method: 'PATCH',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            delete: $(`${row} .board-state-col`).text() === "Active"
+        }),
+        success: function() {
+            location.reload();
+        },
+    });
+}
+
+function handle_inactive_filter(e) {
+    if (e.target.id === "") { e.preventDefault(); }
+    checkbox = $("#disp-inact");
+    checked = !checkbox.is(":checked");
+    checkbox.prop('checked', checked);
 }

@@ -228,3 +228,8 @@ tr .mod {
 .col-body {
   min-height: 1rem;
 }
+
+#modal-btn {
+  margin-left: 2%;
+  margin-right: 2%;
+}
