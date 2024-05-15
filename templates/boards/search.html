@@ -1,18 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="1">
-    <form action="/boards/search", method="POST">
+
+    <form action="/boards/search", method="POST",id="cdiv">
         <label for="Board_name">Board name</label>
         <input type="text" name="search_query">
-        <button type="submit">search</button>
+        <button type="submit" class="btn btn-primary">search</button>
     </form>
-</div>
+
     <Style>
-        #1{display: flex;
+        body {
+            background-color: rgb(157, 255, 0);
+            margin: 0;
+            height: 100vh;
+            display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; }
+        }
+        #centered-div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+       
+       
             
 
     </Style>
