@@ -9,17 +9,12 @@
 {% block content %}
 <ul class="list-group board-display" id="boards-list">
     <li class="list-group-item" id="boards-header">
-        <a class="btn btn-primary" href="{{ url_for('adduser') }}">Go to Add User Page</a>
-        <h2>Your Boards</h2>
-        
-        
-
-
-        <div class="boards-mod-menu">
-            <div class="search-options">
+      <h2>Your Boards</h2>
+       <div class="boards-mod-menu">
+           
                 
-                <a class="btn btn-primary" href="{{ url_for('search') }}">find board</a>
-            </div>
+                <a class="btn btn-primary"  style="padding:0.375rem;" href="{{ url_for('search') }}">find board</a>
+            
             
             <div style="padding:0.375rem;">
                 <div class="dropdown">
@@ -41,6 +36,8 @@
                     </form>
                 </div>
             </div>
+            <a class="btn btn-primary"  style="padding:0.375rem;" href="{{ url_for('adduser') }}">Go to Add User Page</a>
+
         </div>
     </li>
     <div class="boards-container">
