@@ -208,7 +208,7 @@ def search():
             return redirect(url_for("board", id=board_id))
         else:
             flash("Board not found", "error")
-            return redirect(url_for("boards"))
+            return redirect(url_for("search"))
     return render_template("boards/search.html")
 
 
