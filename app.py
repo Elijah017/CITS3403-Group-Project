@@ -60,6 +60,9 @@ def get_owner(id, user):
             return None
         return username.username
 
+def is_superuser(board_id, user_id):#check Whether is superuser
+    board = Board.query.filter_by(id=board_id, superuser=user_id).first()
+    return bool(board)
 
 def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
     board = Board.query.get(Bid)
@@ -85,6 +88,11 @@ def adduser():
         board_id = request.form.get("Bid")
         user_id = request.form.get("Uid")
         write_access = request.form.get("Write_Access")
+        uid=session["UID"]
+        if is_superuser(board_id, uid)!=True:
+             flash("NO Permission", "error")
+             return redirect(url_for("adduser"))
+
         print(board_id,user_id )
         result = AddUser(user_id, board_id, write_access)
         if result["status"] == "error":
@@ -191,6 +199,9 @@ def newBoard():
     return render_template("boardCreat.html", form=form)
 
 
+def check_user_permission(board_id, user_id):
+    permission = Permission.query.filter_by(board=board_id, user=user_id).first()
+    return bool(permission)
 
 def search_board(board_name):
     board = Board.query.filter_by(boardname=board_name).first()
@@ -200,12 +211,18 @@ def search_board(board_name):
 @app.route("/boards/search", methods=["GET", "POST"])
 def search():
     if request.method == "POST":
+        uid=session["UID"]
         search_query = request.form.get("search_query")
        
         board_id = search_board(search_query)
         if board_id:
-            
-            return redirect(url_for("board", id=board_id))
+
+            if check_user_permission(board_id, uid):
+                return redirect(url_for("board", id=board_id))
+            else:
+                flash("NO Permission", "error")
+            return redirect(url_for("search"))
+
         else:
             flash("Board not found", "error")
             return redirect(url_for("search"))
