@@ -70,28 +70,35 @@
 }
 
 #logo{
+    outline-width: 2px;
+    outline-color: grey;
     color: rgba(255, 255, 255, 0.978);
     font-size: 30px;
 }
 
 #slogan{
+    outline-width: 2px;
+    outline-color: grey;
     color:rgba(255, 255, 255, 0.978);
     font-size: 50px;
     font-weight: bold;
-}
-
-.verDiv{
-    width: 2px;
 }
 
 #ref{
     display: none;
     background-color: rgb(211, 233, 240);
     border: 1px ridge black;
-    margin: 3%;
+    margin: 5%;
     padding: 2%;
 }
 
 #ref-btn{
-    
+    margin-left: 10%;
+    margin-bottom: 10%;
+}
+
+#ref-btn:hover{
+    color:rgb(77, 64, 64);
+    border-color: rgb(77, 64, 64);
+    text-shadow: 4px, 4px, lightblue;
 }
