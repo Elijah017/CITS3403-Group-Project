@@ -1,6 +1,18 @@
+const priorityIcons = {
+  0: `<i class="bi bi-chevron-double-down priority" style="color: var(--bs-blue)"></i>`,
+  1: `<i class="bi bi-dash priority" style="color: var(--bs-yellow)"></i>`,
+  2: `<i class="bi bi-chevron-double-up priority" style="color: var(--bs-red)"></i>`
+};
+
+const typeIcons = {
+  0: `<i class="bi bi-check task-icon" style="color: white"></i>`,
+  1: `<i class="bi bi-bug-fill bug-icon" style="color: white; font-size: 0.6rem"></i>`,
+  2: `<i class="bi bi-bookmark-fill story-icon" style="color: white; font-size: 0.6rem"></i>`
+};
+
 function dragOver(e) {
     e.preventDefault();
-  }
+}
   
 function dragTask(e) {
   e.dataTransfer.setData("text", e.target.id);
@@ -23,14 +35,15 @@ function dropTask(e) {
   xhttp.send(JSON.stringify({ticketId: ticketId, status: newStatus}));  
 }
 
-function addTicket(ticketId, title, status) {
+function addTicket(ticketId, title, status, priority, type) {
+  console.log(priority);
   let newTicketElement = document.createElement("div");
   newTicketElement.id = ticketId;
   newTicketElement.classList.add("task");
   newTicketElement.setAttribute("draggable", true);
   newTicketElement.setAttribute("ondragstart", "dragTask(event)");
   newTicketElement.setAttribute("draggable", true);
-  newTicketElement.innerHTML = `<span class="task-id">#${ticketId}</span><br>${title}`
+  newTicketElement.innerHTML = `<p>${typeIcons[type]}<span class="task-id"> #${ticketId}</span>${priorityIcons[priority]}</p>${title}`
   $(".task-col .col-body")[status].appendChild(newTicketElement);
 }
 
@@ -40,7 +53,8 @@ $( document ).ready(() => {
     if (e.target.readyState == 4 && e.target.status == 200) {
       let tickets = JSON.parse(e.target.responseText);
       for (let ticket of tickets) {
-        addTicket(ticket.ticketId, ticket.title, ticket.status);
+        console.log(ticket);
+        addTicket(ticket.ticketId, ticket.title, ticket.status, ticket.priority, ticket.type);
       }
     }
   }
@@ -64,7 +78,7 @@ $( document ).ready(() => {
     xhttp.onreadystatechange = (e) => {
       if (e.target.readyState == 4 && e.target.status == 201) {
         ticketId = JSON.parse(e.target.responseText).ticketId;
-        addTicket(ticketId, data.title, data.status);
+        addTicket(ticketId, data.title, data.status, data.priority, data.type);
       }
     }
     xhttp.open("POST", document.URL + "/tickets", true);
