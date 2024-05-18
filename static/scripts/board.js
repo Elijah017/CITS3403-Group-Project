@@ -90,7 +90,7 @@ $( document ).ready(() => {
     xhttp.onreadystatechange = (e) => {
       if (e.target.readyState == 4 && e.target.status == 201) {
         ticketId = JSON.parse(e.target.responseText).ticketId;
-        addTicket(ticketId, data.title, data.status, data.priority, data.type);
+        addTicket(ticketId, data.title, data.status, data.priority, data.type, data.description);
       }
     }
     xhttp.open("POST", document.URL + "/tickets", true);

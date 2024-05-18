@@ -10,7 +10,8 @@ from flask import (
 )
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from sqlalchemy import ForeignKey, PrimaryKeyConstraint
+from sqlalchemy import ForeignKey, PrimaryKeyConstraint, ForeignKeyConstraint
+from sqlalchemy.sql import func
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
 import json
@@ -50,7 +51,6 @@ class Permission(db.Model):
 
 class Ticket(db.Model):
     boardId = db.Column(db.Integer, ForeignKey(Board.id))
-    creatorId = db.Column(db.Integer, ForeignKey(User.id))
     ticketId = db.Column(db.Integer, nullable=False, default=1)
     type = db.Column(db.Integer, nullable=False, default=0)  # 0: Task, 1: Bug, 2: Story
     title = db.Column(db.String, nullable=False, default="New Ticket")
@@ -59,6 +59,13 @@ class Ticket(db.Model):
     description = db.Column(db.String, nullable=False, default="")
     __table_args__ = (PrimaryKeyConstraint("boardId", "ticketId"),)
     board = db.relationship(Board, back_populates="tickets")
+#     history = db.relationship("History", back_populates="ticket")
+
+
+# class History(db.Model):
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     timestamp = db.Column(db.DateTime, server_default=func.now())
+#     ticket = db.relationship(Ticket, back_populates="history")
 
 
 @app.route("/")
@@ -169,6 +176,8 @@ def tickets(id):
                 "description": ticket.description
             } for ticket in Ticket.query.filter_by(boardId=id)
         ]
+        for ticket in Ticket.query.filter_by(boardId=id):
+            print(ticket.board)
         return tickets, 200
     elif request.method == "POST":
         data = json.loads(request.data)
@@ -176,7 +185,6 @@ def tickets(id):
         try:
             newTicket = Ticket(
                 boardId=int(id),
-                creatorId=int(session["UID"]),
                 ticketId=ticketId,
                 type=data["type"],
                 title=data["title"],
