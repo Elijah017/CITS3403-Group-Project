@@ -68,13 +68,13 @@
                 {% for board in boards.keys() %}
                 <tr id="board{{ board }}-row" {% if not boards[board]["active"] == '1' %} style="display:none;" {% endif %}
                     href="{{ url_for('boards') }}{{ board }}">
-                    <td class="name-col" id="board{{ board }}name">{{ boards[board]["boardname"] }}</td>
-                    <td class="name-col">{{ boards[board]["owner"] }}</td>
+                    <td class="name-col boardname-col" id="board{{ board }}name">{{ boards[board]["boardname"] }}</td>
+                    <td class="board-owner-col name-col">{{ boards[board]["owner"] }}</td>
                     <td class="desc-col">
                         <textarea class="board-desc" rows="2" disabled>{{ boards[board]['description'] }}</textarea>
                     </td>
                     <td class="board-state-col name-col">{% if boards[board]["active"] == '1' %}Active{% else %}Inactive{% endif %}</td>
-                    <td class="name-col">{{ boards[board]["visibility"] }}</td>
+                    <td class="name-col board-vis-col">{{ boards[board]["visibility"] }}</td>
                     <td class="mod">
                         {% if boards[board]["active"] == '1' %}
                         <img
