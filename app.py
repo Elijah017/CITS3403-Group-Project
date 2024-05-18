@@ -184,7 +184,7 @@ def tickets(boardId):
         return tickets, 200
     elif request.method == "POST":
         data = json.loads(request.data)
-        ticketId = Ticket.query.filter_by(boardId=int(id)).count() + 1
+        ticketId = Ticket.query.filter_by(boardId=int(boardId)).count() + 1
         try:
             newTicket = Ticket(
                 boardId=int(boardId),
