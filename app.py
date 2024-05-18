@@ -120,17 +120,17 @@ def adduser():
         user_id = request.form.get("Uid")
         write_access = request.form.get("Write_Access")
         uid=session["UID"]
-        if is_superuser(board_id, uid)!=True:
+        if is_superuser(board_id, uid)!=True:#check the premission of add user
              flash("NO Permission", "error")
              return redirect(url_for("adduser"))
 
-        print(board_id,user_id )
+        #print(board_id,user_id ) just a test
         result = AddUser(user_id, board_id, write_access)
         if result["status"] == "error":
             flash(result["message"], "error")
         else:
             flash(result["message"], "success")
-            return redirect(url_for("boards"))
+            return redirect(url_for("adduser"))
 
     return render_template("boards/adduser.html")
 
@@ -281,10 +281,10 @@ def register():
             "utf-8"
         )  # it will encryption the code in database,  not neccesery
 
-        if User.query.filter_by(email=email).first():
+        if User.query.filter_by(email=email).first():#Check the email if not exist
             flash("Email Already Exists. Please Choose Another One", "danger")
             return redirect(url_for("register"))
-        else:
+        else:#add user
             new_user = User(username=username, email=email, password=password)
             db.session.add(new_user)
             db.session.commit()
@@ -316,11 +316,11 @@ def newBoard():
     return render_template("boardCreat.html", form=form)
 
 
-def check_user_permission(board_id, user_id):
+def check_user_permission(board_id, user_id):#check user permission for one board
     permission = Permission.query.filter_by(board=board_id, user=user_id).first()
     return bool(permission)
 
-def search_board(board_name):
+def search_board(board_name):#transfer board name to id
     board = Board.query.filter_by(boardname=board_name).first()
     return board.id if board else None
 
@@ -329,12 +329,12 @@ def search_board(board_name):
 def search():
     if request.method == "POST":
         uid=session["UID"]
-        search_query = request.form.get("search_query")
+        search_query = request.form.get("search_query")#input  board name
        
         board_id = search_board(search_query)
         if board_id:
 
-            if check_user_permission(board_id, uid):
+            if check_user_permission(board_id, uid):#check user permission for this board
                 return redirect(url_for("board", id=board_id))
             else:
                 flash("NO Permission", "error")
