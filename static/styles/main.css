@@ -254,5 +254,37 @@ main:has(.task-view) {
 }
 
 .task-id {
-  color: var(--bs-gray-600);
+  font-weight: bold;
+  color: var(--bs-gray-500);
+}
+
+.task p {
+  margin: 0;
+  position: relative;
+}
+
+.task i.priority {
+  position: absolute;
+  right: 0;
+}
+
+.task-icon::before {
+  background-color: var(--bs-cyan);
+  border-radius: 2px;
+}
+
+.bug-icon::before {
+  background-color: var(--bs-red);
+  border-radius: 2px;
+  padding: 0.2rem;
+}
+
+.story-icon::before {
+  background-color: var(--bs-teal);
+  border-radius: 2px;
+  padding: 0.2rem;
+}
+
+#ticket-description {
+  text-align: justify;
 }

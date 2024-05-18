@@ -134,4 +134,65 @@
         </div>
         </div>
     </div>
+
+    <div class="modal fade" id="viewTicketModal" tabindex="-1" aria-labelledby="viewTicketModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="viewTicketModalLabel">New Ticket</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6 style="text-align: left">Description</h6>
+                <div id="ticket-description"></div>
+                <br>
+                <h6 style="text-align: left">Ticket History</h6>
+                <form id="viewTicketForm" class="container">
+                    <p>the history will be listed here</p>
+                    <div class="row">
+                        <div class="col">
+                            <label for="ticketType">Ticket type</label>
+                            <select name="ticketType" id="ticketType" class="form-select">
+                                <option value="0">Task</option>
+                                <option value="1">Bug</option>
+                                <option value="2">Story</option>
+                            </select>
+                        </div><br>
+                        <div class="col">
+                            <label for="ticketPriority">Priority</label>
+                            <select name="ticketPriority" id="ticketPriority" class="form-select">
+                                <option value="0">Low</option>
+                                <option value="1">Medium</option>
+                                <option value="2">High</option>
+                            </select>
+                        </div><br>
+                        <div class="col">
+                            <label for="ticketStatus">Status</label>
+                            <select name="ticketStatus" id="ticketStatus" class="form-select">
+                                <option value="0">ON HOLD</option>
+                                <option value="1">TO DO</option>
+                                <option value="2">IN PROGRESS</option>
+                                <option value="3">TESTING</option>
+                                <option value="4">READY FOR QA</option>
+                                <option value="5">DONE</option>
+                            </select>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <label for="ticketComment">Comment</label>
+                        <textarea name="ticketComment" id="ticketComment" class="form-control"></textarea>
+                    </div><br>
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-secondary" style="width: 100%;" data-bs-dismiss="modal" onclick="document.getElementById('newTicketForm').reset()">Close</button>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Create</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
 {% endblock %}
