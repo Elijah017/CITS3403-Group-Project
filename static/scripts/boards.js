@@ -1,19 +1,22 @@
 $(function() {
-    mod_board_height()
+    mod_board_height();
 
-    $(window).change(mod_board_height)
+    $(window).change(mod_board_height);
 
     $("tbody tr").each(function() {
         $(this).click(function(event) {
             if (event.target.id === "") {
                 window.location.href = $(this).attr('href');
             }
-        })
-    })
+        });
+    });
 
     $(".dropdown-item").each(function() {
-        $(this).change(function(e) { console.log($(this)); $(this).stopImmediatePropagation(); });
-    })
+        if ($(this).has("#disp-inact").length === 1) {
+            t = $(this)
+            $(this).click(handle_inactive_filter);
+        }
+    });
 });
 
 function mod_board_height() {
@@ -21,13 +24,25 @@ function mod_board_height() {
     $('#boards-list').css('height', `calc(100% - ${offset}px - 2rem)`);
 }
 
-function restore_board(id) {
-    console.log(id);
-}
-
-function delete_board(uri) {
+function change_board_state(uri, id) {
+    row = `#board${id}-row`;
     $.ajax({
         url: `${uri}`,
-        method: 'DELETE',
-    })
+        method: 'PATCH',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            delete: $(`${row} .board-state-col`).text() === "Active"
+        }),
+        success: function() {
+            location.reload();
+        },
+    });
+}
+
+function handle_inactive_filter(e) {
+    if (e.target.id === "") { e.preventDefault(); }
+    checkbox = $("#disp-inact");
+    checked = !checkbox.is(":checked");
+    checkbox.prop('checked', checked);
 }
