@@ -322,6 +322,22 @@ main:has(.task-view) {
   padding: 0.2rem;
 }
 
-#ticket-description {
+#ticket-description,
+#ticket-history,
+.modal-content h5 {
   text-align: justify;
+}
+
+.history-record {
+  background-color: var(--bs-gray-100);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
+.history-username {
+  font-weight: bold;
+}
+
+.history-timestamp {
+  color: var(--bs-gray-500);
 }

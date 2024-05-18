@@ -69,7 +69,31 @@ function addTicket(ticketId, title, status, priority, type, description) {
     getTicketHistory(ticketId, (history) => {
         for (let record of history) {
           let recordDiv = document.createElement("div");
-          recordDiv.innerHTML = `[${record.timestamp}] ${record.user} did something`;
+          recordDiv.classList.add("history-record");
+          let dt = new Date(record.timestamp);
+          let dtOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+          recordDiv.innerHTML = `
+            <span class="history-username">${record.user}</span>
+            <span class="history-timestamp">${dt.toLocaleString("en-GB", dtOptions)} at ${dt.toLocaleTimeString()}</span>
+            <br>
+          `;
+
+          if (record.type) {
+            recordDiv.innerHTML += `<i>• Changed type to ${record.type}</i>`;
+          }
+          if (record.priority) {
+            recordDiv.innerHTML += `<i>• Changed type to ${record.priority}</i>`;
+          }
+          if (record.status) {
+            recordDiv.innerHTML += `<i>• Changed type to ${record.status}</i>`;
+          }
+          if (record.comment) {
+            recordDiv.innerHTML += record.comment;
+          }
+          if (!record.type & !record.priority & !record.status & !record.comment) {
+            recordDiv.innerHTML += `<i>Created ticket #${ticketId}</i>`;
+          }
+          
           historyDiv.appendChild(recordDiv);
           console.log(record);
         }
