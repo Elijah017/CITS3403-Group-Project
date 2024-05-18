@@ -211,7 +211,7 @@ def tickets(boardId):
         data = json.loads(request.data)
         try:
             oldTicket = Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).first()
-            historicalRecord = History(
+            record = History(
                 boardId=int(boardId),
                 ticketId=data["ticketId"],
                 userId=session["UID"],
@@ -225,9 +225,11 @@ def tickets(boardId):
                 Ticket.status: data.get("status", oldTicket.status),
                 Ticket.priority: data.get("priority", oldTicket.priority)
             })
+
+            if record.type is not None and record.status is not None and record.priority is not None and record.comment is not None:
+                db.session.add(historicalRecord)
+                db.session.commit()
             
-            db.session.add(historicalRecord)
-            db.session.commit()
             return {"StatusCode": 202}, 202
         except Exception as e:
             print(e)
