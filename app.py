@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
-from config import DeploymentConfig, TestConfig
+from config import DeploymentConfig
 
 db = SQLAlchemy()
 
@@ -73,13 +73,13 @@ def get_owner(id, user):
 # The method to add a user to permission, WA is writeAccess
 def AddUser(Uid, Bid, WA, active="active"):
     board = Board.query.get(Bid)
-    if not board:  # check whether the board is exist
+    if not board:  # check whether the board exists
         return {"status": "error", "message": "Board Not Found"}
     user = User.query.get(Uid)
-    if not user:  # check whether the user is exist
+    if not user:  # check whether the user exists
         return {"status": "error", "message": "User Not Found"}
     existing_permission = Permission.query.filter_by(board=Bid, user=Uid).first()
-    if existing_permission:  # check whether the permission is exist
+    if existing_permission:  # check whether the permission exists
         return {"status": "error", "message": "Permission Already Exists"}
     NewPermission = Permission(board=Bid, user=Uid, writeAccess=WA, active=active)
     db.session.add(NewPermission)
@@ -182,12 +182,12 @@ def register():
 @app.route("/newBoard/", methods=["GET", "POST"])
 def newBoard():
     form = BoardForm(request.form)
-    #   Check whether boardname already exists for superuser
+    #Check whether boardname already exists for superuser
     exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
     if exist:
         flash("Board With This Name Already Exists.", "error")
         return render_template("boardCreat.html", form=form)
-    #   Posting to db
+    #Posting to db
     if request.method == "POST":
         addboard = Board(boardname=form.boardname.data, visibility=form.visibility.data, superuser=session["UID"], active=True)
         db.session.add(addboard)
