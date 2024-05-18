@@ -159,7 +159,16 @@ def board(id):
 @app.route("/boards/<int:id>/tickets", methods=["GET", "POST", "PATCH"])
 def tickets(id):
     if request.method == "GET":
-        tickets = [{"ticketId": ticket.id, "type": ticket.type, "title": ticket.title, "status": ticket.status, "priority": ticket.priority} for ticket in Ticket.query.filter_by(boardId=id)]
+        tickets = [
+            {
+                "ticketId": ticket.id, 
+                "type": ticket.type, 
+                "title": ticket.title, 
+                "status": ticket.status, 
+                "priority": ticket.priority, 
+                "description": ticket.description
+            } for ticket in Ticket.query.filter_by(boardId=id)
+        ]
         return tickets, 200
     elif request.method == "POST":
         data = json.loads(request.data)

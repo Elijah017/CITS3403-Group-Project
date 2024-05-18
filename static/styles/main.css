@@ -321,3 +321,7 @@ main:has(.task-view) {
   border-radius: 2px;
   padding: 0.2rem;
 }
+
+#ticket-description {
+  text-align: justify;
+}
