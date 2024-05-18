@@ -49,6 +49,10 @@ function dropTask(e) {
   xhttp.onreadystatechange = (e) => {
     if (e.target.readyState == 4 && e.target.status == 202) {
       colBody.appendChild(document.getElementById(ticketId));
+      let updatedTicket = JSON.parse(e.target.responseText);
+      document.getElementById(updatedTicket.ticketId).onclick = () => {
+        ticketClick(updatedTicket.ticketId, updatedTicket.title, updatedTicket.status, updatedTicket.priority, updatedTicket.type, updatedTicket.description);
+      }
     }
   }
   xhttp.open("PATCH", document.URL + "/tickets", true);
@@ -87,7 +91,6 @@ function addHistoryRecord(record) {
     recordDiv.innerHTML += `<br><i>• Changed status to ${statuses[record.status]}</i>`;
   }
   if (record.comment != null) {
-    console.log(record)
     recordDiv.innerHTML += "<br>" + record.comment;
   }
   if (record.type == null & record.priority == null & record.status == null & record.comment == null) {
@@ -95,6 +98,20 @@ function addHistoryRecord(record) {
   }
   
   document.getElementById("ticketHistory").appendChild(recordDiv);
+}
+
+function ticketClick(ticketId, title, status, priority, type, description) {
+  let form = document.getElementById("viewTicketForm");
+  $("#viewTicketModalLabel").html(`#<span id="ticketId">${ticketId}</span> ${title}`);
+  $("div#ticketDescription").text(description);
+  form.ticketType.selectedIndex = type;
+  form.ticketPriority.selectedIndex = priority;
+  form.ticketStatus.selectedIndex = status;
+  getTicketHistory(ticketId, (history) => {
+      for (let record of history) {
+        addHistoryRecord(record);
+      }
+  })
 }
 
 function addTicket(ticketId, title, status, priority, type, description) {
@@ -115,19 +132,8 @@ function addTicket(ticketId, title, status, priority, type, description) {
       ${title}   
     </p>`
   $(".task-col .col-body")[status].appendChild(newTicketElement);
-
-  newTicketElement.onclick = async () => {
-    let form = document.getElementById("viewTicketForm");
-    $("#viewTicketModalLabel").html(`#<span id="ticketId">${ticketId}</span> ${title}`);
-    $("div#ticketDescription").text(description);
-    form.ticketType.selectedIndex = type;
-    form.ticketPriority.selectedIndex = priority;
-    form.ticketStatus.selectedIndex = status;
-    getTicketHistory(ticketId, (history) => {
-        for (let record of history) {
-          addHistoryRecord(record);
-        }
-    })
+  newTicketElement.onclick = () => {
+    ticketClick(ticketId, title, status, priority, type, description);
   }
 }
 
@@ -199,6 +205,10 @@ $( document ).ready(() => {
           .getElementsByClassName("col-body")[0]
           .appendChild(document.getElementById(data.ticketId));
         getTicketHistory(data.ticketId, (history) => addHistoryRecord(history.at(-1)));
+        let updatedTicket = JSON.parse(e.target.responseText);
+        document.getElementById(updatedTicket.ticketId).onclick = () => {
+          ticketClick(updatedTicket.ticketId, updatedTicket.title, updatedTicket.status, updatedTicket.priority, updatedTicket.type, updatedTicket.description);
+        }
       }
     }
     xhttp.open("PATCH", document.URL + "/tickets", true);
