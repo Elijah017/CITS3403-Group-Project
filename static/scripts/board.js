@@ -48,7 +48,7 @@ function addTicket(ticketId, title, status, priority, type, description) {
   $(".task-col .col-body")[status].appendChild(newTicketElement);
 
   newTicketElement.onclick = () => {
-    $("#viewTicketModalLabel").text(title);
+    $("#viewTicketModalLabel").text(`#${ticketId} ${title}`);
     $("#ticket-description").text(description);
     document.getElementById("viewTicketForm").ticketType.selectedIndex = type;
     document.getElementById("viewTicketForm").ticketPriority.selectedIndex = priority;
