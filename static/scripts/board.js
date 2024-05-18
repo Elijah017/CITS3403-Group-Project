@@ -35,6 +35,17 @@ function dropTask(e) {
   xhttp.send(JSON.stringify({ticketId: ticketId, status: newStatus}));  
 }
 
+function getTicketHistory(ticketId, callback_fn) {
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = (e) => {
+    if (e.target.readyState == 4 && e.target.status == 200) {
+      callback_fn(JSON.parse(e.target.responseText));
+    }
+  }
+  xhttp.open("GET", document.URL + "/history/" + ticketId, true);
+  xhttp.send();
+}
+
 function addTicket(ticketId, title, status, priority, type, description) {
   let newTicketElement = document.createElement("div");
   newTicketElement.id = ticketId;
@@ -47,12 +58,22 @@ function addTicket(ticketId, title, status, priority, type, description) {
   newTicketElement.innerHTML = `<p>${typeIcons[type]}<span class="task-id"> #${ticketId}</span>${priorityIcons[priority]}</p>${title}`
   $(".task-col .col-body")[status].appendChild(newTicketElement);
 
-  newTicketElement.onclick = () => {
+  newTicketElement.onclick = async () => {
+    let form = document.getElementById("viewTicketForm");
+    let historyDiv = document.getElementById("ticket-history");
     $("#viewTicketModalLabel").text(`#${ticketId} ${title}`);
     $("#ticket-description").text(description);
-    document.getElementById("viewTicketForm").ticketType.selectedIndex = type;
-    document.getElementById("viewTicketForm").ticketPriority.selectedIndex = priority;
-    document.getElementById("viewTicketForm").ticketStatus.selectedIndex = status;
+    form.ticketType.selectedIndex = type;
+    form.ticketPriority.selectedIndex = priority;
+    form.ticketStatus.selectedIndex = status;
+    getTicketHistory(ticketId, (history) => {
+        for (let record of history) {
+          let recordDiv = document.createElement("div");
+          recordDiv.innerHTML = `[${record.timestamp}] ${record.user} did something`;
+          historyDiv.appendChild(recordDiv);
+          console.log(record);
+        }
+    })
   }
 }
 

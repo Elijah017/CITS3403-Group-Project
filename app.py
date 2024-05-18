@@ -168,8 +168,8 @@ def board(id):
         return render_template("boards/board.html", title=board.boardname)
 
 
-@app.route("/boards/<int:id>/tickets", methods=["GET", "POST", "PATCH"])
-def tickets(id):
+@app.route("/boards/<int:boardId>/tickets", methods=["GET", "POST", "PATCH"])
+def tickets(boardId):
     if request.method == "GET":
         tickets = [
             {
@@ -179,7 +179,7 @@ def tickets(id):
                 "status": ticket.status, 
                 "priority": ticket.priority, 
                 "description": ticket.description
-            } for ticket in Ticket.query.filter_by(boardId=id)
+            } for ticket in Ticket.query.filter_by(boardId=boardId)
         ]
         return tickets, 200
     elif request.method == "POST":
@@ -187,7 +187,7 @@ def tickets(id):
         ticketId = Ticket.query.filter_by(boardId=int(id)).count() + 1
         try:
             newTicket = Ticket(
-                boardId=int(id),
+                boardId=int(boardId),
                 ticketId=ticketId,
                 type=data["type"],
                 title=data["title"],
@@ -196,7 +196,7 @@ def tickets(id):
                 description=data["description"],
             )
             historicalRecord = History(
-                boardId=int(id),
+                boardId=int(boardId),
                 ticketId=ticketId,
                 userId=session["UID"]
             )
@@ -210,12 +210,28 @@ def tickets(id):
     elif request.method == "PATCH":
         data = json.loads(request.data)
         try:
-            Ticket.query.filter_by(boardId=id, ticketId=data["ticketId"]).update({Ticket.status: data["status"]})
+            Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).update({Ticket.status: data["status"]})
             db.session.commit()
             return {"StatusCode": 202}, 202
         except Exception as e:
             print(e)
             return {"StatusCode": 400}, 400
+
+@app.route("/boards/<int:boardId>/history/<int:ticketId>", methods=["GET"])
+def history(boardId, ticketId):
+    if request.method == "GET":
+        history = [
+            {
+                "timestamp": record.timestamp,
+                "user": User.query.filter_by(id=record.userId).first().username,
+                "type": record.type,
+                "priority": record.priority,
+                "status": record.status,
+                "comment": record.comment
+            } for record in History.query.filter_by(boardId=boardId, ticketId=ticketId).order_by(History.timestamp)
+        ]
+        return history, 200
+    
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
