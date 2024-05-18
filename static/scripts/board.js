@@ -10,6 +10,27 @@ const typeIcons = {
   2: `<i class="bi bi-bookmark-fill story-icon" style="color: white; font-size: 0.6rem"></i>`
 };
 
+const types = {
+  0: "Task",
+  1: "Bug",
+  2: "Story"
+};
+
+const priorities = {
+  0: "LOW",
+  1: "MEDIUM",
+  2: "HIGH"
+};
+
+const statuses = {
+  0: "ON HOLD",
+  1: "TO DO",
+  2: "IN PROGRESS",
+  3: "TESTING",
+  4: "READY FOR QA",
+  5: "DONE"
+}
+
 function dragOver(e) {
     e.preventDefault();
 }
@@ -46,6 +67,36 @@ function getTicketHistory(ticketId, callback_fn) {
   xhttp.send();
 }
 
+function addHistoryRecord(record) {
+  let recordDiv = document.createElement("div");
+  recordDiv.classList.add("history-record");
+  let dt = new Date(record.timestamp);
+  let dtOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  recordDiv.innerHTML = `
+    <span class="history-username">${record.user}</span>
+    <span class="history-timestamp">${dt.toLocaleString("en-GB", dtOptions)} at ${dt.toLocaleTimeString()}</span>
+    <br>
+  `;
+
+  if (record.type) {
+    recordDiv.innerHTML += `<i>• Changed type to ${types[record.type]}</i>`;
+  }
+  if (record.priority) {
+    recordDiv.innerHTML += `<i>• Changed priority to ${priorities[record.priority]}</i>`;
+  }
+  if (record.status) {
+    recordDiv.innerHTML += `<i>• Changed status to ${statuses[record.status]}</i>`;
+  }
+  if (record.comment) {
+    recordDiv.innerHTML += record.comment;
+  }
+  if (!record.type & !record.priority & !record.status & !record.comment) {
+    recordDiv.innerHTML += `<i>Created ticket #${record.ticketId}</i>`;
+  }
+  
+  document.getElementById("ticketHistory").appendChild(recordDiv);
+}
+
 function addTicket(ticketId, title, status, priority, type, description) {
   let newTicketElement = document.createElement("div");
   newTicketElement.id = ticketId;
@@ -55,47 +106,19 @@ function addTicket(ticketId, title, status, priority, type, description) {
   newTicketElement.setAttribute("draggable", true);
   newTicketElement.setAttribute("data-bs-toggle", "modal");
   newTicketElement.setAttribute("data-bs-target", "#viewTicketModal");
-  newTicketElement.innerHTML = `<p>${typeIcons[type]}<span class="task-id"> #${ticketId}</span>${priorityIcons[priority]}</p>${title}`
+  newTicketElement.innerHTML = `<p>${typeIcons[type]}<span id="taskId"> #${ticketId}</span>${priorityIcons[priority]}</p>${title}`
   $(".task-col .col-body")[status].appendChild(newTicketElement);
 
   newTicketElement.onclick = async () => {
     let form = document.getElementById("viewTicketForm");
-    let historyDiv = document.getElementById("ticketHistory");
-    $("#viewTicketModalLabel").text(`#${ticketId} ${title}`);
-    $("#ticketDescription").text(description);
+    $("#viewTicketModalLabel").html(`#<span id="ticketId">${ticketId}</span> ${title}`);
+    $("div#ticketDescription").text(description);
     form.ticketType.selectedIndex = type;
     form.ticketPriority.selectedIndex = priority;
     form.ticketStatus.selectedIndex = status;
     getTicketHistory(ticketId, (history) => {
         for (let record of history) {
-          console.log(record);
-          let recordDiv = document.createElement("div");
-          recordDiv.classList.add("history-record");
-          let dt = new Date(record.timestamp);
-          let dtOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-          recordDiv.innerHTML = `
-            <span class="history-username">${record.user}</span>
-            <span class="history-timestamp">${dt.toLocaleString("en-GB", dtOptions)} at ${dt.toLocaleTimeString()}</span>
-            <br>
-          `;
-
-          if (record.type) {
-            recordDiv.innerHTML += `<i>• Changed type to ${record.type}</i>`;
-          }
-          if (record.priority) {
-            recordDiv.innerHTML += `<i>• Changed type to ${record.priority}</i>`;
-          }
-          if (record.status) {
-            recordDiv.innerHTML += `<i>• Changed type to ${record.status}</i>`;
-          }
-          if (record.comment) {
-            recordDiv.innerHTML += record.comment;
-          }
-          if (!record.type & !record.priority & !record.status & !record.comment) {
-            recordDiv.innerHTML += `<i>Created ticket #${ticketId}</i>`;
-          }
-          
-          historyDiv.appendChild(recordDiv);
+          addHistoryRecord(record);
         }
     })
   }
@@ -147,4 +170,30 @@ $( document ).ready(() => {
     document.getElementById("viewTicketForm").reset();
     document.getElementById("ticketHistory").innerHTML = "";
   });
+
+  $("#viewTicketModal").on("submit", (e) => {
+    e.preventDefault();
+    let data = {
+      ticketId: parseInt($("#viewTicketModal #ticketId").text()),
+      type: parseInt(e.target.ticketType.value),
+      priority: parseInt(e.target.ticketPriority.value),
+      status: parseInt(e.target.ticketStatus.value),
+      comment: e.target.ticketComment.value == "" ? null : e.target.ticketComment.value
+    };
+
+    console.log(data);
+
+    e.target.ticketComment.value = "";
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = (e) => {
+      if (e.target.readyState == 4 && e.target.status == 202) {
+        console.log(JSON.parse(e.target.responseText));
+        // addTicket(ticketId, data.title, data.status, data.priority, data.type, data.description);
+      }
+    }
+    xhttp.open("PATCH", document.URL + "/tickets", true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(JSON.stringify(data));
+  })
 });

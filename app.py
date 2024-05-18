@@ -209,8 +209,25 @@ def tickets(boardId):
             return {"StatusCode": 400}, 400
     elif request.method == "PATCH":
         data = json.loads(request.data)
+        print(data)
         try:
-            Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).update({Ticket.status: data["status"]})
+            oldTicket = Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).first()
+            historicalRecord = History(
+                boardId=int(boardId),
+                ticketId=data["ticketId"],
+                userId=session["UID"],
+                type=None if oldTicket.type == data.get("type") else data.get("type"), 
+                status=None if oldTicket.status == data.get("status") else data.get("status"), 
+                priority=None if oldTicket.priority == data.get("priority") else data.get("priority"), 
+                comment=data.get("comment")
+            )
+            Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).update({
+                Ticket.type: data.get("type", oldTicket.type),
+                Ticket.status: data.get("status", oldTicket.status),
+                Ticket.priority: data.get("priority", oldTicket.priority)
+            })
+            
+            db.session.add(historicalRecord)
             db.session.commit()
             return {"StatusCode": 202}, 202
         except Exception as e:
@@ -222,6 +239,7 @@ def history(boardId, ticketId):
     if request.method == "GET":
         history = [
             {
+                "ticketId": record.ticketId,
                 "timestamp": record.timestamp,
                 "user": User.query.filter_by(id=record.userId).first().username,
                 "type": record.type,

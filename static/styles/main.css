@@ -328,6 +328,10 @@ main:has(.task-view) {
   text-align: justify;
 }
 
+#ticketHistory .history-record:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
 .history-record {
   background-color: var(--bs-gray-100);
   border-radius: 0.25rem;
