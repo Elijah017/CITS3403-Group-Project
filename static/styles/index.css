@@ -63,7 +63,7 @@
     color:white
 }
 
-.backhis{
+.backg{
     padding-left: 10%;
     padding-right: 10%;
     border-radius:15px;
@@ -78,4 +78,8 @@
     color:rgba(255, 255, 255, 0.978);
     font-size: 50px;
     font-weight: bold;
+}
+
+.verDiv{
+    width: 2px;
 }

@@ -5,6 +5,7 @@ from config import TestConfig
 
 localHost = "http://localhost:5000/"
 
+
 class SeleniumTests(unittest.TestCase):
     def setUp(self):
         self.testApp = create_app(TestConfig)
@@ -14,23 +15,17 @@ class SeleniumTests(unittest.TestCase):
 
         options = webdriver.ChromeOptions()
         options.add_argument("--headless=new")
-        self.driver= webdriver.Chrome(options=options)
+        self.driver = webdriver.Chrome(options=options)
         self.driver.get(localHost)
 
         self.server_thread = multiprocessing.Process(target=self.testApp.run)
         self.server.thread.daemon = True
         self.server_thread.start()
-        user = User(username="Bus", 
-                        email="123456@i.com", 
-                        password="123")
-        board1 = Board(boardname="Project",
-                       visibility="public", 
-                       superuser=1, 
-                       active=True)
+        user = User(username="Bus", email="123456@i.com", password="123")
+        board1 = Board(boardname="Project", visibility="public", superuser=1, active=True)
         db.session.add(user)
         db.session.add(board1)
         db.session.commit()
-
 
     def tearDown(self):
         self.server_thread.terminate()
@@ -44,6 +39,7 @@ class SeleniumTests(unittest.TestCase):
         self.assertTrue(board.active)
         delete_board(board)
         self.assertFalse(board.active)
-    
+
+
 if __name__ == "__main__":
     unittest.main()

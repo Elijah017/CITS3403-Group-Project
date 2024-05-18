@@ -70,7 +70,7 @@ def get_owner(id, user):
         return username.username
 
 
-#The method to add a user to permission, WA is writeAccess
+# The method to add a user to permission, WA is writeAccess
 def AddUser(Uid, Bid, WA, active="active"):
     board = Board.query.get(Bid)
     if not board:  # check whether the board is exist

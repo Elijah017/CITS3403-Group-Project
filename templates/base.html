@@ -21,22 +21,28 @@
     <header class="sticky-top">
         <nav class="navbar navbar-expand-md bg-white shadow-sm">
             <div class="container-fluid">
-                <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <div class="mx-auto order-0">
+                    <a class="navbar-brand" href="{{ url_for('home') }}">
+                        <img src="{{ url_for('static', filename='images/icon.png') }}" class="img-circle" href="{{ url_for('home') }}" alt="home" width="30" height="24">
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse w-100 order-3 order-md-0 dual-collapse2">
                     <ul class="navbar-nav me-auto">
                         {% if session.is_login %}
+                        <div class="vr verDiv"></div>
                         <li>
                             <a class="navbar-brand bg-white nav-link" href="{{ url_for('boards') }}">                                    
                                 Boards
                             </a>
                         </li>
-                        <div class="vr"></div>
+                        <div class="vr verDiv"></div>
                         <li>
                             <a class="navbar-brand bg-white nav-link"  href="{{ url_for('newBoard') }}">
                                 New Board
                             </a>
-                        </li>
-                        <div class="vr"></div>    
+                        </li>  
                         {% endif %}
+                        <div class="vr verDiv"></div>  
                         <li>
                             <a class="navbar-brand btn-white nav-link" href="{{ url_for('about') }}">
                                 About Us
@@ -44,11 +50,6 @@
                         </li>    
 
                     </ul>
-                </div>
-                <div class="mx-auto order-0">
-                    <a class="navbar-brand" href="{{ url_for('home') }}">
-                        <img src="{{ url_for('static', filename='images/icon.png') }}" href="{{ url_for('home') }}" alt="home" width="30" height="24">
-                    </a>
                 </div>
                 <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                     <ul class="navbar-nav ms-auto">
