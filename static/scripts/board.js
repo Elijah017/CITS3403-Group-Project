@@ -75,23 +75,23 @@ function addHistoryRecord(record) {
   recordDiv.innerHTML = `
     <span class="history-username">${record.user}</span>
     <span class="history-timestamp">${dt.toLocaleString("en-GB", dtOptions)} at ${dt.toLocaleTimeString()}</span>
-    <br>
   `;
 
-  if (record.type) {
-    recordDiv.innerHTML += `<i>• Changed type to ${types[record.type]}</i>`;
+  if (record.type != null) {
+    recordDiv.innerHTML += `<br><i>• Changed type to ${types[record.type]}</i>`;
   }
-  if (record.priority) {
-    recordDiv.innerHTML += `<i>• Changed priority to ${priorities[record.priority]}</i>`;
+  if (record.priority != null) {
+    recordDiv.innerHTML += `<br><i>• Changed priority to ${priorities[record.priority]}</i>`;
   }
-  if (record.status) {
-    recordDiv.innerHTML += `<i>• Changed status to ${statuses[record.status]}</i>`;
+  if (record.status != null) {
+    recordDiv.innerHTML += `<br><i>• Changed status to ${statuses[record.status]}</i>`;
   }
-  if (record.comment) {
-    recordDiv.innerHTML += record.comment;
+  if (record.comment != null) {
+    console.log(record)
+    recordDiv.innerHTML += "<br>" + record.comment;
   }
-  if (!record.type & !record.priority & !record.status & !record.comment) {
-    recordDiv.innerHTML += `<i>Created ticket #${record.ticketId}</i>`;
+  if (record.type == null & record.priority == null & record.status == null & record.comment == null) {
+    recordDiv.innerHTML += `<br><i>Created ticket #${record.ticketId}</i>`;
   }
   
   document.getElementById("ticketHistory").appendChild(recordDiv);
