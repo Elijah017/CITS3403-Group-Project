@@ -1,7 +1,8 @@
 from flask import Flask, render_template, flash, redirect, request, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from sqlalchemy import ForeignKey, PrimaryKeyConstraint
+from sqlalchemy import ForeignKey, PrimaryKeyConstraint, ForeignKeyConstraint
+from sqlalchemy.sql import func
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
 import json
@@ -41,7 +42,6 @@ class Permission(db.Model):
 
 class Ticket(db.Model):
     boardId = db.Column(db.Integer, ForeignKey(Board.id))
-    creatorId = db.Column(db.Integer, ForeignKey(User.id))
     ticketId = db.Column(db.Integer, nullable=False, default=1)
     type = db.Column(db.Integer, nullable=False, default=0)  # 0: Task, 1: Bug, 2: Story
     title = db.Column(db.String, nullable=False, default="New Ticket")
@@ -50,6 +50,18 @@ class Ticket(db.Model):
     description = db.Column(db.String, nullable=False, default="")
     __table_args__ = (PrimaryKeyConstraint("boardId", "ticketId"),)
     board = db.relationship(Board, back_populates="tickets")
+
+
+class History(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    boardId = db.Column(db.Integer, ForeignKey(Ticket.boardId))
+    ticketId = db.Column(db.Integer, ForeignKey(Ticket.ticketId))
+    userId = db.Column(db.Integer, ForeignKey(User.id))
+    timestamp = db.Column(db.DateTime, server_default=func.now())
+    type = db.Column(db.Integer)
+    priority = db.Column(db.Integer)
+    status = db.Column(db.Integer)
+    comment = db.Column(db.String)
 
 
 @app.route("/")
@@ -153,27 +165,27 @@ def board(id):
         return render_template("boards/board.html", title=board.boardname)
 
 
-@app.route("/boards/<int:id>/tickets", methods=["GET", "POST", "PATCH"])
-def tickets(id):
+@app.route("/boards/<int:boardId>/tickets", methods=["GET", "POST", "PATCH"])
+def tickets(boardId):
     if request.method == "GET":
         tickets = [
             {
-                "ticketId": ticket.ticketId, 
-                "type": ticket.type, 
-                "title": ticket.title, 
-                "status": ticket.status, 
-                "priority": ticket.priority, 
-                "description": ticket.description
-            } for ticket in Ticket.query.filter_by(boardId=id)
+                "ticketId": ticket.ticketId,
+                "type": ticket.type,
+                "title": ticket.title,
+                "status": ticket.status,
+                "priority": ticket.priority,
+                "description": ticket.description,
+            }
+            for ticket in Ticket.query.filter_by(boardId=boardId)
         ]
         return tickets, 200
     elif request.method == "POST":
         data = json.loads(request.data)
-        ticketId = Ticket.query.filter_by(boardId=int(id)).count() + 1
+        ticketId = Ticket.query.filter_by(boardId=int(boardId)).count() + 1
         try:
             newTicket = Ticket(
-                boardId=int(id),
-                creatorId=int(session["UID"]),
+                boardId=int(boardId),
                 ticketId=ticketId,
                 type=data["type"],
                 title=data["title"],
@@ -181,7 +193,9 @@ def tickets(id):
                 status=data["status"],
                 description=data["description"],
             )
+            historicalRecord = History(boardId=int(boardId), ticketId=ticketId, userId=session["UID"])
             db.session.add(newTicket)
+            db.session.add(historicalRecord)
             db.session.commit()
             return {"ticketId": ticketId}, 201
         except Exception as e:
@@ -190,12 +204,51 @@ def tickets(id):
     elif request.method == "PATCH":
         data = json.loads(request.data)
         try:
-            Ticket.query.filter_by(boardId=id, ticketId=data["ticketId"]).update({Ticket.status: data["status"]})
-            db.session.commit()
+            oldTicket = Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).first()
+            record = History(
+                boardId=int(boardId),
+                ticketId=data["ticketId"],
+                userId=session["UID"],
+                type=None if oldTicket.type == data.get("type") else data.get("type"),
+                status=None if oldTicket.status == data.get("status") else data.get("status"),
+                priority=None if oldTicket.priority == data.get("priority") else data.get("priority"),
+                comment=data.get("comment"),
+            )
+            Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).update(
+                {
+                    Ticket.type: data.get("type", oldTicket.type),
+                    Ticket.status: data.get("status", oldTicket.status),
+                    Ticket.priority: data.get("priority", oldTicket.priority),
+                }
+            )
+
+            if record.type is not None or record.status is not None or record.priority is not None or record.comment is not None:
+                db.session.add(record)
+                db.session.commit()
+
             return {"StatusCode": 202}, 202
         except Exception as e:
             print(e)
             return {"StatusCode": 400}, 400
+
+
+@app.route("/boards/<int:boardId>/history/<int:ticketId>", methods=["GET"])
+def history(boardId, ticketId):
+    if request.method == "GET":
+        history = [
+            {
+                "ticketId": record.ticketId,
+                "timestamp": record.timestamp,
+                "user": User.query.filter_by(id=record.userId).first().username,
+                "type": record.type,
+                "priority": record.priority,
+                "status": record.status,
+                "comment": record.comment,
+            }
+            for record in History.query.filter_by(boardId=boardId, ticketId=ticketId).order_by(History.timestamp)
+        ]
+        return history, 200
+
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
