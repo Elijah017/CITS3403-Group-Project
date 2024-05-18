@@ -322,8 +322,8 @@ main:has(.task-view) {
   padding: 0.2rem;
 }
 
-#ticket-description,
-#ticket-history,
+#ticketDescription,
+#ticketHistory,
 .modal-content h5 {
   text-align: justify;
 }

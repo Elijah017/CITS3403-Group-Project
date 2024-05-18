@@ -60,14 +60,15 @@ function addTicket(ticketId, title, status, priority, type, description) {
 
   newTicketElement.onclick = async () => {
     let form = document.getElementById("viewTicketForm");
-    let historyDiv = document.getElementById("ticket-history");
+    let historyDiv = document.getElementById("ticketHistory");
     $("#viewTicketModalLabel").text(`#${ticketId} ${title}`);
-    $("#ticket-description").text(description);
+    $("#ticketDescription").text(description);
     form.ticketType.selectedIndex = type;
     form.ticketPriority.selectedIndex = priority;
     form.ticketStatus.selectedIndex = status;
     getTicketHistory(ticketId, (history) => {
         for (let record of history) {
+          console.log(record);
           let recordDiv = document.createElement("div");
           recordDiv.classList.add("history-record");
           let dt = new Date(record.timestamp);
@@ -95,7 +96,6 @@ function addTicket(ticketId, title, status, priority, type, description) {
           }
           
           historyDiv.appendChild(recordDiv);
-          console.log(record);
         }
     })
   }
@@ -145,5 +145,6 @@ $( document ).ready(() => {
 
   $("#viewTicketModal").on("hidden.bs.modal", (e) => {
     document.getElementById("viewTicketForm").reset();
+    document.getElementById("ticketHistory").innerHTML = "";
   });
 });
