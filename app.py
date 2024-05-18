@@ -51,13 +51,13 @@ class Permission(db.Model):
 class Ticket(db.Model):
     boardId = db.Column(db.Integer, ForeignKey(Board.id))
     creatorId = db.Column(db.Integer, ForeignKey(User.id))
-    id = db.Column(db.Integer, nullable=False, default=1)
+    ticketId = db.Column(db.Integer, nullable=False, default=1)
     type = db.Column(db.Integer, nullable=False, default=0)  # 0: Task, 1: Bug, 2: Story
     title = db.Column(db.String, nullable=False, default="New Ticket")
     priority = db.Column(db.Integer, nullable=False, default=1)  # 0: Low, 1: Medium, 2: High
     status = db.Column(db.Integer, nullable=False, default=1)  # 0: On Hold, 1: To Do, 2: In Progress, 3: Testing, 4: Ready for QA, 5: Done
     description = db.Column(db.String, nullable=False, default="")
-    __table_args__ = (PrimaryKeyConstraint("boardId", "creatorId", "id"),)
+    __table_args__ = (PrimaryKeyConstraint("boardId", "ticketId"),)
     board = db.relationship(Board, back_populates="tickets")
 
 
@@ -161,7 +161,7 @@ def tickets(id):
     if request.method == "GET":
         tickets = [
             {
-                "ticketId": ticket.id, 
+                "ticketId": ticket.ticketId, 
                 "type": ticket.type, 
                 "title": ticket.title, 
                 "status": ticket.status, 
@@ -172,12 +172,12 @@ def tickets(id):
         return tickets, 200
     elif request.method == "POST":
         data = json.loads(request.data)
-        ticketId = Ticket.query.filter_by(boardId=int(id), creatorId=int(session["UID"])).count() + 1
+        ticketId = Ticket.query.filter_by(boardId=int(id)).count() + 1
         try:
             newTicket = Ticket(
                 boardId=int(id),
                 creatorId=int(session["UID"]),
-                id=ticketId,
+                ticketId=ticketId,
                 type=data["type"],
                 title=data["title"],
                 priority=data["priority"],
@@ -188,11 +188,12 @@ def tickets(id):
             db.session.commit()
             return {"ticketId": ticketId}, 201
         except Exception as e:
+            print(e)
             return {"StatusCode": 400}, 400
     elif request.method == "PATCH":
         data = json.loads(request.data)
         try:
-            Ticket.query.filter_by(boardId=id, id=data["ticketId"]).update({Ticket.status: data["status"]})
+            Ticket.query.filter_by(boardId=id, ticketId=data["ticketId"]).update({Ticket.status: data["status"]})
             db.session.commit()
             return {"StatusCode": 202}, 202
         except Exception as e:
