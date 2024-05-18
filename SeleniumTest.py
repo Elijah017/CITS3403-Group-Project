@@ -10,13 +10,14 @@ from config import TestConfig
 
 localHost = "http://127.0.0.1:5000/"
 
+
 class SeleniumTests(unittest.TestCase):
     def setUp(self):
         self.testApp = create_app(TestConfig)
         self.app_context = self.testApp.app_context()
         self.app_context.push()
-        
-        #Manage database
+
+        # Manage database
         db.create_all()
 
         """#Something else?
@@ -29,10 +30,10 @@ class SeleniumTests(unittest.TestCase):
         self.server_process = multiprocessing.Process(target=self.testApp.run)
         self.server_process.start()
 
-        #options = webdriver.ChromeOptions()
-        #options.add_argument("--headless=new")
-        #self.driver = webdriver.Chrome(options=options)
-        #self.driver.implicitly_wait(5)
+        # options = webdriver.ChromeOptions()
+        # options.add_argument("--headless=new")
+        # self.driver = webdriver.Chrome(options=options)
+        # self.driver.implicitly_wait(5)
         self.driver = webdriver.Chrome()
         self.driver.get(localHost)
 
@@ -88,6 +89,7 @@ class SeleniumTests(unittest.TestCase):
         # Check for the success flash message
         flash_message = driver.find_element(By.CLASS_NAME, "flash-message").text
         self.assertIn("Public Board Created", flash_message)"""
+
 
 if __name__ == "__main__":
     unittest.main()

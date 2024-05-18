@@ -182,12 +182,12 @@ def register():
 @app.route("/newBoard/", methods=["GET", "POST"])
 def newBoard():
     form = BoardForm(request.form)
-    #Check whether boardname already exists for superuser
+    # Check whether boardname already exists for superuser
     exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
     if exist:
         flash("Board With This Name Already Exists.", "error")
         return render_template("boardCreat.html", form=form)
-    #Posting to db
+    # Posting to db
     if request.method == "POST":
         addboard = Board(boardname=form.boardname.data, visibility=form.visibility.data, superuser=session["UID"], active=True)
         db.session.add(addboard)
