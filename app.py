@@ -228,7 +228,14 @@ def tickets(boardId):
                 db.session.add(record)
                 db.session.commit()
 
-            return {"StatusCode": 202}, 202
+            return {
+                "ticketId": data["ticketId"],
+                "title": oldTicket.title,
+                "type": data.get("type", oldTicket.type),
+                "status": data.get("status", oldTicket.status),
+                "priority": data.get("priority", oldTicket.priority),
+                "description": oldTicket.description,
+            }, 202
         except Exception as e:
             print(e)
             return {"StatusCode": 400}, 400
