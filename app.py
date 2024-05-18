@@ -226,8 +226,8 @@ def tickets(boardId):
                 Ticket.priority: data.get("priority", oldTicket.priority)
             })
 
-            if record.type is not None and record.status is not None and record.priority is not None and record.comment is not None:
-                db.session.add(historicalRecord)
+            if record.type is not None or record.status is not None or record.priority is not None or record.comment is not None:
+                db.session.add(record)
                 db.session.commit()
             
             return {"StatusCode": 202}, 202

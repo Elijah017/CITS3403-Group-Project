@@ -195,6 +195,9 @@ $( document ).ready(() => {
       if (e.target.readyState == 4 && e.target.status == 202) {
         $(`#${data.ticketId}.task span.type-icon`).html(typeIcons[data.type]);
         $(`#${data.ticketId}.task span.priority-icon`).html(priorityIcons[data.priority]);
+        document.getElementsByClassName("task-col")[data.status]
+          .getElementsByClassName("col-body")[0]
+          .appendChild(document.getElementById(data.ticketId));
       }
     }
     xhttp.open("PATCH", document.URL + "/tickets", true);
