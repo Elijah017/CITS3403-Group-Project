@@ -59,13 +59,18 @@ class Ticket(db.Model):
     description = db.Column(db.String, nullable=False, default="")
     __table_args__ = (PrimaryKeyConstraint("boardId", "ticketId"),)
     board = db.relationship(Board, back_populates="tickets")
-#     history = db.relationship("History", back_populates="ticket")
 
 
-# class History(db.Model):
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     timestamp = db.Column(db.DateTime, server_default=func.now())
-#     ticket = db.relationship(Ticket, back_populates="history")
+class History(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    boardId = db.Column(db.Integer, ForeignKey(Ticket.boardId))
+    ticketId = db.Column(db.Integer, ForeignKey(Ticket.ticketId))
+    userId = db.Column(db.Integer, ForeignKey(User.id))
+    timestamp = db.Column(db.DateTime, server_default=func.now())
+    type = db.Column(db.Integer)
+    priority = db.Column(db.Integer)
+    status = db.Column(db.Integer)
+    comment = db.Column(db.String)
 
 
 @app.route("/")
@@ -176,8 +181,6 @@ def tickets(id):
                 "description": ticket.description
             } for ticket in Ticket.query.filter_by(boardId=id)
         ]
-        for ticket in Ticket.query.filter_by(boardId=id):
-            print(ticket.board)
         return tickets, 200
     elif request.method == "POST":
         data = json.loads(request.data)
@@ -192,7 +195,13 @@ def tickets(id):
                 status=data["status"],
                 description=data["description"],
             )
+            historicalRecord = History(
+                boardId=int(id),
+                ticketId=ticketId,
+                userId=session["UID"]
+            )
             db.session.add(newTicket)
+            db.session.add(historicalRecord)
             db.session.commit()
             return {"ticketId": ticketId}, 201
         except Exception as e:
