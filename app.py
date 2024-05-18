@@ -173,13 +173,14 @@ def tickets(boardId):
     if request.method == "GET":
         tickets = [
             {
-                "ticketId": ticket.ticketId, 
-                "type": ticket.type, 
-                "title": ticket.title, 
-                "status": ticket.status, 
-                "priority": ticket.priority, 
-                "description": ticket.description
-            } for ticket in Ticket.query.filter_by(boardId=boardId)
+                "ticketId": ticket.ticketId,
+                "type": ticket.type,
+                "title": ticket.title,
+                "status": ticket.status,
+                "priority": ticket.priority,
+                "description": ticket.description,
+            }
+            for ticket in Ticket.query.filter_by(boardId=boardId)
         ]
         return tickets, 200
     elif request.method == "POST":
@@ -195,11 +196,7 @@ def tickets(boardId):
                 status=data["status"],
                 description=data["description"],
             )
-            historicalRecord = History(
-                boardId=int(boardId),
-                ticketId=ticketId,
-                userId=session["UID"]
-            )
+            historicalRecord = History(boardId=int(boardId), ticketId=ticketId, userId=session["UID"])
             db.session.add(newTicket)
             db.session.add(historicalRecord)
             db.session.commit()
@@ -215,25 +212,28 @@ def tickets(boardId):
                 boardId=int(boardId),
                 ticketId=data["ticketId"],
                 userId=session["UID"],
-                type=None if oldTicket.type == data.get("type") else data.get("type"), 
-                status=None if oldTicket.status == data.get("status") else data.get("status"), 
-                priority=None if oldTicket.priority == data.get("priority") else data.get("priority"), 
-                comment=data.get("comment")
+                type=None if oldTicket.type == data.get("type") else data.get("type"),
+                status=None if oldTicket.status == data.get("status") else data.get("status"),
+                priority=None if oldTicket.priority == data.get("priority") else data.get("priority"),
+                comment=data.get("comment"),
             )
-            Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).update({
-                Ticket.type: data.get("type", oldTicket.type),
-                Ticket.status: data.get("status", oldTicket.status),
-                Ticket.priority: data.get("priority", oldTicket.priority)
-            })
+            Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).update(
+                {
+                    Ticket.type: data.get("type", oldTicket.type),
+                    Ticket.status: data.get("status", oldTicket.status),
+                    Ticket.priority: data.get("priority", oldTicket.priority),
+                }
+            )
 
             if record.type is not None or record.status is not None or record.priority is not None or record.comment is not None:
                 db.session.add(record)
                 db.session.commit()
-            
+
             return {"StatusCode": 202}, 202
         except Exception as e:
             print(e)
             return {"StatusCode": 400}, 400
+
 
 @app.route("/boards/<int:boardId>/history/<int:ticketId>", methods=["GET"])
 def history(boardId, ticketId):
@@ -246,11 +246,12 @@ def history(boardId, ticketId):
                 "type": record.type,
                 "priority": record.priority,
                 "status": record.status,
-                "comment": record.comment
-            } for record in History.query.filter_by(boardId=boardId, ticketId=ticketId).order_by(History.timestamp)
+                "comment": record.comment,
+            }
+            for record in History.query.filter_by(boardId=boardId, ticketId=ticketId).order_by(History.timestamp)
         ]
         return history, 200
-    
+
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
