@@ -19,33 +19,36 @@
 </head>
 
 <body>
-    <header class="sticky-top">
+    <header class="sticky-top navbar-fit">
         <nav class="navbar navbar-expand-md bg-white shadow-sm">
             <div class="container-fluid">
-                <div class="mx-auto order-0">
-                    <a class="navbar-brand" href="{{ url_for('home') }}">
-                        <img src="{{ url_for('static', filename='images/icon.png') }}" class="img-circle" href="{{ url_for('home') }}" alt="home" width="30" height="24">
+                <div class="mx-auto order-0 navbar-nav">
+                    <a class="navbar-brand bg-white nav-link" href="{{ url_for('home') }}">
+                        <img src="{{ url_for('static', filename='images/icon.png') }}"  href="{{ url_for('home') }}" alt="home" width="30" height="24">
                     </a>
                 </div>
                 <div class="navbar-collapse collapse w-100 order-3 order-md-0 dual-collapse2">
                     <ul class="navbar-nav me-auto">
                         {% if session.is_login %}
-                        <div class="vr verDiv"></div>
+                        <div class="vr"></div>
                         <li>
                             <a class="navbar-brand bg-white nav-link" href="{{ url_for('boards') }}">                                    
+                                <img src="{{ url_for('static', filename='images/board.png') }}" alt="boards" width="30" height="24">
                                 Boards
                             </a>
                         </li>
-                        <div class="vr verDiv"></div>
+                        <div class="vr"></div>
                         <li>
                             <a class="navbar-brand bg-white nav-link"  href="{{ url_for('newBoard') }}">
+                                <img src="{{ url_for('static', filename='images/blackboard.png') }}" alt="about" width="30" height="24">
                                 New Board
                             </a>
                         </li>  
                         {% endif %}
-                        <div class="vr verDiv"></div>  
+                        <div class="vr"></div>  
                         <li>
                             <a class="navbar-brand btn-white nav-link" href="{{ url_for('about') }}">
+                                <img src="{{ url_for('static', filename='images/information.png') }}" alt="about" width="24" height="24">
                                 About Us
                             </a>                    
                         </li>    
