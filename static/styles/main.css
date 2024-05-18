@@ -261,7 +261,7 @@ main:has(.task-view) {
   padding: 0.5rem;
 }
 
-.task-id {
+.ticket-id {
   font-weight: bold;
   color: var(--bs-gray-500);
 }
@@ -293,7 +293,9 @@ main:has(.task-view) {
   padding: 0.2rem;
 }
 
-#ticket-description {
+#ticketDescription,
+#ticketHistory,
+.modal-content h5 {
   text-align: justify;
 }
 
@@ -310,4 +312,22 @@ main:has(.task-view) {
 .boards-table thead, .boards-table tbody tr {
   display: table;
   width: 100%;
+}
+
+#ticketHistory .history-record:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+.history-record {
+  background-color: var(--bs-gray-100);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
+.history-username {
+  font-weight: bold;
+}
+
+.history-timestamp {
+  color: var(--bs-gray-500);
 }
