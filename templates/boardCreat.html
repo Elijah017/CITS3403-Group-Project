@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block title %}Board Creation{% endblock %}
+{% block head %}
+{{ super() }}
+<script src="{{ url_for('static', filename='scripts/createBoard.js') }}"></script>
+{% endblock %}
 
 {% block content %}
     {%  for message in get_flashed_messages() %}
@@ -9,19 +13,22 @@
         <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
-    <form method="post" class="bg-white shadow-sm centred login-form board-create-form">
+    <form method="post" id="create-board" path="{{ url_for('newBoard') }}" class="bg-white shadow-sm centred login-form board-create-form">
         {{ form.csrf_token }}
         <h1>Board Creation</h1>
         <p class="text-center" id="description">Let's Start Creating Your New DevBoards Board!</p>
         <div id="create">
-            <form method="post">
-                {{ form.csrf_token }}
-                <div class="input-group mb-3">
-                    {{ form.visibility }}
-                    {{ form.boardname }}
-                </div>
-                {{ form.submit }}
-            </form>
+            {{ form.csrf_token }}
+            <div class="input-group mb-3">
+                {{ form.visibility }}
+                {{ form.boardname }}
+            </div>
+            <div id="board-desc-container">
+                <label for="board-description" style="align-self: left;">Description:</label>
+                <textarea id="board-description" class="form-control" rows="3" placeholder="Optional"></textarea>
+            </div>
+            {{ form.submit }}
         </div>
+    </form>
 {% endblock %}
 </html>

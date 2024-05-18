@@ -29,6 +29,7 @@ class Board(db.Model):
     superuser = db.Column(db.String(20), ForeignKey(User.id))
     active = db.Column(db.String(20), nullable=False)
     tickets = db.relationship("Ticket", back_populates="board")
+    description = db.Column(db.String, nullable=True)
 
 
 class Permission(db.Model):
@@ -132,7 +133,7 @@ def boards():
         if owner == None:
             continue
 
-        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility}
+        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility, "description": board.description}
 
     for perm in Permission.query.filter_by(board=user):
         if perm.board in render:
@@ -141,7 +142,7 @@ def boards():
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
-        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility}
+        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility, "description": board.description}
 
     return render_template("boards/boards.html", boards=render)
 
@@ -251,7 +252,8 @@ def newBoard():
         return render_template("boardCreat.html", form=form)
     #   Posting to db
     if request.method == "POST":
-        addboard = Board(boardname=form.boardname.data, visibility=form.visibility.data, superuser=session["UID"], active=True)
+        data = json.loads(request.data)
+        addboard = Board(boardname=data['boardname'], visibility=data['visibility'], superuser=session["UID"], active=True, description=data['description'])
         db.session.add(addboard)
         db.session.commit()
         if addboard.visibility is True:

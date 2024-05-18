@@ -20,8 +20,10 @@ $(function() {
 });
 
 function mod_board_height() {
-    let offset = $('#boards-list').offset().top;
-    $('#boards-list').css('height', `calc(100% - ${offset}px - 2rem)`);
+    let list_offset = $('#boards-list').offset().top;
+    let table_offset = $('.boards-table').offset().bottom;
+    $('#boards-list').css('height', `calc(${list_offset}px - 2rem)`);
+    $('.boards-table tbody').css('max-height', `${table_offset}px`);
 }
 
 function change_board_state(uri, id) {

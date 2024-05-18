@@ -202,6 +202,14 @@ tr .mod {
 .board-desc {
   font-size: small;
   max-height: 5rem;
+  width: 100%;
+  text-align: center;
+  border: none;
+  background: none;
+}
+
+#board-desc-container {
+  text-align: left;
 }
 
 body:has(.task-view) {
@@ -287,4 +295,19 @@ main:has(.task-view) {
 
 #ticket-description {
   text-align: justify;
+}
+
+.boards-table {
+  max-height: 100%;
+}
+
+.boards-table tbody {
+  display: block;
+  overflow-y: scroll;
+  max-height: 700px;
+}
+
+.boards-table thead, .boards-table tbody tr {
+  display: table;
+  width: 100%;
 }

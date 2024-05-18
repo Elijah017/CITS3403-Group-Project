@@ -91,7 +91,7 @@ class BoardForm(FlaskForm):
         choices=[("public", "Public"), ("private", "Private")],
         render_kw={"class": "form-select"},
     )
-    submit = SubmitField("Create", render_kw={"class": "btn btn-primary"})
+    submit = SubmitField("Create", render_kw={ "class": "btn btn-primary" })
     supervisor = StringField("Superuser")
     active = SelectField("active")
 
