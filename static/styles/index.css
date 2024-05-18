@@ -83,3 +83,15 @@
 .verDiv{
     width: 2px;
 }
+
+#ref{
+    display: none;
+    background-color: rgb(211, 233, 240);
+    border: 1px ridge black;
+    margin: 3%;
+    padding: 2%;
+}
+
+#ref-btn{
+    
+}
