@@ -290,7 +290,7 @@ main:has(.task-view) {
   padding: 0.5rem;
 }
 
-.task-id {
+.ticket-id {
   font-weight: bold;
   color: var(--bs-gray-500);
 }

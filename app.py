@@ -209,7 +209,6 @@ def tickets(boardId):
             return {"StatusCode": 400}, 400
     elif request.method == "PATCH":
         data = json.loads(request.data)
-        print(data)
         try:
             oldTicket = Ticket.query.filter_by(boardId=boardId, ticketId=data["ticketId"]).first()
             historicalRecord = History(

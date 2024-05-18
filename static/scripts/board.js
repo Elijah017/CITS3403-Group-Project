@@ -11,9 +11,9 @@ const typeIcons = {
 };
 
 const types = {
-  0: "Task",
-  1: "Bug",
-  2: "Story"
+  0: "TASK",
+  1: "BUG",
+  2: "STORY"
 };
 
 const priorities = {
@@ -106,7 +106,14 @@ function addTicket(ticketId, title, status, priority, type, description) {
   newTicketElement.setAttribute("draggable", true);
   newTicketElement.setAttribute("data-bs-toggle", "modal");
   newTicketElement.setAttribute("data-bs-target", "#viewTicketModal");
-  newTicketElement.innerHTML = `<p>${typeIcons[type]}<span id="taskId"> #${ticketId}</span>${priorityIcons[priority]}</p>${title}`
+  newTicketElement.innerHTML = `
+    <p>
+      <span class="type-icon">${typeIcons[type]}</span>
+      <span class="ticket-id"> #${ticketId}</span>
+      <span class="priority-icon">${priorityIcons[priority]}</span>
+      <br>
+      ${title}   
+    </p>`
   $(".task-col .col-body")[status].appendChild(newTicketElement);
 
   newTicketElement.onclick = async () => {
@@ -181,15 +188,13 @@ $( document ).ready(() => {
       comment: e.target.ticketComment.value == "" ? null : e.target.ticketComment.value
     };
 
-    console.log(data);
-
     e.target.ticketComment.value = "";
 
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = (e) => {
       if (e.target.readyState == 4 && e.target.status == 202) {
-        console.log(JSON.parse(e.target.responseText));
-        // addTicket(ticketId, data.title, data.status, data.priority, data.type, data.description);
+        $(`#${data.ticketId}.task span.type-icon`).html(typeIcons[data.type]);
+        $(`#${data.ticketId}.task span.priority-icon`).html(priorityIcons[data.priority]);
       }
     }
     xhttp.open("PATCH", document.URL + "/tickets", true);
