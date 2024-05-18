@@ -198,6 +198,7 @@ $( document ).ready(() => {
         document.getElementsByClassName("task-col")[data.status]
           .getElementsByClassName("col-body")[0]
           .appendChild(document.getElementById(data.ticketId));
+        getTicketHistory(data.ticketId, (history) => addHistoryRecord(history.at(-1)));
       }
     }
     xhttp.open("PATCH", document.URL + "/tickets", true);
