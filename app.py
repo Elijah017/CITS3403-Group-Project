@@ -6,6 +6,7 @@ from sqlalchemy.sql import func
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
 from config import DeploymentConfig
+import json
 
 db = SQLAlchemy()
 
