@@ -334,10 +334,6 @@ main:has(.task-view) {
   color: var(--bs-gray-500);
 }
 
-.navbar-fit{
-    margin-right: 1%;
-}
-
 .navbar-brand:hover{
     color:rgb(48, 88, 230);
     font-style: bold;

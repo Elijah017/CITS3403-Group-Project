@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, validators, SubmitField, SelectF
 from wtforms.validators import DataRequired, Email, Length
 
 
-def checkPassword(field):
+def checkPassword(form, field):
     """
     Defines password validation parameters. These parameters are:
         - length >= 10
