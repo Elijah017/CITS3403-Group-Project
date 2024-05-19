@@ -105,7 +105,6 @@ def is_superuser(board_id, user_id):  # check Whether is superuser
     return bool(board)
 
 
-
 def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
     board = Board.query.get(Bid)
     if not board:  # check whether the board exists
