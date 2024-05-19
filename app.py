@@ -38,7 +38,7 @@ class Permission(db.Model):
     user = db.Column(db.Integer, ForeignKey(User.id))
     writeAccess = db.Column(db.Integer, nullable=False)
     active = db.Column(db.String(20), nullable=False)
-    __table_args__ = (PrimaryKeyConstraint("board", "user"),)
+    __table_args__ = (PrimaryKeyConstraint("board", "user", name="permission_key"),)
 
 
 class Ticket(db.Model):
@@ -49,7 +49,7 @@ class Ticket(db.Model):
     priority = db.Column(db.Integer, nullable=False, default=1)  # 0: Low, 1: Medium, 2: High
     status = db.Column(db.Integer, nullable=False, default=1)  # 0: On Hold, 1: To Do, 2: In Progress, 3: Testing, 4: Ready for QA, 5: Done
     description = db.Column(db.String, nullable=False, default="")
-    __table_args__ = (PrimaryKeyConstraint("boardId", "ticketId"),)
+    __table_args__ = (PrimaryKeyConstraint("boardId", "ticketId", name="ticket_key"),)
     board = db.relationship(Board, back_populates="tickets")
 
 
