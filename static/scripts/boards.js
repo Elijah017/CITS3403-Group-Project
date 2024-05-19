@@ -49,28 +49,57 @@ function change_board_state(uri, id) {
         }),
         success: function() {
             if (!$("#disp-inact").is(":checked")) { $(row).hide(); }
+            let state_col = $(row).find(".board-state-col");
+            if (state_col.text() === "Active") {
+                state_col.text("Inactive");
+                $(row).find("img").prop('src', '/static/images/restore.png');
+            }
+            else {
+                state_col.text("Active");
+                $(row).find("img").prop('src', '/static/images/delete.png');
+            }
         },
+        error: function() {
+            alert(`error modifying ${$(row).find('.boardname-col').text()}`);
+        }
     });
+
 }
 
 function handle_other_boards(event) {
     handle_checkbox(event, '#disp-others');
-    console.log("clicked other boards");
+    for (let row in map) {
+        row = map[row];
+        if (
+            !$("#disp-others").is(":checked")
+            && $(row.id).find(".board-owner-col").text() !== "Me"
+        ) { $(row.id).hide(); }
+        else { try_show_row(row); }
+    }
 }
 
 function handle_my_boards(event) {
     handle_checkbox(event, '#disp-mine');
-    console.log('clicked my boards');
+    for (let row in map) {
+        row = map[row];
+        if (
+            !$("#disp-mine").is(":checked")
+            && $(row.id).find(".board-owner-col").text() === "Me"
+        ) { $(row.id).hide(); }
+        else { try_show_row(row); }
+    }
 }
 
 function handle_inactive_filter(event) {
     handle_checkbox(event, '#disp-inact');
     for (let row in map) {
-        row = map[row]
-        if (!$("#disp-inact").is(":checked")) { $(row.id).hide(); }
-        else { try_show_row(map[row]); }
+        row = map[row];
+        if (
+            !$("#disp-inact").is(":checked")
+            && $(row.id).find('.board-state-col').text() === "Inactive"
+        ) { $(row.id).hide(); }
+        else { try_show_row(row); }
     }
-    console.log("clicked");
 }
 
 function handle_checkbox(event, check_id) {
@@ -115,15 +144,15 @@ function try_show_row(row) {
     let owner = jqRow.find(".board-owner-col").text();
 
     // get the state of the filters
-    let factive = !$("#disp-inact").is(":checked");
+    let finact = $("#disp-inact").is(":checked");
     let fmine = $("#disp-mine").is(":checked");
     let fothers = $("#disp-others").is(":checked");
 
     let valid = 0;
     if (owner === "Me" && fmine) { valid = valid | 0b1; }
     else if (owner !== "Me" && fothers) { valid = valid | 0b1; }
-    if (active === "Active" && factive) { valid = valid | 0b10; }
-    else if (active === "Inactive" && !factive) { valid = valid | 0b10; }
+    if (active === "Active") { valid = valid | 0b10; }
+    else if (active === "Inactive" && finact) { valid = valid | 0b10; }
 
     if (valid === 0b11) { jqRow.css('display', 'table'); }
 }
