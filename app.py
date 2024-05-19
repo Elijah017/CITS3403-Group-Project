@@ -5,13 +5,22 @@ from sqlalchemy import ForeignKey, PrimaryKeyConstraint, ForeignKeyConstraint
 from sqlalchemy.sql import func
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
-import json
+from config import DeploymentConfig
 
-app = Flask(__name__)
-app.config.from_file("config.json", load=json.load)
+db = SQLAlchemy()
 
 
-db = SQLAlchemy(app)
+# Refactor app creation function
+def create_app(config):
+    flaskApp = Flask(__name__)
+    flaskApp.config.from_object(config)
+
+    db.init_app(flaskApp)
+
+    return flaskApp
+
+
+app = create_app(DeploymentConfig)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
@@ -73,7 +82,6 @@ def home():
 @app.route("/boards/change_board_state/<int:id>", methods=["PATCH"])
 def change_board_state(id):
     board = Board.query.filter_by(id=id).first()
-
     change_state = request.json["delete"]
     if change_state:
         setattr(board, "active", int(False))
@@ -100,13 +108,13 @@ def is_superuser(board_id, user_id):  # check Whether is superuser
 
 def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
     board = Board.query.get(Bid)
-    if not board:  # check whether the board is exist
+    if not board:  # check whether the board exists
         return {"status": "error", "message": "Board Not Found"}
     user = User.query.get(Uid)
-    if not user:  # check whether the user is exist
+    if not user:  # check whether the user exists
         return {"status": "error", "message": "User Not Found"}
     existing_permission = Permission.query.filter_by(board=Bid, user=Uid).first()
-    if existing_permission:  # check whether the permission is exist
+    if existing_permission:  # check whether the permission exists
         return {"status": "error", "message": "Permission Already Exists"}
     NewPermission = Permission(board=Bid, user=Uid, writeAccess=WA, active=active)
     db.session.add(NewPermission)
@@ -266,7 +274,7 @@ def login():
     # remember user by session after first login
     if "is_login" in session and session["is_login"]:
         return redirect(url_for("home"))
-    if request.method == "POST":  # and form.validate():
+    if request.method == "POST":  # and form.validate()
         email = request.form["email"]
         password = request.form["password"]
         user = User.query.filter_by(email=email).first()
@@ -307,12 +315,12 @@ def register():
 @app.route("/newBoard/", methods=["GET", "POST"])
 def newBoard():
     form = BoardForm(request.form)
-    #   Check whether boardname already exists for superuser
+    # Check whether boardname already exists for superuser
     exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
     if exist:
         flash("Board With This Name Already Exists.", "error")
         return render_template("boardCreat.html", form=form)
-    #   Posting to db
+    # Posting to db
     if request.method == "POST":
         data = json.loads(request.data)
         addboard = Board(boardname=data['boardname'], visibility=data['visibility'], superuser=session["UID"], active=True, description=data['description'])
@@ -327,10 +335,9 @@ def newBoard():
     return render_template("boardCreat.html", form=form)
 
 
-def check_user_permission(board_id, user_id):  # check user permission for one board
+def check_user_permission(board_id, user_id):  # Check user permission for one board
     permission = Permission.query.filter_by(board=board_id, user=user_id).first()
     return bool(permission)
-
 
 @app.route("/about/")
 def about():
