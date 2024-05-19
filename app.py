@@ -11,7 +11,7 @@ import json
 db = SQLAlchemy()
 
 
-# Refactor app creation function
+# App creation function
 def create_app(config):
     flaskApp = Flask(__name__)
     flaskApp.config.from_object(config)
@@ -25,14 +25,14 @@ app = create_app(DeploymentConfig)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
-
+#Database table on the user
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20))
     email = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(200))
 
-
+#Database table on the board
 class Board(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     boardname = db.Column(db.String(20), nullable=False, unique=True)
@@ -42,7 +42,7 @@ class Board(db.Model):
     tickets = db.relationship("Ticket", back_populates="board")
     description = db.Column(db.String, nullable=True)
 
-
+#Database table on the permissions
 class Permission(db.Model):
     board = db.Column(db.Integer, ForeignKey(Board.id))
     user = db.Column(db.Integer, ForeignKey(User.id))
@@ -50,7 +50,7 @@ class Permission(db.Model):
     active = db.Column(db.String(20), nullable=False)
     __table_args__ = (PrimaryKeyConstraint("board", "user", name="permission_key"),)
 
-
+#Datebase table on the ticket
 class Ticket(db.Model):
     boardId = db.Column(db.Integer, ForeignKey(Board.id))
     ticketId = db.Column(db.Integer, nullable=False, default=1)
@@ -62,7 +62,7 @@ class Ticket(db.Model):
     __table_args__ = (PrimaryKeyConstraint("boardId", "ticketId", name="ticket_key"),)
     board = db.relationship(Board, back_populates="tickets")
 
-
+#Database table on the ticket history
 class History(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     boardId = db.Column(db.Integer, ForeignKey(Ticket.boardId))
@@ -74,12 +74,12 @@ class History(db.Model):
     status = db.Column(db.Integer)
     comment = db.Column(db.String)
 
-
+#Home route
 @app.route("/")
 def home():
     return render_template("index.html")
 
-
+#Changing the board state
 @app.route("/boards/change_board_state/<int:id>", methods=["PATCH"])
 def change_board_state(id):
     board = Board.query.filter_by(id=id).first()
@@ -91,7 +91,7 @@ def change_board_state(id):
     db.session.commit()
     return jsonify(success=True)
 
-
+#Get the name of the board owner
 def get_owner(id, user):
     if int(id) == user:
         return "Me"
@@ -101,13 +101,13 @@ def get_owner(id, user):
             return None
         return username.username
 
-
-def is_superuser(board_id, user_id):  # check Whether is superuser
+# check Whether is superuser
+def is_superuser(board_id, user_id): 
     board = Board.query.filter_by(id=board_id, superuser=user_id).first()
     return bool(board)
 
-
-def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
+#Method used in situation below
+def AddUser(Uid, Bid, WA, active="active"):  # the method to add a user to permission, WA is writeAccess
     board = Board.query.get(Bid)
     if not board:  # check whether the board exists
         return {"status": "error", "message": "Board Not Found"}
@@ -123,7 +123,7 @@ def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permi
 
     return {"status": "success", "message": "Permission Added Successfully"}
 
-
+#Adding users to the boards so they can modify the contents
 @app.route("/boards/adduser/", methods=["GET", "POST"])
 def adduser():
     if request.method == "POST":
@@ -145,7 +145,7 @@ def adduser():
 
     return render_template("boards/adduser.html")
 
-
+#Displaying all the user's boards
 @app.route("/boards/")
 def boards():
     render = {}
@@ -181,7 +181,7 @@ def boards():
 
     return render_template("boards/boards.html", boards=render)
 
-
+#Displaying a board of a particular user
 @app.route("/boards/<int:id>", methods=["GET"])
 def board(id):
     if request.method == "GET":
@@ -191,6 +191,7 @@ def board(id):
 
 @app.route("/boards/<int:boardId>/tickets", methods=["GET", "POST", "PATCH"])
 def tickets(boardId):
+    #Getting a new ticket
     if request.method == "GET":
         tickets = [
             {
@@ -204,6 +205,7 @@ def tickets(boardId):
             for ticket in Ticket.query.filter_by(boardId=boardId)
         ]
         return tickets, 200
+    #Creating a new ticket
     elif request.method == "POST":
         data = json.loads(request.data)
         ticketId = Ticket.query.filter_by(boardId=int(boardId)).count() + 1
@@ -225,6 +227,7 @@ def tickets(boardId):
         except Exception as e:
             print(e)
             return {"StatusCode": 400}, 400
+    #When changing the attributes of the ticket
     elif request.method == "PATCH":
         data = json.loads(request.data)
         try:
@@ -258,11 +261,12 @@ def tickets(boardId):
                 "priority": data.get("priority", oldTicket.priority),
                 "description": oldTicket.description,
             }, 202
+        #Error handling
         except Exception as e:
             print(e)
             return {"StatusCode": 400}, 400
 
-
+#Function for getting the comment history on a particular ticket in the board
 @app.route("/boards/<int:boardId>/history/<int:ticketId>", methods=["GET"])
 def history(boardId, ticketId):
     if request.method == "GET":
@@ -280,14 +284,14 @@ def history(boardId, ticketId):
         ]
         return history, 200
 
-
+#Route for logging in, persists after user leaves the page
 @app.route("/login/", methods=["GET", "POST"])
 def login():
     form = LoginForm(request.form)
     # remember user by session after first login
     if "is_login" in session and session["is_login"]:
         return redirect(url_for("home"))
-    if request.method == "POST":  # and form.validate()
+    if request.method == "POST":  
         email = request.form["email"]
         password = request.form["password"]
         user = User.query.filter_by(email=email).first()
@@ -300,7 +304,6 @@ def login():
         else:
             flash("Username or Password Incorrect", "danger")
     return render_template("login.html", form=form)
-
 
 @app.route("/register/", methods=["GET", "POST"])
 def register():
@@ -321,10 +324,10 @@ def register():
             db.session.commit()
             flash("You Have Successfully Registered!", "success")
             return redirect(url_for("login"))
-
+        
     return render_template("register.html", form=form)
 
-
+#Route for creating a new board
 @app.route("/newBoard/", methods=["GET", "POST"])
 def newBoard():
     form = BoardForm(request.form)
@@ -353,16 +356,14 @@ def newBoard():
         return redirect(url_for("boards"))
     return render_template("boardCreat.html", form=form)
 
-
-def check_user_permission(board_id, user_id):  # Check user permission for one board
+# Check user permission for one board
+def check_user_permission(board_id, user_id):  
     permission = Permission.query.filter_by(board=board_id, user=user_id).first()
     return bool(permission)
-
 
 @app.route("/about/")
 def about():
     return render_template("about.html")
-
 
 @app.route("/logout/")
 def logout():

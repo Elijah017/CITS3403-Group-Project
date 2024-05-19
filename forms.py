@@ -3,14 +3,14 @@ from wtforms import StringField, PasswordField, validators, SubmitField, SelectF
 from wtforms.validators import DataRequired, Email, Length
 
 
-def checkPassword(form, field):
-    """
+"""
     Defines password validation parameters. These parameters are:
         - length >= 10
         - atleast 1 digit
         - atleast 1 lowercase
         - atleast 1 uppercase
     """
+def checkPassword(form, field):
     Password = field.data
     if len(Password) < 10:
         raise validators.ValidationError("Password length should be more than 10 characters")
@@ -21,8 +21,6 @@ def checkPassword(form, field):
     if not any(char.isupper() for char in Password):
         raise validators.ValidationError("Password must contain at least one uppercase letter")
 
-
-#  we can change the form of password  at this place
 
 
 class LoginForm(FlaskForm):
@@ -37,7 +35,7 @@ class LoginForm(FlaskForm):
         render_kw={"class": "lowered", "placeholder": "Enter Password"},
     )
 
-
+#Register form for error handling
 class RegisterForm(FlaskForm):
     username = StringField(
         "Username",
@@ -71,7 +69,7 @@ class RegisterForm(FlaskForm):
         render_kw={"class": "form-control", "placeholder": "Confirm your password"},
     )
 
-
+#For error handling
 class BoardForm(FlaskForm):
     boardname = StringField(
         "Board Name",
@@ -95,7 +93,7 @@ class BoardForm(FlaskForm):
     supervisor = StringField("Superuser")
     active = SelectField("active")
 
-
+#Permissions form for error handling
 class Permission(FlaskForm):
     board = StringField()
     user = StringField()
