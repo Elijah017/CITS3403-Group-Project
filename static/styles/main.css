@@ -339,3 +339,11 @@ main:has(.task-view) {
   position: absolute;
   left: 0.375rem;
 }
+
+.boards-container {
+  height: 100%;
+}
+
+.modal-header:has(.modal-title) {
+  justify-content: center;
+}

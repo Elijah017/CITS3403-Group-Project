@@ -34,7 +34,7 @@ function mod_board_height() {
     let list_offset = $('#boards-list').offset().top;
     let table_offset = $('.boards-table').offset().top;
     $('#boards-list').css('height', `calc(100% - ${list_offset}px - 2rem)`);
-    $('.boards-table tbody').css('height', `calc(${table_offset}px + 33rem)`);
+    $('.boards-table tbody').css('height', $('.boards-container').css('height'));
 }
 
 function change_board_state(uri, id) {
@@ -51,10 +51,18 @@ function change_board_state(uri, id) {
             if (!$("#disp-inact").is(":checked")) { $(row).hide(); }
             let state_col = $(row).find(".board-state-col");
             if (state_col.text() === "Active") {
+                let modal_btn = $(row).find(".btn-danger");
+                modal_btn.text("Reactivate");
+                modal_btn.removeClass("btn-danger");
+                modal_btn.addClass("btn-info");
                 state_col.text("Inactive");
                 $(row).find("img").prop('src', '/static/images/restore.png');
             }
             else {
+                let modal_btn = $(row).find(".btn-info");
+                modal_btn.text("Deactivate");
+                modal_btn.removeClass("btn-info");
+                modal_btn.addClass("btn-danger");
                 state_col.text("Active");
                 $(row).find("img").prop('src', '/static/images/delete.png');
             }
