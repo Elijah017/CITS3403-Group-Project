@@ -1,6 +1,6 @@
 import unittest
 from forms import checkPassword
-from app import create_app, get_owner, check_user_permission, search_board, AddUser, db, User, Board, Permission
+from app import create_app, get_owner, check_user_permission, AddUser, db, User, Board, Permission
 from config import TestConfig
 from wtforms import validators
 
@@ -93,16 +93,16 @@ class BasicTests(unittest.TestCase):
         p3 = Password("asdjojfajiafa")
         p4 = Password("asfaf143256")
         with self.assertRaises(validators.ValidationError) as context:
-            checkPassword(p1)
+            checkPassword(0, p1)
         self.assertEqual(context.exception.args[0], "Password length should be more than 10 characters")
         with self.assertRaises(validators.ValidationError) as context:
-            checkPassword(p2)
+            checkPassword(0, p2)
         self.assertEqual(context.exception.args[0], "Password must contain at least one lowercase letter")
         with self.assertRaises(validators.ValidationError) as context:
-            checkPassword(p3)
+            checkPassword(0, p3)
         self.assertEqual(context.exception.args[0], "Password must contain at least one digit")
         with self.assertRaises(validators.ValidationError) as context:
-            checkPassword(p4)
+            checkPassword(0, p4)
         self.assertEqual(context.exception.args[0], "Password must contain at least one uppercase letter")
 
     # Test correct functionality of get_owner function
@@ -125,20 +125,7 @@ class BasicTests(unittest.TestCase):
         permission = Permission.query.filter_by(board="1")
         self.assertTrue(permission, "1")
 
-    # Check normal functioning of search board function
-    def test_search_board_normal(self):
-        board1 = search_board("Project")
-        board2 = search_board("Kanban")
-        self.assertEqual(1, board1)
-        self.assertEqual(2, board2)
-
-    # Check function of search board function when the searched board does not exist
-    def test_search_board_none(self):
-        board1 = search_board("new")
-        board2 = search_board("Newboard")
-        self.assertIsNone(board1)
-        self.assertIsNone(board2)
-
+    # Check normal functioning of getting permissions
     def test_get_permission(self):
         # Testing the ability to obtain the write access on different boards
         perm1 = check_user_permission(2, 4)
