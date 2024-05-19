@@ -185,10 +185,10 @@ def boards():
             "description": board.description,
         }
 
-    for perm in Permission.query.filter_by(board=user):
+    for perm in Permission.query.filter_by(user=user):
         if perm.board in render:
             continue
-        board = Board.query.filter_by(id=perm.board)
+        board = Board.query.filter_by(id=perm.board).first();
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
