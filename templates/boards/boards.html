@@ -14,6 +14,7 @@
 {% block content %}
 <ul class="list-group board-display" id="boards-list">
     <li class="list-group-item" id="boards-header">
+        <a class="btn btn-primary list-new-btn" href="{{ url_for('newBoard') }}">New Board</a>
         <h2>Your Boards</h2>
         <div class="boards-mod-menu">
             <div class="search-options">
