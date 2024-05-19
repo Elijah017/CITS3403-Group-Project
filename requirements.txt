@@ -1,9 +1,9 @@
 Flask
-Flask - Login
-Flask - SQLAlchemy
-Flask - WTF
+Flask-Login
+Flask-SQLAlchemy
+Flask-WTF
 SQLAlchemy
-flask - bcrypt
+flask-bcrypt
 WTForms
 email_validator
 Flask-Migrate
