@@ -10,6 +10,8 @@ from wtforms.validators import DataRequired, Email, Length
         - atleast 1 lowercase
         - atleast 1 uppercase
     """
+
+
 def checkPassword(form, field):
     Password = field.data
     if len(Password) < 10:
@@ -20,7 +22,6 @@ def checkPassword(form, field):
         raise validators.ValidationError("Password must contain at least one lowercase letter")
     if not any(char.isupper() for char in Password):
         raise validators.ValidationError("Password must contain at least one uppercase letter")
-
 
 
 class LoginForm(FlaskForm):
@@ -35,7 +36,8 @@ class LoginForm(FlaskForm):
         render_kw={"class": "lowered", "placeholder": "Enter Password"},
     )
 
-#Register form for error handling
+
+# Register form for error handling
 class RegisterForm(FlaskForm):
     username = StringField(
         "Username",
@@ -69,7 +71,8 @@ class RegisterForm(FlaskForm):
         render_kw={"class": "form-control", "placeholder": "Confirm your password"},
     )
 
-#For error handling
+
+# For error handling
 class BoardForm(FlaskForm):
     boardname = StringField(
         "Board Name",
@@ -93,7 +96,8 @@ class BoardForm(FlaskForm):
     supervisor = StringField("Superuser")
     active = SelectField("active")
 
-#Permissions form for error handling
+
+# Permissions form for error handling
 class Permission(FlaskForm):
     board = StringField()
     user = StringField()
