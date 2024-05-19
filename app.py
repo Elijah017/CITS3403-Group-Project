@@ -163,7 +163,7 @@ def boards():
     render = {}
     user = session["UID"]
 
-    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "public")):
+    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "Public")):
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
@@ -204,7 +204,18 @@ def board(id):
 
 @app.route("/boards/<int:boardId>/tickets", methods=["GET", "POST", "PATCH"])
 def tickets(boardId):
-    # Getting a new ticket
+    board = Board.query.filter_by(id=boardId).first()
+    permission = Permission.query.filter_by(board=boardId, user=session["UID"]).first()
+
+    if request.method != "GET" and int(board.active) != 1:
+        return {"StatusCode": 403}, 403
+    if (
+        board.visibility.lower() == "private"
+        and int(session["UID"]) != int(board.superuser)
+        and (permission is None or int(permission.writeAccess) != 1)
+    ):
+        return {"StatusCode": 401}, 401
+
     if request.method == "GET":
         tickets = [
             {
