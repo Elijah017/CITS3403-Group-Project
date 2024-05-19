@@ -344,6 +344,23 @@ main:has(.task-view) {
   height: 100%;
 }
 
-.modal-header:has(.modal-title) {
+.modal-header:has(h1.modal-title) {
   justify-content: center;
+}
+
+.modal-body .form-select {
+  max-width: max-content;
+  margin: 0px;
+}
+
+.username-group {
+  text-align: left;
+  font-size: large;
+  margin: 0px;
+  padding: 0px;
+}
+
+#add-user-form button {
+  width: 100%;
+  margin-top: 1rem;
 }

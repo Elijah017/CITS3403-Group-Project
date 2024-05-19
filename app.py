@@ -65,6 +65,18 @@ class History(db.Model):
     comment = db.Column(db.String)
 
 
+@app.route('/boards/board/adduser/<int:id>')
+def getAddUserData(id):
+    board = Board.query.filter_by(id=id).first()
+    data = {"boardname": board.boardname}
+    data["users"] = []
+    users = User.query.all()
+    for user in users:
+        if (user.id == session['UID']): continue
+        data['users'].append({"id": user.id, "username": user.username})
+    return jsonify(data)
+
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -115,26 +127,24 @@ def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permi
     return {"status": "success", "message": "Permission Added Successfully"}
 
 
-@app.route("/boards/adduser/", methods=["GET", "POST"])
+@app.route("/boards/adduser/", methods=["POST"])
 def adduser():
-    if request.method == "POST":
-        board_id = request.form.get("Bid")
-        user_id = request.form.get("Uid")
-        write_access = request.form.get("Write_Access")
-        uid = session["UID"]
-        if is_superuser(board_id, uid) != True:  # check the premission of add user
-            flash("NO Permission", "error")
-            return redirect(url_for("adduser"))
+    data = json.loads(request.data)
+    perm = Permission.query.filter_by(board=data['bid'], user=data['uid']).first()
+    if perm is None:
+        perm = Permission(
+            board = data['bid'],
+            user = data['uid'],
+            active = "active",
+            writeAccess = int(data['wa'])
+        )
+        db.session.add(perm)
+    else:
+        perm.writeAccess = int(data['wa'])
+    db.session.commit()
 
-        # print(board_id,user_id ) just a test
-        result = AddUser(user_id, board_id, write_access)
-        if result["status"] == "error":
-            flash(result["message"], "error")
-        else:
-            flash(result["message"], "success")
-            return redirect(url_for("adduser"))
+    return jsonify(success=True);
 
-    return render_template("boards/adduser.html")
 
 
 @app.route("/boards/")
@@ -142,7 +152,7 @@ def boards():
     render = {}
     user = session["UID"]
 
-    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "public")):
+    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "Public")):
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue

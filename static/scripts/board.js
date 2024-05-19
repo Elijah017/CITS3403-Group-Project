@@ -137,6 +137,9 @@ function addTicket(ticketId, title, status, priority, type, description) {
   }
 }
 
+let user_map = []
+let board_id;
+
 $( document ).ready(() => {
   let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = (e) => {
@@ -214,5 +217,104 @@ $( document ).ready(() => {
     xhttp.open("PATCH", document.URL + "/tickets", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(JSON.stringify(data));
+
   })
 });
+
+$(function() {
+  board_id = document.URL.match(/.*\/(.*)/)[1]; 
+  
+  $("#add-user-btn").click(function() {
+    $.ajax({
+      method: 'GET',
+      url: '/boards/board/adduser/' + board_id,
+      dataType: 'json',
+      success: function(data) {
+        $("#boardname-input").prop('value', data.boardname);
+        for (let user in data.users) {
+            user = data.users[user];
+            user_map.push(user);
+            let list_el = document.createElement('a');
+            list_el.setAttribute('id', `user-${user.id}`);
+            list_el.setAttribute('class', 'list-group-item list-group-item-action');
+            list_el.setAttribute('href', `/boards/adduser/`);
+            list_el.setAttribute('disabled', true);
+            list_el.innerText = user.username;
+            $('.display-users').append(list_el);
+            $(`#user-${user.id}`).click(insert_user)
+        }
+      }
+    });
+
+    $("#username-input").on("input", handle_username_input);
+
+    $("#add-user-submit").click(send_newuser);
+  })
+})
+
+function insert_user(e) {
+  e.preventDefault();
+  let username = $(this).text();
+  $(".display-users").prop('hidden', true);
+  $("#username-input").prop('value', username);
+}
+
+function handle_username_input() {
+  let str = $("#username-input").val().toString();
+  let length = str.length;
+  if (length < 1) {
+    $(".display-users").prop('hidden', true);
+    return;
+  }
+
+  $(".display-users").prop('hidden', false);
+  for (let user in user_map) {
+      user = user_map[user];
+      let comp_str;
+      const name_len = user.username.length;
+
+      if (length < name_len) {
+          comp_str = user.username.slice(0, length);
+      }
+      else if (name_len === length) { comp_str = user.username; }
+      else { comp_str = ""; }
+
+      if (comp_str == str) { $(`user-${user.id}`).prop('hidden', false); }
+      else { $(`user-${user.id}`).prop('hidden', true); }
+  }
+}
+
+function send_newuser(e) {
+  e.preventDefault();
+
+  let uid;
+  let username = $("#username-input").val().toString();
+  for (let user in user_map) {
+    user = user_map[user];
+    if (user.username === username) {
+      uid = user.id;
+      break;
+    }
+  }
+
+  if (uid === undefined) {
+    alert("invalid username");
+    return;
+  }
+
+  let data = {
+    uid: uid,
+    bid: board_id,
+    wa: $("#writeAccess").find(":selected").val().toString()
+  }
+
+  $.ajax({
+    url: '/boards/adduser/',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(data),
+    success: function() {
+      location.reload();
+    }
+  });
+}

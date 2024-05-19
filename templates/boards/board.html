@@ -11,7 +11,7 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTicketModal">
             New Ticket
         </button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+        <button id="add-user-btn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
             Add User
         </button>
     </li>
@@ -202,63 +202,30 @@
 
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="viewTicketModalLabel">New Ticket</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="viewTicketModalLabel">Add User</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mb-3">
+                    <form id="add-user-form">
+                        <div class="input-group mb-3">
+                            <select name="writeAccess" id="writeAccess" class="form-select">
+                                <option value="1">Give Write Access</option>
+                                <option value="0" selected>Deny Write Access</option>
+                            </select>
+                            <input id="boardname-input" type="text" class="form-control" value="" disabled />
+                        </div>
+                        <div class="modal-body mb-3 username-group">
+                            <label for="username-input" class="form-label">Username:</label>
+                            <input id="username-input" type="text" class="form-control" />
+                        </div>
+                        <div class="display-users list-group" hidden>
+                        </div>
+                        <button id="add-user-submit" type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
             </div>
-            <div class="modal-body">
-                <h5>Description</h5>
-                <div id="ticketDescription"></div>
-                <br>
-                <h5>Ticket History</h5>
-                <div id="ticketHistory"></div>
-                <br>
-                <form id="viewTicketForm" class="container">
-                    <div class="row">
-                        <div class="col">
-                            <label for="ticketType">Ticket type</label>
-                            <select name="ticketType" id="ticketType" class="form-select">
-                                <option value="0">Task</option>
-                                <option value="1">Bug</option>
-                                <option value="2">Story</option>
-                            </select>
-                        </div><br>
-                        <div class="col">
-                            <label for="ticketPriority">Priority</label>
-                            <select name="ticketPriority" id="ticketPriority" class="form-select">
-                                <option value="0">Low</option>
-                                <option value="1">Medium</option>
-                                <option value="2">High</option>
-                            </select>
-                        </div><br>
-                        <div class="col">
-                            <label for="ticketStatus">Status</label>
-                            <select name="ticketStatus" id="ticketStatus" class="form-select">
-                                <option value="0">ON HOLD</option>
-                                <option value="1">TO DO</option>
-                                <option value="2">IN PROGRESS</option>
-                                <option value="3">TESTING</option>
-                                <option value="4">READY FOR QA</option>
-                                <option value="5">DONE</option>
-                            </select>
-                        </div>
-                    </div><br>
-                    <div class="row">
-                        <label for="ticketComment">Comment</label>
-                        <textarea name="ticketComment" id="ticketComment" class="form-control"></textarea>
-                    </div><br>
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="btn btn-secondary" style="width: 100%;" data-bs-dismiss="modal" onclick="document.getElementById('newTicketForm').reset()">Close</button>
-                        </div>
-                        <div class="col">
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">Update</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
         </div>
     </div>
 {% endblock %}
