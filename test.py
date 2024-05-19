@@ -40,6 +40,53 @@ class BasicTests(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
+    #Test the correct creation of user
+    def test_user_creation_and_retrieval(self):
+        # Initialize User object
+        user1 = User(username="test_user", email="test@example.com", password="password")
+        user2 = User(username="Testuser", email="Testing@e.com", password="password")
+        db.session.add(user1)
+        db.session.add(user2)
+        db.session.commit()
+
+        # Retrieve the users from the database
+        retrieved_user1 = User.query.filter_by(username='test_user').first()
+        retrieved_user2 = User.query.filter_by(username='Testuser').first()
+        # Assert that the retrieved user is not None
+        self.assertTrue(retrieved_user1 is not None)
+        self.assertTrue(retrieved_user2 is not None)
+
+        # Assert that the retrieved users has the correct username, email, and password
+        self.assertEqual(retrieved_user1.username, 'test_user')
+        self.assertEqual(retrieved_user1.email, 'test@example.com')
+        self.assertEqual(retrieved_user1.password, 'password')
+
+        self.assertEqual(retrieved_user2.username, 'Testuser')
+        self.assertEqual(retrieved_user2.email, 'Testing@e.com')
+        self.assertEqual(retrieved_user2.password, 'password')
+
+    #Testing the correct creation of boards
+    def test_board_creation_and_retrieval(self):
+        #Storing information of a board
+        board = Board(boardname="Test Board", visibility="Public", superuser="1", active="1")
+        db.session.add(board)
+        db.session.commit()
+
+        #Retrieving existing board
+        retrieved_board1 = Board.query.filter_by(boardname="Test Board").first()
+        self.assertTrue(retrieved_board1 is not None)
+
+        #Retrieving non-existing board
+        retrieved_board2 = Board.query.filter_by(boardname="New board").first()
+        self.assertFalse(retrieved_board2 is not None)
+
+        #Comparing values of newly added board
+        self.assertEqual(retrieved_board1.boardname, "Test Board")
+        self.assertEqual(retrieved_board1.visibility, "Public")
+        self.assertEqual(retrieved_board1.superuser, "1")
+        self.assertEqual(retrieved_board1.active, "1")
+
+    #Testing the functionalities of the validators
     def test_checkPassword(self):
         p1 = Password("123")
         p2 = Password("1234567890")

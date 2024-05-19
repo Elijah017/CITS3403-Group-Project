@@ -81,7 +81,6 @@ def home():
 @app.route("/boards/change_board_state/<int:id>", methods=["PATCH"])
 def change_board_state(id):
     board = Board.query.filter_by(id=id).first()
-
     change_state = request.json["delete"]
     if change_state:
         setattr(board, "active", int(False))
