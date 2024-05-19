@@ -334,6 +334,11 @@ main:has(.task-view) {
   color: var(--bs-gray-500);
 }
 
+.navbar-brand:hover{
+    color:rgb(48, 88, 230);
+    font-style: bold;
+}
+
 .list-new-btn {
   padding: 0.375rem;
   position: absolute;

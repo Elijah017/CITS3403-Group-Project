@@ -1,4 +1,3 @@
-
 Flask
 Flask-Login
 Flask-SQLAlchemy
@@ -9,3 +8,4 @@ WTForms
 email_validator
 Flask-Migrate
 black==24.4.0
+selenium

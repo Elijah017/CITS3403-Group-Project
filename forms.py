@@ -21,10 +21,6 @@ def checkPassword(form, field):
     if not any(char.isupper() for char in Password):
         raise validators.ValidationError("Password must contain at least one uppercase letter")
 
-
-#  we can change the form of password  at this place
-
-
 class LoginForm(FlaskForm):
     email = StringField(
         "Email",
@@ -38,6 +34,7 @@ class LoginForm(FlaskForm):
     )
 
 
+# Register form for error handling
 class RegisterForm(FlaskForm):
     username = StringField(
         "Username",
@@ -72,6 +69,7 @@ class RegisterForm(FlaskForm):
     )
 
 
+# For error handling
 class BoardForm(FlaskForm):
     boardname = StringField(
         "Board Name",
@@ -91,11 +89,12 @@ class BoardForm(FlaskForm):
         choices=[("public", "Public"), ("private", "Private")],
         render_kw={"class": "form-select"},
     )
-    submit = SubmitField("Create", render_kw={ "class": "btn btn-primary" })
+    submit = SubmitField("Create", render_kw={"class": "btn btn-primary"})
     supervisor = StringField("Superuser")
     active = SelectField("active")
 
 
+# Permissions form for error handling
 class Permission(FlaskForm):
     board = StringField()
     user = StringField()

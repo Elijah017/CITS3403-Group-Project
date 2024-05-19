@@ -5,17 +5,28 @@ from sqlalchemy import ForeignKey, PrimaryKeyConstraint, ForeignKeyConstraint
 from sqlalchemy.sql import func
 from forms import LoginForm, RegisterForm, BoardForm
 from flask_bcrypt import Bcrypt
+from config import DeploymentConfig
 import json
 
-app = Flask(__name__)
-app.config.from_file("config.json", load=json.load)
+db = SQLAlchemy()
 
 
-db = SQLAlchemy(app)
+# App creation function
+def create_app(config):
+    flaskApp = Flask(__name__)
+    flaskApp.config.from_object(config)
+
+    db.init_app(flaskApp)
+
+    return flaskApp
+
+
+app = create_app(DeploymentConfig)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
 
+# Database table on the user
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(20))
@@ -23,6 +34,7 @@ class User(db.Model):
     password = db.Column(db.String(200))
 
 
+# Database table on the board
 class Board(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     boardname = db.Column(db.String(20), nullable=False, unique=True)
@@ -33,6 +45,7 @@ class Board(db.Model):
     description = db.Column(db.String, nullable=True)
 
 
+# Database table on the permissions
 class Permission(db.Model):
     board = db.Column(db.Integer, ForeignKey(Board.id))
     user = db.Column(db.Integer, ForeignKey(User.id))
@@ -41,6 +54,7 @@ class Permission(db.Model):
     __table_args__ = (PrimaryKeyConstraint("board", "user", name="permission_key"),)
 
 
+# Datebase table on the ticket
 class Ticket(db.Model):
     boardId = db.Column(db.Integer, ForeignKey(Board.id))
     ticketId = db.Column(db.Integer, nullable=False, default=1)
@@ -53,6 +67,7 @@ class Ticket(db.Model):
     board = db.relationship(Board, back_populates="tickets")
 
 
+# Database table on the ticket history
 class History(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     boardId = db.Column(db.Integer, ForeignKey(Ticket.boardId))
@@ -77,15 +92,16 @@ def getAddUserData(id):
     return jsonify(data)
 
 
+# Home route
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
+# Changing the board state
 @app.route("/boards/change_board_state/<int:id>", methods=["PATCH"])
 def change_board_state(id):
     board = Board.query.filter_by(id=id).first()
-
     change_state = request.json["delete"]
     if change_state:
         setattr(board, "active", int(False))
@@ -95,6 +111,7 @@ def change_board_state(id):
     return jsonify(success=True)
 
 
+# Get the name of the board owner
 def get_owner(id, user):
     if int(id) == user:
         return "Me"
@@ -105,20 +122,22 @@ def get_owner(id, user):
         return username.username
 
 
-def is_superuser(board_id, user_id):  # check Whether is superuser
+# check Whether is superuser
+def is_superuser(board_id, user_id):
     board = Board.query.filter_by(id=board_id, superuser=user_id).first()
     return bool(board)
 
 
-def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permission, WA is writeAccess
+# Method used in situation below
+def AddUser(Uid, Bid, WA, active="active"):  # the method to add a user to permission, WA is writeAccess
     board = Board.query.get(Bid)
-    if not board:  # check whether the board is exist
+    if not board:  # check whether the board exists
         return {"status": "error", "message": "Board Not Found"}
     user = User.query.get(Uid)
-    if not user:  # check whether the user is exist
+    if not user:  # check whether the user exists
         return {"status": "error", "message": "User Not Found"}
     existing_permission = Permission.query.filter_by(board=Bid, user=Uid).first()
-    if existing_permission:  # check whether the permission is exist
+    if existing_permission:  # check whether the permission exists
         return {"status": "error", "message": "Permission Already Exists"}
     NewPermission = Permission(board=Bid, user=Uid, writeAccess=WA, active=active)
     db.session.add(NewPermission)
@@ -127,6 +146,7 @@ def AddUser(Uid, Bid, WA, active="active"):  # the mathod to add a user to permi
     return {"status": "success", "message": "Permission Added Successfully"}
 
 
+# Adding users to the boards so they can modify the contents
 @app.route("/boards/adduser/", methods=["POST"])
 def adduser():
     data = json.loads(request.data)
@@ -146,7 +166,7 @@ def adduser():
     return jsonify(success=True);
 
 
-
+# Displaying all the user's boards
 @app.route("/boards/")
 def boards():
     render = {}
@@ -157,7 +177,13 @@ def boards():
         if owner == None:
             continue
 
-        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility, "description": board.description}
+        render[board.id] = {
+            "boardname": board.boardname,
+            "owner": owner,
+            "active": board.active,
+            "visibility": board.visibility,
+            "description": board.description,
+        }
 
     for perm in Permission.query.filter_by(board=user):
         if perm.board in render:
@@ -166,11 +192,18 @@ def boards():
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
-        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility, "description": board.description}
+        render[board.id] = {
+            "boardname": board.boardname,
+            "owner": owner,
+            "active": board.active,
+            "visibility": board.visibility,
+            "description": board.description,
+        }
 
     return render_template("boards/boards.html", boards=render)
 
 
+# Displaying a board of a particular user
 @app.route("/boards/<int:id>", methods=["GET"])
 def board(id):
     if request.method == "GET":
@@ -180,6 +213,18 @@ def board(id):
 
 @app.route("/boards/<int:boardId>/tickets", methods=["GET", "POST", "PATCH"])
 def tickets(boardId):
+    board = Board.query.filter_by(id=boardId).first()
+    permission = Permission.query.filter_by(board=boardId, user=session["UID"]).first()
+
+    if request.method != "GET" and int(board.active) != 1:
+        return {"StatusCode": 403}, 403
+    if (
+        board.visibility.lower() == "private"
+        and int(session["UID"]) != int(board.superuser)
+        and (permission is None or int(permission.writeAccess) != 1)
+    ):
+        return {"StatusCode": 401}, 401
+
     if request.method == "GET":
         tickets = [
             {
@@ -193,6 +238,7 @@ def tickets(boardId):
             for ticket in Ticket.query.filter_by(boardId=boardId)
         ]
         return tickets, 200
+    # Creating a new ticket
     elif request.method == "POST":
         data = json.loads(request.data)
         ticketId = Ticket.query.filter_by(boardId=int(boardId)).count() + 1
@@ -214,6 +260,7 @@ def tickets(boardId):
         except Exception as e:
             print(e)
             return {"StatusCode": 400}, 400
+    # When changing the attributes of the ticket
     elif request.method == "PATCH":
         data = json.loads(request.data)
         try:
@@ -247,11 +294,13 @@ def tickets(boardId):
                 "priority": data.get("priority", oldTicket.priority),
                 "description": oldTicket.description,
             }, 202
+        # Error handling
         except Exception as e:
             print(e)
             return {"StatusCode": 400}, 400
 
 
+# Function for getting the comment history on a particular ticket in the board
 @app.route("/boards/<int:boardId>/history/<int:ticketId>", methods=["GET"])
 def history(boardId, ticketId):
     if request.method == "GET":
@@ -270,13 +319,14 @@ def history(boardId, ticketId):
         return history, 200
 
 
+# Route for logging in, persists after user leaves the page
 @app.route("/login/", methods=["GET", "POST"])
 def login():
     form = LoginForm(request.form)
     # remember user by session after first login
     if "is_login" in session and session["is_login"]:
         return redirect(url_for("home"))
-    if request.method == "POST":  # and form.validate():
+    if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
         user = User.query.filter_by(email=email).first()
@@ -314,18 +364,25 @@ def register():
     return render_template("register.html", form=form)
 
 
+# Route for creating a new board
 @app.route("/newBoard/", methods=["GET", "POST"])
 def newBoard():
     form = BoardForm(request.form)
-    #   Check whether boardname already exists for superuser
+    # Check whether boardname already exists for superuser
     exist = Board.query.filter_by(boardname=form.boardname.data, superuser=session["UID"]).first()
     if exist:
         flash("Board With This Name Already Exists.", "error")
         return render_template("boardCreat.html", form=form)
-    #   Posting to db
+    # Posting to db
     if request.method == "POST":
         data = json.loads(request.data)
-        addboard = Board(boardname=data['boardname'], visibility=data['visibility'], superuser=session["UID"], active=True, description=data['description'])
+        addboard = Board(
+            boardname=data["boardname"],
+            visibility=data["visibility"],
+            superuser=session["UID"],
+            active=True,
+            description=data["description"],
+        )
         db.session.add(addboard)
         db.session.commit()
         if addboard.visibility is True:
@@ -337,7 +394,8 @@ def newBoard():
     return render_template("boardCreat.html", form=form)
 
 
-def check_user_permission(board_id, user_id):  # check user permission for one board
+# Check user permission for one board
+def check_user_permission(board_id, user_id):
     permission = Permission.query.filter_by(board=board_id, user=user_id).first()
     return bool(permission)
 

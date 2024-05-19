@@ -137,9 +137,6 @@ function addTicket(ticketId, title, status, priority, type, description) {
   }
 }
 
-let user_map = []
-let board_id;
-
 $( document ).ready(() => {
   let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = (e) => {
@@ -217,9 +214,12 @@ $( document ).ready(() => {
     xhttp.open("PATCH", document.URL + "/tickets", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(JSON.stringify(data));
-
   })
 });
+
+
+let user_map = []
+let board_id;
 
 $(function() {
   board_id = document.URL.match(/.*\/(.*)/)[1]; 
