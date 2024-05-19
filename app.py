@@ -156,7 +156,13 @@ def boards():
         if owner == None:
             continue
 
-        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility, "description": board.description}
+        render[board.id] = {
+            "boardname": board.boardname,
+            "owner": owner,
+            "active": board.active,
+            "visibility": board.visibility,
+            "description": board.description,
+        }
 
     for perm in Permission.query.filter_by(board=user):
         if perm.board in render:
@@ -165,7 +171,13 @@ def boards():
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
-        render[board.id] = {"boardname": board.boardname, "owner": owner, "active": board.active, "visibility": board.visibility, "description": board.description}
+        render[board.id] = {
+            "boardname": board.boardname,
+            "owner": owner,
+            "active": board.active,
+            "visibility": board.visibility,
+            "description": board.description,
+        }
 
     return render_template("boards/boards.html", boards=render)
 
@@ -324,7 +336,13 @@ def newBoard():
     # Posting to db
     if request.method == "POST":
         data = json.loads(request.data)
-        addboard = Board(boardname=data['boardname'], visibility=data['visibility'], superuser=session["UID"], active=True, description=data['description'])
+        addboard = Board(
+            boardname=data["boardname"],
+            visibility=data["visibility"],
+            superuser=session["UID"],
+            active=True,
+            description=data["description"],
+        )
         db.session.add(addboard)
         db.session.commit()
         if addboard.visibility is True:
@@ -339,6 +357,7 @@ def newBoard():
 def check_user_permission(board_id, user_id):  # Check user permission for one board
     permission = Permission.query.filter_by(board=board_id, user=user_id).first()
     return bool(permission)
+
 
 @app.route("/about/")
 def about():
