@@ -45,6 +45,7 @@ class SeleniumTests(unittest.TestCase):
         self.driver.close()
 
     def test_create_board_name_exists(self):
+        #Issue with obtaining the correct path from the server
         sleep(10)
         self.assertTrue(True)
         """driver = self.driver
