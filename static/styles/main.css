@@ -1,43 +1,346 @@
-body:has(.login-form) {
-    background-image: linear-gradient(to top right, rgba(111,66,192,1), rgba(13,110,240,1));
-    height: 100vh;
-    width: 100vw;
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+body:has(.login-form), body:has(.board-display), body:has(.task-view) {
+  background-image: linear-gradient(to top right, rgba(111, 66, 192, 1), rgba(13, 110, 240, 1));
 }
 
 .centred {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+body{
+    overflow-x: hidden
 }
 
 .login-form {
-    width: 50%;
-    min-width: 250px;
-    max-width: 500px;
-    padding: 1rem;
-    border-radius: 0.5rem;
+  width: 50%;
+  min-width: 250px;
+  max-width: 500px;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
 }
 
 .login-form h1 {
-    text-align: center;
+  text-align: center;
 }
 
 .login-form * {
-    width: 100%;
+  width: 100%;
 }
 
 .login-form :not(label):not(:last-child) {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
-.login-form input:not([type="submit"]) {
-    border-radius: 0.25rem;
-    border: 1px solid black;
-    padding: 0.25rem;
+.form-container {
+  border: 1px solid;
+  color: var(--bs-body-color);
+  border-radius: var(--bs-border-radius);
+  border-color: var(--bs-border-color);
+  margin: 0px;
+  padding: 0px;
+}
+
+.form-container input:not([type="submit"]) {
+  margin: 0px;
+  padding: 0.8rem;
+  text-align: center;
+  border: 0px var(--bs-border-color);
+}
+
+.form-container input::placeholder {
+  text-align: center;
+}
+
+.form-container input:focus {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid;
+  border-radius: 0px;
+  border-color: black;
+}
+
+.form-container label {
+  margin-bottom: 0px;
+  padding: 0.375rem 0.75rem;
+  width: 100%;
+  background-color: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: var(--bs-border-color);
+  /* border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0; */
+}
+
+.form-container label:is(:first-child) {
+  border-top: none;
 }
 
 p.danger {
-    color: var(--bs-danger);
+  color: var(--bs-danger);
+}
+
+div.formHelpers {
+  margin-top: 5px;
+  padding-top: 5px;
+  line-height: 0;
+  opacity: 0.75;
+}
+
+.login-form .form-control {
+  border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.login-form .input-group input:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: black;
+}
+
+#create .form-select {
+  max-width: max-content;
+  margin: 0px;
+}
+
+.board-display {
+  text-align: center;
+  position: absolute;
+  background-color: white;
+  left: 5%;
+  margin: 2rem 0;
+  width: 90%;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+#boards-header {
+  border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.boards-heading {
+  justify-self: center;
+}
+
+.boards-mod-menu {
+  display: flex;
+  width: 25%;
+  position: absolute;
+  right: 0.375rem;
+}
+
+.search-options {
+  width: 100%;
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+}
+
+.search-icon {
+  margin-right: 0.25rem;
+  opacity: 0.75;
+}
+
+.filter-btn {
+  opacity: 0.75;
+}
+
+.search-bar {
+  width: 88%;
+  margin-top: 0.375rem;
+  border: none;
+}
+
+.search-bar:focus {
+  outline: none;
+}
+
+thead {
+    border-bottom: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+}
+
+tr .name-col {
+  width: 12.5%;
+}
+
+tr .desc-col {
+  width: 40%;
+}
+
+tr .mod {
+  width: 5%;
+  cursor: pointer;
+}
+
+.board-action {
+  background-color: none;
+  border: none;
+}
+
+.modal-content {
+  text-align: center;
+}
+
+.modal-content b {
+  color: red;
+}
+
+.board-mod-btn {
+  cursor: pointer;
+}
+
+.board-desc {
+  font-size: small;
+  max-height: 5rem;
+  width: 100%;
+  text-align: center;
+  border: none;
+  background: none;
+}
+
+#board-desc-container {
+  text-align: left;
+}
+
+body:has(.task-view) {
+  overflow: hidden;
+}
+
+main:has(.task-view) {
+  height: calc(100% - 2rem);
+  overflow-y: auto;
+}
+
+.task-view {
+  margin: 1rem;
+  width: calc(100vw - 2rem);
+}
+
+.task-view .row {
+  width: inherit;
+}
+
+.task-col {
+  background-color: var(--bs-gray-200);
+  border: 1px solid var(--bs-gray-400);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  max-height: max-content;
+}
+
+.col-title {
+  font-weight: bold;
+}
+
+.task-view hr {
+  margin: 0.5rem 0;
+  border-color: var(--bs-gray-600);
+}
+
+.col-body {
+  min-height: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task {
+  background-color: var(--bs-gray-100);
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 0.5rem;
+}
+
+.ticket-id {
+  font-weight: bold;
+  color: var(--bs-gray-500);
+}
+
+.task p {
+  margin: 0;
+  position: relative;
+}
+
+.task i.priority {
+  position: absolute;
+  right: 0;
+}
+
+.task-icon::before {
+  background-color: var(--bs-cyan);
+  border-radius: 2px;
+}
+
+.bug-icon::before {
+  background-color: var(--bs-red);
+  border-radius: 2px;
+  padding: 0.2rem;
+}
+
+.story-icon::before {
+  background-color: var(--bs-teal);
+  border-radius: 2px;
+  padding: 0.2rem;
+}
+
+#ticketDescription,
+#ticketHistory,
+.modal-content h5 {
+  text-align: justify;
+}
+
+.boards-table {
+  max-height: 100%;
+}
+
+.boards-table tbody {
+  display: block;
+  overflow-y: scroll;
+  max-height: 700px;
+  border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
+}
+
+.boards-table thead, .boards-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+#ticketHistory .history-record:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
+.history-record {
+  background-color: var(--bs-gray-100);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
+.history-username {
+  font-weight: bold;
+}
+
+.history-timestamp {
+  color: var(--bs-gray-500);
+}
+
+.navbar-brand:hover{
+    color:rgb(48, 88, 230);
+    font-style: bold;
+}
+
+.list-new-btn {
+  padding: 0.375rem;
+  position: absolute;
+  left: 0.375rem;
 }

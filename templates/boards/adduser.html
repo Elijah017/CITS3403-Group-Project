@@ -1,0 +1,35 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+{%  for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissble fade show" role="alert" >
+    {{ message }}
+    <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+
+<!-- Form to add user to a board -->
+<form method="POST" action="{{ url_for('adduser') }}">
+<div class="form-group">
+    <label for="Bid">Board ID:</label>
+    <input type="text" class="form-control" name="Bid" id="board_id" required>
+</div>
+
+<div class="form-group">
+    <label for="Uid">User ID:</label>
+    <input type="text" class="form-control" name="Uid" id="user_id" required>
+</div>
+
+<div class="form-group">
+    <label for="write_access">Write Access:</label>
+    <select class="form-control" name="Write_Access" id="write_access" required>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+    </select>
+</div>
+
+<button type="submit" class="btn btn-primary">Add User</button>
+</form>
+{% endblock %}

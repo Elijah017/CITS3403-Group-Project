@@ -42,4 +42,4 @@ Run web app: `flask run`
 
 ##  Running Tests
 
-Need to write tests for website 
+Run the Python test files: `python3 test.py`, `python3 SeleniumTest.py`
