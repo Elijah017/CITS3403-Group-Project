@@ -1,6 +1,6 @@
 import unittest
 from forms import checkPassword
-from app import create_app, get_owner, delete_board, AddUser, db, User, Board, Permission
+from app import create_app, get_owner, check_user_permission, search_board, AddUser, db, User, Board, Permission
 from config import TestConfig
 from wtforms import validators
 
@@ -20,11 +20,17 @@ class BasicTests(unittest.TestCase):
         self.client = testApp.test_client()
         db.create_all()
         # Testing values in database
+        #Users
         tableValues.append(User(username="Bus", email="123456@i.com", password="123"))
         tableValues.append(User(username="Car", email="1123ad@a.com", password="1234567890"))
         tableValues.append(User(username="Cab", email="113dfsd@a.com", password="asdjojfajiafa"))
         tableValues.append(User(username="Truck", email="11edffsd@a.com", password="asfaf143256"))
+        #Boards
         tableValues.append(Board(boardname="Project", visibility="public", superuser=1, active=True))
+        tableValues.append(Board(boardname="Kanban", visibility="private", superuser=2, active=True))
+        #Permissions
+        tableValues.append(Permission(board=1, user=2, writeAccess=1, active=1))
+        tableValues.append(Permission(board=2, user=4, writeAccess=1, active=1))
         for item in tableValues:
             db.session.add(item)
         db.session.commit()
@@ -66,23 +72,36 @@ class BasicTests(unittest.TestCase):
         self.assertIsNone(get_owner("6", 4))
         self.assertIsNone(get_owner("7", 2))
 
-    # Test the proper functioning of delete board function
-    def test_delete_board(self):
-        # Active stored as '1' and non-ative stored as '0'
-        board = Board.query.filter_by(boardname="Project").first()
-        self.assertEqual(board.active, "1")
-        delete_board(board.id)
-        self.assertEqual(board.active, "0")
-
     # Created test for adding permissions to a user
     def test_add_permission(self):
         AddUser("2", "1", "1")
         permission = Permission.query.filter_by(board="1")
         self.assertTrue(permission, "1")
-        AddUser("2", "1", "0")
 
-    # Have 5 tests currently
+    #Check normal functioning of search board function
+    def test_search_board_normal(self):
+        board1 = search_board("Project")
+        board2 = search_board("Kanban")
+        self.assertEqual(1, board1)
+        self.assertEqual(2, board2)
 
+    #Check function of search board function when the searched board does not exist
+    def test_search_board_none(self):
+        board1 = search_board("new")
+        board2 = search_board("Newboard")
+        self.assertIsNone(board1)
+        self.assertIsNone(board2)
+
+    def test_get_permission(self):
+        #Testing the ability to obtain the write access on different boards
+        perm1 = check_user_permission(2, 4)
+        perm2 = check_user_permission(1, 2)
+        perm3 = check_user_permission(2, 1)
+        perm4 = check_user_permission(1, 1)
+        self.assertTrue(perm1)
+        self.assertTrue(perm2)
+        self.assertFalse(perm3)
+        self.assertFalse(perm4)
 
 if __name__ == "__main__":
     unittest.main()

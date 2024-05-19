@@ -275,7 +275,7 @@ def login():
     # remember user by session after first login
     if "is_login" in session and session["is_login"]:
         return redirect(url_for("home"))
-    if request.method == "POST":  # and form.validate():
+    if request.method == "POST":  # and form.validate()
         email = request.form["email"]
         password = request.form["password"]
         user = User.query.filter_by(email=email).first()
@@ -335,12 +335,12 @@ def newBoard():
     return render_template("boardCreat.html", form=form)
 
 
-def check_user_permission(board_id, user_id):  # check user permission for one board
+def check_user_permission(board_id, user_id):  # Check user permission for one board
     permission = Permission.query.filter_by(board=board_id, user=user_id).first()
     return bool(permission)
 
 
-def search_board(board_name):  # transfer board name to id
+def search_board(board_name):  # Transfer board name to id
     board = Board.query.filter_by(boardname=board_name).first()
     return board.id if board else None
 
