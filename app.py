@@ -163,7 +163,7 @@ def boards():
     render = {}
     user = session["UID"]
 
-    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "public")):
+    for board in Board.query.filter((Board.superuser == user) | (Board.visibility == "Public")):
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
