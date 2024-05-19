@@ -1,0 +1,4 @@
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+deliverables/0a75e7a65dab8d746d74e50f622c87b60280a8df.mp4 filter=lfs diff=lfs merge=lfs -text
+deliverables/0dc905d1e3984840643d1db129dec2a5749c8b2b.mp4 filter=lfs diff=lfs merge=lfs -text
+deliverables/65b3012e70a1b8a73f60ea24b2f622f038c0278d.mp4 filter=lfs diff=lfs merge=lfs -text
