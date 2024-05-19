@@ -202,6 +202,14 @@ tr .mod {
 .board-desc {
   font-size: small;
   max-height: 5rem;
+  width: 100%;
+  text-align: center;
+  border: none;
+  background: none;
+}
+
+#board-desc-container {
+  text-align: left;
 }
 
 body:has(.task-view) {
@@ -291,6 +299,23 @@ main:has(.task-view) {
   text-align: justify;
 }
 
+.boards-table {
+  max-height: 100%;
+}
+
+.boards-table tbody {
+  display: block;
+  overflow-y: scroll;
+  max-height: 700px;
+  border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
+}
+
+.boards-table thead, .boards-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
 #ticketHistory .history-record:not(:first-child) {
   margin-top: 0.5rem;
 }
@@ -316,4 +341,10 @@ main:has(.task-view) {
 .navbar-brand:hover{
     color:rgb(48, 88, 230);
     font-style: bold;
+}
+
+.list-new-btn {
+  padding: 0.375rem;
+  position: absolute;
+  left: 0.375rem;
 }
