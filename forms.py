@@ -21,6 +21,7 @@ def checkPassword(form, field):
     if not any(char.isupper() for char in Password):
         raise validators.ValidationError("Password must contain at least one uppercase letter")
 
+
 class LoginForm(FlaskForm):
     email = StringField(
         "Email",

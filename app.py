@@ -80,15 +80,16 @@ class History(db.Model):
     comment = db.Column(db.String)
 
 
-@app.route('/boards/board/adduser/<int:id>')
+@app.route("/boards/board/adduser/<int:id>")
 def getAddUserData(id):
     board = Board.query.filter_by(id=id).first()
     data = {"boardname": board.boardname}
     data["users"] = []
     users = User.query.all()
     for user in users:
-        if (user.id == session['UID']): continue
-        data['users'].append({"id": user.id, "username": user.username})
+        if user.id == session["UID"]:
+            continue
+        data["users"].append({"id": user.id, "username": user.username})
     return jsonify(data)
 
 
@@ -150,20 +151,15 @@ def AddUser(Uid, Bid, WA, active="active"):  # the method to add a user to permi
 @app.route("/boards/adduser/", methods=["POST"])
 def adduser():
     data = json.loads(request.data)
-    perm = Permission.query.filter_by(board=data['bid'], user=data['uid']).first()
+    perm = Permission.query.filter_by(board=data["bid"], user=data["uid"]).first()
     if perm is None:
-        perm = Permission(
-            board = data['bid'],
-            user = data['uid'],
-            active = "active",
-            writeAccess = int(data['wa'])
-        )
+        perm = Permission(board=data["bid"], user=data["uid"], active="active", writeAccess=int(data["wa"]))
         db.session.add(perm)
     else:
-        perm.writeAccess = int(data['wa'])
+        perm.writeAccess = int(data["wa"])
     db.session.commit()
 
-    return jsonify(success=True);
+    return jsonify(success=True)
 
 
 # Displaying all the user's boards
@@ -188,7 +184,7 @@ def boards():
     for perm in Permission.query.filter_by(user=user):
         if perm.board in render:
             continue
-        board = Board.query.filter_by(id=perm.board).first();
+        board = Board.query.filter_by(id=perm.board).first()
         owner = get_owner(board.superuser, user)
         if owner == None:
             continue
