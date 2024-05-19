@@ -332,31 +332,6 @@ def check_user_permission(board_id, user_id):  # check user permission for one b
     return bool(permission)
 
 
-def search_board(board_name):  # transfer board name to id
-    board = Board.query.filter_by(boardname=board_name).first()
-    return board.id if board else None
-
-
-@app.route("/boards/search", methods=["GET", "POST"])
-def search():
-    if request.method == "POST":
-        uid = session["UID"]
-        search_query = request.form.get("search_query")  # input  board name
-
-        board_id = search_board(search_query)
-        if board_id:
-            if check_user_permission(board_id, uid):  # check user permission for this board
-                return redirect(url_for("board", id=board_id))
-            else:
-                flash("NO Permission", "error")
-            return redirect(url_for("search"))
-
-        else:
-            flash("Board not found", "error")
-            return redirect(url_for("search"))
-    return render_template("boards/search.html")
-
-
 @app.route("/about/")
 def about():
     return render_template("about.html")
